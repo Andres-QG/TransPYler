@@ -10,17 +10,34 @@ class Lexer:
         self.data = None
         self.debug = debug
         self.symbol_table = SymbolTable()
-        self.reserved_map = {}
+        #self.reserved_map = {}
         self.errors = errors  # to use the same list of errors that the parser uses
-        for r in self.reserved:
-            self.reserved_map[r.lower()] = r
+        #for r in self.reserved:
+        #    self.reserved_map[r.lower()] = r
 
-    reserved = (
-        'IF', 'ELSE', 'THEN', 'WHILE', 'FOR', 'DO', 'TO', 'READ', 'WRITE', 'PROGRAM', 'DECLARE', 'INTEGER', 'DECIMAL',
-        'BEGIN', 'END', 'AND', 'OR', 'NOT', 'MOD',
-    )
+    reserved = {
+        'if': 'IF',
+        'else': 'ELSE',
+        'then': 'THEN',
+        'while': 'WHILE',
+        'for': 'FOR',
+        'do': 'DO',
+        'to': 'TO',
+        'read': 'READ',
+        'write': 'WRITE',
+        'program': 'PROGRAM',
+        'declare': 'DECLARE',
+        'integer': 'INTEGER',
+        'decimal': 'DECIMAL',
+        'begin': 'BEGIN',
+        'end': 'END',
+        'and': 'AND',
+        'or': 'OR',
+        'not': 'NOT',
+        'mod': 'MOD',
+    }
 
-    tokens = reserved + (
+    tokens = tuple(reserved.values()) + (
         # Literals (identifier, integer constant, float constant, string constant, char const)'ID',
         'ID', 'NUMBER', 'SCONST',
 
@@ -53,19 +70,43 @@ class Lexer:
     t_TRIPLEGREATER = r'>>>'
     t_LESSGREATER = r'<>'
     t_TERNAL = r'\?'
+    
+    t_LESSEQUAL = r'<='
+    t_GREATEREQUAL = r'>='
+
 
     # String literal
     t_SCONST = r'\"([^\\\n]|(\\.))*?\"'
 
     t_ignore = ' \t'
 
-    def t_ID(self, t):
-        r"""[a-zA-Z][a-zA-Z0-9_]*"""
+    def log(self, msg: str):
         if self.debug:
-            print(f'DEBUG(LEXER): {t.value.upper()} on line {t.lineno}, position {t.lexpos}')
-        t.type = self.reserved_map.get(t.value, 'ID')
+            print(f"DEBUG(LEXER): {msg}")
+
+    # This rules matches identifiers that start with a letter or underscore, and may contain letters, digits, underscores.
+    # If the value is in "self.reserve", it is classified as a keyword. Otherwise it remains an 'ID'.
+    # Errors are logged without stopping the lexer. In debud mode, token details are printed.
+
+    def t_ID(self, t):
+       
+
+        r'[a-zA-Z_][a-zA-Z0-9_]*'
+        
+       # Check if the token is a reserved word
+        t.type = self.reserved.get(t.value.lower(), 'ID')
+
+        # Register in symbol table, redeclarations allowed by design
+        if t.type == 'ID':
+            try:
+                self.symbol_table.add(t.value, t.lexpos, t.lineno, 'identifier')
+            except Exception as e:
+                self.log(f"Redeclaration ignored: {t.value} at line {t.lineno}, pos {t.lexpos}")  # Comment about design choice
+
+        self.log(f"Token {t.type}={t.value} at line {t.lineno}, pos {t.lexpos}")
         return t
 
+    # TODO: Podría ser un sólo token t_NUMBER y t_DECIMAL?
     def t_NUMBER(self, t):
         r"""\d+"""
         t.value = int(t.value)
@@ -85,12 +126,14 @@ class Lexer:
         t.lexer.lineno += len(t.value)
 
     def t_COMMENT(self, t):
-        r"""\%.*"""
-        pass
+        r'\#.*'
+        self.log(f"Comment ignored at line {t.lineno}")
+        return None  # Ignore comments
 
     def t_error(self, t):
-        self.errors.append(Error("Illegal character '%s'" % t.value[0], t.lineno, t.lexpos, 'lexer', self.data))
-        print(self.errors[-1])
+        error_msg = f"Illegal character '{t.value[0]}'"
+        self.errors.append(Error(error_msg, t.lineno, t.lexpos, 'lexer', self.data))
+        self.log(error_msg)
         t.lexer.skip(1)
 
     def build(self, ):
