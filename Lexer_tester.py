@@ -32,6 +32,7 @@ def load_expected_tokens(filepath):
                 expected.append((parts[0], ""))
     return expected
 
+
 def test_file(filepath, debug=False):
     """
     Test lexer against a single file.
@@ -60,7 +61,9 @@ def test_file(filepath, debug=False):
             success = False
             break
         if (tok.type, str(tok.value)) != expected:
-            print(f"Token mismatch at index {idx}: got ({tok.type}, {tok.value}), expected {expected}")
+            print(
+                f"Token mismatch at index {idx}: got ({tok.type}, {tok.value}), expected {expected}"
+            )
             success = False
 
     # Check for extra tokens
@@ -80,6 +83,7 @@ def test_file(filepath, debug=False):
     else:
         print("Test failed ❌")
 
+
 def test_directory(directory, debug=False):
     """
     Test all .txt files in a directory with their corresponding .expect files.
@@ -87,6 +91,7 @@ def test_directory(directory, debug=False):
     for filename in os.listdir(directory):
         if filename.endswith(".txt"):
             test_file(os.path.join(directory, filename), debug=debug)
+
 
 if __name__ == "__main__":
     # Example usage: tests folder contains .txt and .expect pairs
