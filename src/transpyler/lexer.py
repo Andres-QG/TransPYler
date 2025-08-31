@@ -30,7 +30,52 @@ KEYWORDS = {
     "not": "NOT",
 }
 
-TOKENS = tuple(set(KEYWORDS.values())) + ("ID", "INDENT", "DEDENT")
+TOKENS = (
+    tuple(set(KEYWORDS.values()))
+    + ("ID", "INDENT", "DEDENT")
+    + (  # * Are this token names to long?
+        # Literals
+        "NUMBER",
+        "STRING",
+        # Operators
+        ## Arithmetic
+        "PLUS",
+        "MINUS",
+        "TIMES",
+        "DIVIDE",
+        "FLOOR_DIVIDE",
+        "MOD",
+        "POWER",
+        ## Relational
+        "EQUALS",
+        "NOT_EQUALS",
+        "LESS_THAN",
+        "LESS_THAN_EQUALS",
+        "GREATER_THAN",
+        "GREATER_THAN_EQUALS",
+        ## Assignment
+        "ASSIGN",
+        "PLUS_ASSIGN",
+        "MINUS_ASSIGN",
+        "TIMES_ASSIGN",
+        "DIVIDE_ASSIGN",
+        "FLOOR_DIVIDE_ASSIGN",
+        "MOD_ASSIGN",
+        "POWER_ASSIGN",
+        # Delimiters
+        "LPAREN",
+        "RPAREN",
+        "LBRACE",
+        "RBRACE",
+        "LBRACKET",
+        "RBRACKET",
+        "COLON",
+        "COMMA",
+        "DOT",
+        # Special
+        "NEWLINE",
+    )
+)
 
 
 class Lexer:  # TODO: Too much instance attributes?
@@ -38,7 +83,7 @@ class Lexer:  # TODO: Too much instance attributes?
     Lexer for a Python-like language using PLY.
 
     Handles tokenization, keyword recognition, indentation-based block structure,
-    string literals, operators, identifiers and one line comments.
+    string and number literals, operators, identifiers and one line comments.
     Tracks indentation levels to emit INDENT and DEDENT tokens, similar to Python's syntax.
     Registers identifiers in a symbol table and collects lexical errors.
     Supports debug output for indentation errors.
@@ -54,6 +99,56 @@ class Lexer:  # TODO: Too much instance attributes?
 
     keywords = KEYWORDS
     tokens = TOKENS
+
+    t_PLUS = r"\+"
+    t_MINUS = r"-"
+    t_TIMES = r"\*"
+    t_DIVIDE = r"/"
+    t_FLOOR_DIVIDE = r"//"
+    t_MOD = r"%"
+    t_POWER = r"\*\*"
+    t_EQUALS = r"=="
+    t_NOT_EQUALS = r"!="
+    t_LESS_THAN = r"<"
+    t_LESS_THAN_EQUALS = r"<="
+    t_GREATER_THAN = r">"
+    t_GREATER_THAN_EQUALS = r">="
+    t_ASSIGN = r"="
+    t_PLUS_ASSIGN = r"\+="
+    t_MINUS_ASSIGN = r"-="
+    t_TIMES_ASSIGN = r"\*="
+    t_DIVIDE_ASSIGN = r"/="
+    t_FLOOR_DIVIDE_ASSIGN = r"//="
+    t_MOD_ASSIGN = r"%="
+    t_POWER_ASSIGN = r"\*\*="
+    t_LPAREN = r"\("
+    t_RPAREN = r"\)"
+    t_LBRACE = r"\{"
+    t_RBRACE = r"\}"
+    t_LBRACKET = r"\["
+    t_RBRACKET = r"\]"
+    t_COLON = r":"
+    t_COMMA = r","
+    t_DOT = r"\."
+
+    t_STRING = r"""
+    (?x)                          # Verbose mode
+    (
+        "                         # Double-quoted string
+            (?:                   # Content:
+                \\ (?: n | t | \\ | " | ' )   # Allowed escape: \n, \t, \\, \", \'
+            | [^"\\]             #  Anything except " or \
+            )*
+        "
+    |
+        '                         # Single-quoted string
+            (?:                   # Content:
+                \\ (?: n | t | \\ | " | ' )   #  Allowed escape: \n, \t, \\, \", \'
+            | [^'\\]             #  Anything except ' or \
+            )*
+        '
+    )
+    """
 
     t_ignore = ""
 
@@ -197,3 +292,9 @@ class Lexer:  # TODO: Too much instance attributes?
             return self._make_token("DEDENT", "", self.lex.lineno, self.lex.lexpos)
 
         return tok
+
+    def t_NUMBER(self, t):
+        r"\d+(\.\d+)?"
+        t.value = float(t.value) if "." in t.value else int(t.value)
+        self._at_line_start = False
+        return t
