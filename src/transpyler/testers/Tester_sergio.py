@@ -2,7 +2,7 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath("src"))
-from transpyler.lexer import Lexer
+from transpyler.lexer.lexer import Lexer
 
 
 SOURCE = """### PRUEBAS

@@ -4,8 +4,8 @@ import sys
 
 sys.path.insert(0, os.path.abspath("src"))
 
-from transpyler.lexer import Lexer
-from transpyler.utils import Error
+from transpyler.lexer.lexer import Lexer
+from transpyler.core.utils import Error
 
 
 def load_expected_tokens(filepath):
