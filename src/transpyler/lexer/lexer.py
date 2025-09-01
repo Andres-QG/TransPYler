@@ -3,6 +3,7 @@
 from ..core.utils import Error
 from ..core.symbol_table import SymbolTable
 from .tokens import TOKENS, KEYWORDS, TAB_WIDTH
+from .indentation import wrapped_token, process_indent_dedent
 
 
 class Lexer:  # TODO: Too much instance attributes?
@@ -57,25 +58,25 @@ class Lexer:  # TODO: Too much instance attributes?
     t_COLON = r":"
     t_COMMA = r","
     t_DOT = r"\."
-
-    t_STRING = r"""
-    (?x)                          # Verbose mode
-    (
-        "                         # Double-quoted string
-            (?:                   # Content:
-                \\ (?: n | t | \\ | " | ' )   # Allowed escape: \n, \t, \\, \", \'
-            | [^"\\]             #  Anything except " or \
-            )*
-        "
-    |
-        '                         # Single-quoted string
-            (?:                   # Content:
-                \\ (?: n | t | \\ | " | ' )   #  Allowed escape: \n, \t, \\, \", \'
-            | [^'\\]             #  Anything except ' or \
-            )*
-        '
-    )
-    """
+    t_STRING = r" \".*\" | \'.*\' "
+    # t_STRING = r"""
+    # (?x)                          # Verbose mode
+    # (
+    #     "                         # Double-quoted string
+    #         (?:                   # Content:
+    #             \\ (?: n | t | \\ | " | ' )   # Allowed escape: \n, \t, \\, \", \'
+    #         | [^"\\]             #  Anything except " or \
+    #         )*
+    #     "
+    # |
+    #     '                         # Single-quoted string
+    #         (?:                   # Content:
+    #             \\ (?: n | t | \\ | " | ' )   #  Allowed escape: \n, \t, \\, \", \'
+    #         | [^'\\]             #  Anything except ' or \
+    #         )*
+    #     '
+    # )
+    # """
 
     t_ignore = ""
 
@@ -95,7 +96,7 @@ class Lexer:  # TODO: Too much instance attributes?
     def build(self):
         self.lex = lex.lex(module=self)
         self._base_token = self.lex.token
-        self.lex.token = self._wrapped_token
+        self.lex.token = lambda: wrapped_token(self, self._base_token)
 
     #   Private helpers
     def _make_token(self, type_, value, lineno, lexpos):
@@ -135,90 +136,14 @@ class Lexer:  # TODO: Too much instance attributes?
         self._at_line_start = True
         return None
 
-    # TODO: Refactor
     def t_INDENT_DEDENT(self, t):
         r"[ \t]+"
-        if not self._at_line_start:
-            return None  # internal whitespace is ignored
-
-        # 1) Count indentation (tab == TAB_WIDTH)
-        spaces = sum(TAB_WIDTH if ch == "\t" else 1 for ch in t.value)
-
-        # 2) Peek next character without consuming it
-        pos, data = t.lexer.lexpos, t.lexer.lexdata
-        nextch = data[pos] if pos < len(data) else ""
-        # blank line or comment-only
-        if nextch in ("\n", "#"):
-            return None
-
-        # 3) Compare with current top
-        top = self._indent_stack[-1]
-
-        if spaces == top:
-            self._at_line_start = False
-            return None
-
-        if spaces > top:
-            # INDENT
-            delta = spaces - top
-            if delta % TAB_WIDTH != 0:
-                self._indent_error(
-                    "Indentation is not a multiple of 4", t.lineno, t.lexpos
-                )
-                self._at_line_start = False
-                return None
-            for _ in range(delta // TAB_WIDTH):
-                top += TAB_WIDTH
-                self._indent_stack.append(top)
-                self._pending.append(self._make_token("INDENT", "", t.lineno, t.lexpos))
-
-            self._at_line_start = False
-            return self._pending.pop(0) if self._pending else None
-
-        # spaces < top DEDENT
-        if spaces % TAB_WIDTH != 0:
-            self._indent_error("Indentation is not a multiple of 4", t.lineno, t.lexpos)
-
-        while self._indent_stack and self._indent_stack[-1] > spaces:
-            self._indent_stack.pop()
-            self._pending.append(self._make_token("DEDENT", "", t.lineno, t.lexpos))
-
-        if self._indent_stack and self._indent_stack[-1] != spaces:
-            self._indent_error("Invalid dedent level", t.lineno, t.lexpos)
-
-        self._at_line_start = False
-        return self._pending.pop(0) if self._pending else None
+        return process_indent_dedent(self, t, TAB_WIDTH)
 
     def t_error(self, t):
         msg = f"Illegal character '{t.value[0]}'"
         self.errors.append(Error(msg, t.lineno, t.lexpos, "lexer", self.data))
         t.lexer.skip(1)
-
-    def _wrapped_token(self):
-        # Dedent at start-of-line (column 0)
-        if self._at_line_start and not self._pending:
-            pos, data = self.lex.lexpos, self.lex.lexdata
-            ch = data[pos] if pos < len(data) else ""
-            if ch not in (" ", "\t", "\n", "#"):
-                while len(self._indent_stack) > 1:
-                    self._indent_stack.pop()
-                    self._pending.append(
-                        self._make_token("DEDENT", "", self.lex.lineno, self.lex.lexpos)
-                    )
-
-        # Return any queued INDENT/DEDENT first
-        if self._pending:
-            return self._pending.pop(0)
-
-        # Ask PLY for the next real token
-        tok = self._base_token()
-
-        # At EOF, close remaining indentation levels
-        if tok is None and len(self._indent_stack) > 1:
-            self._indent_stack.pop()
-            return self._make_token("DEDENT", "", self.lex.lineno, self.lex.lexpos)
-
-        return tok
 
     def t_NUMBER(self, t):
         r"\d+(\.\d+)?"
