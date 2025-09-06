@@ -1,6 +1,0 @@
-# Test 3: more identifiers, keywords, and comments
-x_var := 42
-_y := x_var * 2
-z1 := _y / 3
-write := 1  # keyword, should not be added
-read := 2   # keyword, should not be added

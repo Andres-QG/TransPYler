@@ -1,4 +1,5 @@
 ﻿import ply.lex as lex
+import re
 
 from ..core.utils import Error
 from ..core.symbol_table import SymbolTable
@@ -58,25 +59,6 @@ class Lexer:  # TODO: Too much instance attributes?
     t_COLON = r":"
     t_COMMA = r","
     t_DOT = r"\."
-    t_STRING = r" \".*\" | \'.*\' "
-    # t_STRING = r"""
-    # (?x)                          # Verbose mode
-    # (
-    #     "                         # Double-quoted string
-    #         (?:                   # Content:
-    #             \\ (?: n | t | \\ | " | ' )   # Allowed escape: \n, \t, \\, \", \'
-    #         | [^"\\]             #  Anything except " or \
-    #         )*
-    #     "
-    # |
-    #     '                         # Single-quoted string
-    #         (?:                   # Content:
-    #             \\ (?: n | t | \\ | " | ' )   #  Allowed escape: \n, \t, \\, \", \'
-    #         | [^'\\]             #  Anything except ' or \
-    #         )*
-    #     '
-    # )
-    # """
 
     t_ignore = ""
 
@@ -130,6 +112,37 @@ class Lexer:  # TODO: Too much instance attributes?
         r"\#.*"
         return None
 
+    def t_STRING(self, t):
+        (
+            r'(?:'  # Start of non-capturing group for first quote
+            r'\"(?:\\.|[^\"\\\n])*\"|'  # Double quoted string
+            r'\'(?:\\.|[^\'\\\n])*\''    # Single quoted string
+            r')'
+            r'(?:'  # Start of non-capturing group for continuation
+            r'\\[ \t]*\n[ \t]*'  # Line continuation
+            r'(?:'  # Start of non-capturing group for additional quotes
+            r'\"(?:\\.|[^\"\\\n])*\"|'  # Double quoted string
+            r'\'(?:\\.|[^\'\\\n])*\''    # Single quoted string
+            r')'
+            r')*'  # Zero or more continuations
+        )
+        # Extract everything between the quotes, handling multiple parts
+        parts = re.findall(r'"((?:\\.|[^"\\\n])*)"|\'((?:\\.|[^\'\\\n])*)\'', t.value)
+        raw = "".join(p1 if p1 else p2 for (p1, p2) in parts)
+        # Handle escape sequences
+        raw = (
+            raw.replace(r"\\", "\\")
+            .replace(r"\"", '"')
+            .replace(r"\'", "'")
+            .replace(r"\n", "\n")
+            .replace(r"\t", "\t")
+        )
+
+        t.value = raw
+        self._at_line_start = False
+        return t
+
+    # Note: This is a PLY special rule, not a token
     def t_NEWLINE(self, t):
         r"\n+"
         t.lexer.lineno += len(t.value)
@@ -146,7 +159,7 @@ class Lexer:  # TODO: Too much instance attributes?
         t.lexer.skip(1)
 
     def t_NUMBER(self, t):
-        r"\d+(\.\d+)?"
+        r"(\d+(\.\d*)?|\.\d+)"
         t.value = float(t.value) if "." in t.value else int(t.value)
         self._at_line_start = False
         return t

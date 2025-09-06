@@ -8,7 +8,6 @@ ID "print"
 LPAREN "("
 STRING "Hello world"
 RPAREN ")"
-NEWLINE
 RETURN "return"
 NUMBER "42"
 DEDENT

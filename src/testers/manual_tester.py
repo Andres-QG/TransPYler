@@ -3,6 +3,7 @@ from src.lexer.lexer import Lexer
 
 # TODO(Andres): Fix output formatting for comparison
 
+
 def read_file(file_path):
     """Read contents of a file"""
     try:
@@ -14,10 +15,9 @@ def read_file(file_path):
 
 
 def format_token(token):
-    """Format token for comparison"""
-    if token.type in ("NUMBER", "STRING", "ID"):
-        return f'{token.type} "{token.value}"'
-    return f"{token.type}"
+    if token.type in ("INDENT", "DEDENT", "NEWLINE"):
+        return f"{token.type}"
+    return f'{token.type} "{token.value}"'
 
 
 def compare_results(lexer_output, expected_output):

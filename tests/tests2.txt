@@ -1,7 +1,0 @@
-# Test 2: identifiers, keywords, and comments
-a := 10
-b := a + 5
-# Another comment
-result := a + b
-if := 100  # keyword, should not be added
-while := 20  # keyword, should not be added

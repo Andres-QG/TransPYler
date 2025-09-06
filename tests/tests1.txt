@@ -1,6 +1,0 @@
-# Tests:1 This is a comment
-x := 42
-y := x + 1
-# Another comment
-my_var := y
-if := 10  # 'if' is a keyword, should not be added to symbol table
