@@ -68,11 +68,11 @@ pip install -r requirements.txt
 ### 5.1 Running the Lexer
 
 ```bash
-python lexer.py input.fangpy
+python -m src.testers.manual_tester <test> <expect>
 ```
 
-- **Input**: A `.fangpy` file containing Fangless Python code.
-- **Output**: A sequence of tokens printed to the console or stored in an output file.
+- **test**: Path of the file that contains a fangless python (.flpy) code for testing.
+- **expect**: Path of the file that contains the sequence of tokens to expect when testing `test`.
 
 ### 5.2 Example
 
