@@ -1,0 +1,7 @@
+
+# Function
+def f():
+    s1 = "Quote\"mark"
+    s2 = 'Back\\slash'
+    s3 = ''
+    return s1

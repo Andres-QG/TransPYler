@@ -202,34 +202,34 @@ class Lexer:  # TODO: Too much instance attributes?
         return None
 
     def t_STRING(self, t):
-        (
-            r"(?:"  # Start of non-capturing group for first quote
-            r"\"(?:\\.|[^\"\\\n])*\"|"  # Double quoted string
-            r"\'(?:\\.|[^\'\\\n])*\'"  # Single quoted string
-            r")"
-            r"(?:"  # Start of non-capturing group for continuation
-            r"\\[ \t]*\n[ \t]*"  # Line continuation
-            r"(?:"  # Start of non-capturing group for additional quotes
-            r"\"(?:\\.|[^\"\\\n])*\"|"  # Double quoted string
-            r"\'(?:\\.|[^\'\\\n])*\'"  # Single quoted string
-            r")"
-            r")*"  # Zero or more continuations
-        )
-        # Extract everything between the quotes, handling multiple parts
-        parts = re.findall(r'"((?:\\.|[^"\\\n])*)"|\'((?:\\.|[^\'\\\n])*)\'', t.value)
-        raw = "".join(p1 if p1 else p2 for (p1, p2) in parts)
-        # Handle escape sequences
-        raw = (
-            raw.replace(r"\\", "\\")
+        # TODO(Andres): Multiline doesn't allow \n inside single/double quotes. Asks if this is correct.
+        r"(?:\"\"\"(?:[^\"\\]|\\.|\"(?!\"\"))*\"\"\"|\'\'\'(?:[^\'\\]|\\.|\'(?!\'\'))*\'\'\'|\"(?:[^\"\\\n]|\\.)*\"|\'(?:[^\'\\\n]|\\.)*\')"
+
+        if t.value.startswith('"""') or t.value.startswith("'''"):
+            content = t.value[3:-3]  # Triple quotes - multiline OK
+        else:
+            content = t.value[1:-1]  # Single/double quotes
+
+        # Process basic escapes
+        content = (
+            content.replace(r"\\", "\\")
             .replace(r"\"", '"')
             .replace(r"\'", "'")
             .replace(r"\n", "\n")
             .replace(r"\t", "\t")
+            .replace(r"\r", "\r")
         )
 
-        t.value = raw
+        t.value = content
         self._at_line_start = False
         return t
+
+    def t_error_unterminated_string(self, t):
+        r'(?:"""|\'\'\'|["\']).+?(?=\n|$)'
+        msg = "Unterminated string literal"
+        self.errors.append(Error(msg, t.lineno, t.lexpos, "lexer", self.data))
+        t.lexer.skip(len(t.value))
+        return None
 
     # Note: This is a PLY special rule, not a token
     def t_NEWLINE(self, t):
@@ -243,7 +243,7 @@ class Lexer:  # TODO: Too much instance attributes?
         return process_indent_dedent(self, t, TAB_WIDTH)
 
     def t_NUMBER(self, t):
-        r'((\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?)'
+        r"((\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?)"
         if "." in t.value or "e" in t.value or "E" in t.value:
             t.value = float(t.value)
         else:
