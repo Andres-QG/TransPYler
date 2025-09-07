@@ -9,5 +9,6 @@ LPAREN "("
 STRING "Hello world"
 RPAREN ")"
 RETURN "return"
+MINUS "-"
 NUMBER "42"
 DEDENT

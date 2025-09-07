@@ -1,9 +1,6 @@
 import sys
 from src.lexer.lexer import Lexer
 
-# TODO(Andres): Fix output formatting for comparison
-
-
 def read_file(file_path):
     """Read contents of a file"""
     try:
@@ -15,7 +12,7 @@ def read_file(file_path):
 
 
 def format_token(token):
-    if token.type in ("INDENT", "DEDENT", "NEWLINE"):
+    if token.type in ("INDENT", "DEDENT"):
         return f"{token.type}"
     return f'{token.type} "{token.value}"'
 
@@ -75,13 +72,11 @@ def main():
             break
         tokens.append(tok)
 
-    # Compare results
     if compare_results(tokens, expected_content):
         print("✅ Test passed: All tokens match expected output")
     else:
         print("❌ Test failed: Tokens don't match expected output")
 
-    # Print any lexical errors
     if errors:
         print("\nLexical Errors:")
         for error in errors:

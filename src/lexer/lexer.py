@@ -1,5 +1,43 @@
-﻿import ply.lex as lex
+﻿"""
+A lexical analyzer for a Fangless Python language using PLY.
+This class implements a lexer that tokenizes source code following Fangless Python syntax rules.
+It handles keywords, operators, literals, identifiers, comments and indentation-based
+block structure.
+Key features:
+- Tokenizes source code into language elements
+- Tracks indentation levels for INDENT/DEDENT tokens
+- Maintains symbol table for identifiers
+- Collects lexical errors
+- Supports debug output
+    keywords (dict): Maps language keywords to their token types
+    tokens (tuple): List of all valid token types
+    t_ignore (str): Characters to skip during lexical analysis
+    lex: PLY lexer instance
+    data (str): Input source code being analyzed
+    debug (bool): Enable debug output for indentation errors
+    errors (list[Error]): Collection of lexical errors found
+    symbol_table (SymbolTable): Symbol table tracking identifiers
+    _indent_stack (list[int]): Stack of indentation levels in spaces
+    _pending (list): Queue of pending INDENT/DEDENT tokens
+    _at_line_start (bool): Flag for line start position
+    _base_token: Original PLY token function
+Regular expression rules defined for:
+- Arithmetic operators (+, -, *, /, //, %, **)
+- Comparison operators (==, !=, <, <=, >, >=)
+- Assignment operators (=, +=, -=, *=, /=, //=, %=, **=)
+- Delimiters ((, ), {, }, [, ], :, ,, .)
+- Identifiers, numbers, strings, comments
+- Whitespace and newlines for indentation
+Example usage:
+    lexer = Lexer(errors=[])
+    lexer.build()
+    lexer.input(source_code)
+    for token in lexer:
+        print(token)
+"""
+
 import re
+from ply import lex
 
 from ..core.utils import Error
 from ..core.symbol_table import SymbolTable
@@ -9,7 +47,7 @@ from .indentation import wrapped_token, process_indent_dedent
 
 class Lexer:  # TODO: Too much instance attributes?
     """
-    Lexer for a Python-like language using PLY.
+    Lexer for a Fangless Python language using PLY.
 
     Handles tokenization, keyword recognition, indentation-based block structure,
     string and number literals, operators, identifiers and one line comments.
@@ -30,25 +68,25 @@ class Lexer:  # TODO: Too much instance attributes?
     tokens = TOKENS
 
     t_PLUS = r"\+"
-    t_MINUS = r"-"
+    t_MINUS = r"\-"
     t_TIMES = r"\*"
-    t_DIVIDE = r"/"
-    t_FLOOR_DIVIDE = r"//"
-    t_MOD = r"%"
+    t_DIVIDE = r"\/"
+    t_FLOOR_DIVIDE = r"\/\/"
+    t_MOD = r"\%"
     t_POWER = r"\*\*"
-    t_EQUALS = r"=="
-    t_NOT_EQUALS = r"!="
-    t_LESS_THAN = r"<"
-    t_LESS_THAN_EQUALS = r"<="
-    t_GREATER_THAN = r">"
-    t_GREATER_THAN_EQUALS = r">="
-    t_ASSIGN = r"="
-    t_PLUS_ASSIGN = r"\+="
-    t_MINUS_ASSIGN = r"-="
-    t_TIMES_ASSIGN = r"\*="
-    t_DIVIDE_ASSIGN = r"/="
-    t_FLOOR_DIVIDE_ASSIGN = r"//="
-    t_MOD_ASSIGN = r"%="
+    t_EQUALS = r"\=\="
+    t_NOT_EQUALS = r"\!\="
+    t_LESS_THAN = r"\<"
+    t_LESS_THAN_EQUALS = r"\<\="
+    t_GREATER_THAN = r"\>"
+    t_GREATER_THAN_EQUALS = r"\>\="
+    t_ASSIGN = r"\="
+    t_PLUS_ASSIGN = r"\+\="
+    t_MINUS_ASSIGN = r"\-\="
+    t_TIMES_ASSIGN = r"\*\="
+    t_DIVIDE_ASSIGN = r"\/\="
+    t_FLOOR_DIVIDE_ASSIGN = r"\/\/\="
+    t_MOD_ASSIGN = r"\%\="
     t_POWER_ASSIGN = r"\*\*="
     t_LPAREN = r"\("
     t_RPAREN = r"\)"
@@ -56,8 +94,8 @@ class Lexer:  # TODO: Too much instance attributes?
     t_RBRACE = r"\}"
     t_LBRACKET = r"\["
     t_RBRACKET = r"\]"
-    t_COLON = r":"
-    t_COMMA = r","
+    t_COLON = r"\:"
+    t_COMMA = r"\,"
     t_DOT = r"\."
 
     t_ignore = ""
@@ -76,12 +114,45 @@ class Lexer:  # TODO: Too much instance attributes?
         self._at_line_start = True  # true when the next char is at start of a line
 
     def build(self):
+        """
+        Builds and initializes the lexical analyzer (lexer).
+
+        This method sets up the lexer using the PLY library's lex module and wraps
+        the base token function with custom token handling logic.
+
+        The lexer is built using the current instance (self) as the module, which
+        contains all the token definitions and rules. It also replaces the default
+        token function with a wrapped version that provides additional functionality.
+
+        Returns:
+            None
+
+        Side Effects:
+            - Initializes self.lex with a new lexer instance
+            - Stores original token function in self._base_token
+            - Replaces lexer's token function with wrapped version
+        """
         self.lex = lex.lex(module=self)
         self._base_token = self.lex.token
         self.lex.token = lambda: wrapped_token(self, self._base_token)
 
     #   Private helpers
     def _make_token(self, type_, value, lineno, lexpos):
+        """
+        Creates and returns a LexToken object with the specified attributes.
+
+        Args:
+            type_ (str): The type/category of the token
+            value: The actual value/text of the token
+            lineno (int): The line number where the token appears
+            lexpos (int): The position/index where the token starts in the input
+
+        Returns:
+            lex.LexToken: A token object containing the specified type, value, line number and position
+
+        Example:
+            token = self._make_token('NUMBER', '42', 1, 0)
+        """
         tok = lex.LexToken()
         tok.type = type_
         tok.value = value
@@ -90,6 +161,24 @@ class Lexer:  # TODO: Too much instance attributes?
         return tok
 
     def _indent_error(self, msg, lineno, lexpos):
+        """
+        Reports an indentation error during lexical analysis.
+
+        This method adds the indentation error to the error collection and
+        optionally prints debug information.
+
+        Args:
+            msg (str): The error message describing the indentation issue.
+            lineno (int): The line number where the error occurred.
+            lexpos (int): The position in the input where the error occurred.
+
+        Returns:
+            None
+
+        Side Effects:
+            - Adds an Error object to self.errors list
+            - Prints debug message if self.debug is True
+        """
         self.errors.append(Error(msg, lineno, lexpos, "lexer", self.data))
         if self.debug:
             print(f"[INDENT-ERROR] {msg} @ line {lineno}")
@@ -114,17 +203,17 @@ class Lexer:  # TODO: Too much instance attributes?
 
     def t_STRING(self, t):
         (
-            r'(?:'  # Start of non-capturing group for first quote
-            r'\"(?:\\.|[^\"\\\n])*\"|'  # Double quoted string
-            r'\'(?:\\.|[^\'\\\n])*\''    # Single quoted string
-            r')'
-            r'(?:'  # Start of non-capturing group for continuation
-            r'\\[ \t]*\n[ \t]*'  # Line continuation
-            r'(?:'  # Start of non-capturing group for additional quotes
-            r'\"(?:\\.|[^\"\\\n])*\"|'  # Double quoted string
-            r'\'(?:\\.|[^\'\\\n])*\''    # Single quoted string
-            r')'
-            r')*'  # Zero or more continuations
+            r"(?:"  # Start of non-capturing group for first quote
+            r"\"(?:\\.|[^\"\\\n])*\"|"  # Double quoted string
+            r"\'(?:\\.|[^\'\\\n])*\'"  # Single quoted string
+            r")"
+            r"(?:"  # Start of non-capturing group for continuation
+            r"\\[ \t]*\n[ \t]*"  # Line continuation
+            r"(?:"  # Start of non-capturing group for additional quotes
+            r"\"(?:\\.|[^\"\\\n])*\"|"  # Double quoted string
+            r"\'(?:\\.|[^\'\\\n])*\'"  # Single quoted string
+            r")"
+            r")*"  # Zero or more continuations
         )
         # Extract everything between the quotes, handling multiple parts
         parts = re.findall(r'"((?:\\.|[^"\\\n])*)"|\'((?:\\.|[^\'\\\n])*)\'', t.value)
@@ -153,13 +242,16 @@ class Lexer:  # TODO: Too much instance attributes?
         r"[ \t]+"
         return process_indent_dedent(self, t, TAB_WIDTH)
 
+    def t_NUMBER(self, t):
+        r'((\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?)'
+        if "." in t.value or "e" in t.value or "E" in t.value:
+            t.value = float(t.value)
+        else:
+            t.value = int(t.value)
+        self._at_line_start = False
+        return t
+
     def t_error(self, t):
         msg = f"Illegal character '{t.value[0]}'"
         self.errors.append(Error(msg, t.lineno, t.lexpos, "lexer", self.data))
         t.lexer.skip(1)
-
-    def t_NUMBER(self, t):
-        r"(\d+(\.\d*)?|\.\d+)"
-        t.value = float(t.value) if "." in t.value else int(t.value)
-        self._at_line_start = False
-        return t
