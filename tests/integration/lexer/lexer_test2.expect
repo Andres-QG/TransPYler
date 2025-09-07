@@ -1,0 +1,17 @@
+DEF "def"
+ID "hello"
+LPAREN "("
+RPAREN ")"
+COLON ":"
+INDENT
+ID "print"
+LPAREN "("
+STRING "Hello"
+RPAREN ")"
+ID "foo_bar123"
+ASSIGN "="
+NUMBER "99"
+ID "_hidden"
+ASSIGN "="
+STRING "secret"
+DEDENT
