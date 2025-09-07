@@ -1,0 +1,12 @@
+class Box:
+    def __init__(self, items=[]):
+        self.items = items
+    def size(self):
+        return len(self.items)
+
+box = Box([1, 2, 3])
+if box.size() != 0 and not False:
+    box.items = {"k": box.size()}
+    box.items[0] *= 2
+else:
+    box.items = []

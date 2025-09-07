@@ -1,0 +1,34 @@
+IF "if"
+TRUE "True"
+COLON ":"
+INDENT
+ID "x"
+ASSIGN "="
+NUMBER "1"
+WHILE "while"
+ID "x"
+LESS_THAN "<"
+NUMBER "10"
+OR "or"
+ID "x"
+EQUALS "=="
+NUMBER "0"
+COLON ":"
+INDENT
+ID "x"
+PLUS_ASSIGN "+="
+NUMBER "2"
+DEDENT
+ELSE "else"
+COLON ":"
+INDENT
+PASS "pass"
+DEDENT
+DEDENT
+ID "y"
+ASSIGN "="
+ID "x"
+POWER "**"
+NUMBER "2"
+FLOOR_DIVIDE "//"
+NUMBER "3"

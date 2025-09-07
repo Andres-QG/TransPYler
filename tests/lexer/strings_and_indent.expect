@@ -1,4 +1,3 @@
-COMMENT "# Function"
 DEF "def"
 ID "f"
 LPAREN "("

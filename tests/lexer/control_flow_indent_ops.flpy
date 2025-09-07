@@ -1,0 +1,8 @@
+if True:
+    x = 1
+    while x < 10 or x == 0:
+        # loop body comment
+        x += 2
+    else:
+        pass # This one fails here on dedent
+y = x**2 // 3
