@@ -1,7 +1,7 @@
 CLASS "class"
 ID "MyClass123"
 COLON ":"
-NEWLINE
+
 INDENT
 DEF "def"
 ID "__init__"
@@ -17,20 +17,20 @@ ASSIGN "="
 STRING "default"
 RPAREN ")"
 COLON ":"
-NEWLINE
+
 INDENT
 ID "self"
 DOT "."
 ID "value"
 ASSIGN "="
 ID "value"
-NEWLINE
+
 ID "self"
 DOT "."
 ID "name"
 ASSIGN "="
 ID "name"
-NEWLINE
+
 IF "if"
 ID "self"
 DOT "."
@@ -44,23 +44,23 @@ ID "name"
 NOT_EQUALS "!="
 STRING ""
 COLON ":"
-NEWLINE
+
 INDENT
 ID "print"
 LPAREN "("
 STRING "Valid instance"
 RPAREN ")"
-NEWLINE
+
 DEDENT
 ELSE "else"
 COLON ":"
-NEWLINE
+
 INDENT
 ID "print"
 LPAREN "("
 STRING "Invalid instance"
 RPAREN ")"
-NEWLINE
+
 DEDENT
 DEDENT
 DEF "def"
@@ -73,7 +73,7 @@ COMMA ","
 ID "y"
 RPAREN ")"
 COLON ":"
-NEWLINE
+
 INDENT
 ID "result"
 ASSIGN "="
@@ -88,30 +88,30 @@ MINUS "-"
 NUMBER "2"
 POWER "**"
 NUMBER "5"
-NEWLINE
+
 ID "result"
 DIVIDE_ASSIGN "/="
 NUMBER "10"
-NEWLINE
+
 ID "result"
 MOD_ASSIGN "%="
 NUMBER "7"
-NEWLINE
+
 ID "result"
 FLOOR_DIVIDE_ASSIGN "//="
 NUMBER "2"
-NEWLINE
+
 ID "result"
 PLUS_ASSIGN "+="
 NUMBER "1"
-NEWLINE
+
 ID "result"
 MINUS_ASSIGN "-="
 NUMBER "2"
-NEWLINE
+
 RETURN "return"
 ID "result"
-NEWLINE
+
 DEDENT
 DEDENT
 DEF "def"
@@ -120,22 +120,22 @@ LPAREN "("
 ID "n"
 RPAREN ")"
 COLON ":"
-NEWLINE
+
 INDENT
 IF "if"
 ID "n"
 LESS_THAN_EQUALS "<="
 NUMBER "1"
 COLON ":"
-NEWLINE
+
 INDENT
 RETURN "return"
 NUMBER "1"
-NEWLINE
+
 DEDENT
 ELSE "else"
 COLON ":"
-NEWLINE
+
 INDENT
 RETURN "return"
 ID "n"
@@ -146,37 +146,37 @@ ID "n"
 MINUS "-"
 NUMBER "1"
 RPAREN ")"
-NEWLINE
+
 DEDENT
 DEDENT
 ID "foo_bar123"
 ASSIGN "="
 NUMBER "99"
-NEWLINE
+
 ID "__hidden__"
 ASSIGN "="
 STRING "secret"
-NEWLINE
+
 ID "CamelCaseVar"
 ASSIGN "="
 TRUE "True"
-NEWLINE
+
 ID "snake_case_var"
 ASSIGN "="
 FALSE "False"
-NEWLINE
+
 ID "loooooooong_identifier_name_with_1234567890_and_UPPERCASE"
 ASSIGN "="
 NUMBER "3.14159e-10"
-NEWLINE
+
 ID "escaped"
 ASSIGN "="
 STRING "Line1\nLine2\tTabbed\Backslash\"Quote'Quote"
-NEWLINE
+
 ID "multi"
 ASSIGN "="
 STRING "This is a long string with line continuation"
-NEWLINE
+
 ID "numbers"
 ASSIGN "="
 LBRACKET "["
@@ -188,7 +188,7 @@ NUMBER "3"
 COMMA ","
 NUMBER "4"
 RBRACKET "]"
-NEWLINE
+
 ID "mapping"
 ASSIGN "="
 LBRACE "{"
@@ -200,7 +200,7 @@ STRING "b"
 COLON ":"
 NUMBER "2"
 RBRACE "}"
-NEWLINE
+
 ID "unique"
 ASSIGN "="
 LBRACE "{"
@@ -210,7 +210,7 @@ NUMBER "2"
 COMMA ","
 NUMBER "3"
 RBRACE "}"
-NEWLINE
+
 ID "cond"
 ASSIGN "="
 LPAREN "("
@@ -235,13 +235,13 @@ NUMBER "3"
 NOT_EQUALS "!="
 NUMBER "1"
 RPAREN ")"
-NEWLINE
+
 FOR "for"
 ID "i"
 IN "in"
 ID "numbers"
 COLON ":"
-NEWLINE
+
 INDENT
 IF "if"
 ID "i"
@@ -250,27 +250,27 @@ NUMBER "2"
 EQUALS "=="
 NUMBER "0"
 COLON ":"
-NEWLINE
+
 INDENT
 CONTINUE "continue"
-NEWLINE
+
 DEDENT
 ELIF "elif"
 ID "i"
 EQUALS "=="
 NUMBER "3"
 COLON ":"
-NEWLINE
+
 INDENT
 BREAK "break"
-NEWLINE
+
 DEDENT
 ELSE "else"
 COLON ":"
-NEWLINE
+
 INDENT
 PASS "pass"
-NEWLINE
+
 DEDENT
 DEDENT
 WHILE "while"
@@ -278,16 +278,16 @@ ID "foo_bar123"
 GREATER_THAN ">"
 NUMBER "0"
 COLON ":"
-NEWLINE
+
 INDENT
 ID "foo_bar123"
 MINUS_ASSIGN "-="
 NUMBER "1"
-NEWLINE
+
 DEDENT
 ID "illegal_char"
 ASSIGN "="
-ERROR "@"
-ERROR "@"
-ERROR "@"
-NEWLINE
+Line 63: Illegal character '@'
+Line 63: Illegal character '@'
+Line 63: Illegal character '@'
+
