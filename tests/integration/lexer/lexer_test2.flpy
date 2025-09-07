@@ -1,5 +1,0 @@
-def hello():
-    print("Hello")
-    foo_bar123 = 99
-    # This is a comment
-    _hidden = "secret"
