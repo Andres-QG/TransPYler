@@ -1,0 +1,4 @@
+def iter_example():    l = [1,2.5,3,"hola",5,"mundo"]
+        it = iter(l)
+            for i in l:
+        print(next(it))    return True
