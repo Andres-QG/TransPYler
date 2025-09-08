@@ -65,7 +65,7 @@ pip install -r requirements.txt
 
 ## 5. Usage (Current Lexer Stage)
 
-### 5.1 Running the Lexer
+### 5.1 Running tests from files
 
 ```bash
 python -m src.testers.manual_tester <test> <expect>
@@ -76,31 +76,92 @@ python -m src.testers.manual_tester <test> <expect>
 
 ### 5.2 Example
 
-**Input (`example.fangpy`):**
+**Test (`strings_and_indent.flpy`):**
 
 ```python
-def add(x, y):
-    return x + y
+# Function
+def f():
+    s1 = "Quote\"mark"
+    s2 = 'Back\\slash'
+    s3 = ''
+    return s1
 ```
 
-**Output (tokens):**
+**Expected Tokens (`strings_and_indent.expect`):**
 
 ```plain
-DEF IDENTIFIER LPAREN IDENTIFIER COMMA IDENTIFIER RPAREN COLON NEWLINE INDENT RETURN IDENTIFIER PLUS IDENTIFIER DEDENT
+DEF "def"
+ID "f"
+LPAREN "("
+RPAREN ")"
+COLON ":"
+INDENT
+ID "s1"
+ASSIGN "="
+STRING "Quote"mark"
+ID "s2"
+ASSIGN "="
+STRING "Back\slash"
+ID "s3"
+ASSIGN "="
+STRING ""
+RETURN "return"
+ID "s1"
+DEDENT
+```
+
+**Input (terminal)**
+
+```bash
+python -m src.testers.manual_tester strings_and_indent.flpy strings_and_indent.expect
+```
+
+**Output (from `manual_tester.py`)**
+
+```plain
+✅ Test passed: All tokens match expected output
 ```
 
 ---
 
-## 6. Project Structure (TODO: Correct it to be the same as the real projects structure)
+## 6. Project Design
+
+### 6.1 File structure
 
 ```plain
 TransPYler/
-│── lexer.py        # Main entry point for the Lexer
-│── tokens.py       # Token definitions and regex rules
-│── tests/          # Test cases for validation
-│── docs/           # Documentation and design notes
-│── README.md       # This file
+│── src/
+│   │── core/
+│   │   │── __init__.py
+│   │   │── symbol_table.py
+│   │   │── utils.py
+│   │
+│   │── lexer/
+│   │   │── __init__.py
+│   │   │── indentation.py
+│   │   │── lexer.py
+│   │   │── tokens.py
+│   │
+│   │── testers/
+│   |   │── __init__.py
+│   |   │── manual_tester.py
+│   |   │── test_lexer.py
+|   |
+|   |── __init__.py
+│
+│── tests/
+│   │── lexer/
+│   │── parser/
+│
+│── .gitignore
+│── pytest.ini
+│── README.md
+│── requirements.txt
 ```
+
+### 6.2 Lexer Design
+
+[Read about TransPYler's lexer design here](doc/lexer_design.md)
 
 ---
 
@@ -116,7 +177,7 @@ TransPYler/
 
 ---
 
-## 8. Testing
+## 8. Automatic Testing
 
 ### 8.1 Strategy
 
@@ -124,22 +185,47 @@ TransPYler/
 - Integration tests with Fangless Python snippets.
 - Error cases: invalid characters, indentation, escape sequences.
 
-### 8.2 Example Test
+### 8.2 Run tests
 
-**Input:**
+This project uses [pytest](https://docs.pytest.org/) for testing.
 
-```python
-while x < 10:
-    x += 1
-```
+1. **Install dependencies**  
+   Make sure you have installed all requirements first:
 
-**Expected Tokens:**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-```plain
-WHILE IDENTIFIER LT NUMBER COLON NEWLINE INDENT IDENTIFIER PLUSEQ NUMBER NEWLINE DEDENT
-```
+2. **Run the full test suite**
+   From the project root, run:
 
-### TODO: Add more usage examples
+   ```bash
+   pytest
+   ```
+
+   By default, pytest will automatically discover all tests with `test_` on their name.
+
+3. **Run tests with more detailed output**
+
+   ```bash
+   pytest -v
+   ```
+
+   The -v (verbose) flag shows each test name and its result.
+
+4. **Run a specific test file**
+
+   ```bash
+   pytest src/testers/test_lexer.py
+   ```
+
+5. **Stop at the first failure**
+
+   ```bash
+   pytest -x
+   ```
+
+---
 
 ---
 
@@ -159,8 +245,8 @@ WHILE IDENTIFIER LT NUMBER COLON NEWLINE INDENT IDENTIFIER PLUSEQ NUMBER NEWLINE
 
 ## 11. Authors
 
-| Name                    | Email                          | Role/Contribution                                                                |
-| ----------------------- | ------------------------------ | -------------------------------------------------------------------------------- |
-| Andrés Quesada-González | <andresquesadagon4@gmail.com>  | Operator and literal token definition, documentation, project structure, testing |
-| David Obando-Cortés     | <david.obandocortes@ucr.ac.cr> | TODO                                                                             |
-| Randy Agüero-Bermúdez   | <randy.aguero@ucr.ac.cr>       | TODO                                                                             |
+| Name                    | Email                          | Role/Contribution                                                                                 |
+| ----------------------- | ------------------------------ | ------------------------------------------------------------------------------------------------- |
+| Andrés Quesada-González | <andresquesadagon4@gmail.com>  | Operator and literal token definition, documentation, project structure, test scripts, test cases |
+| David Obando-Cortés     | <david.obandocortes@ucr.ac.cr> | TODO                                                                                              |
+| Randy Agüero-Bermúdez   | <randy.aguero@ucr.ac.cr>       | TODO                                                                                              |
