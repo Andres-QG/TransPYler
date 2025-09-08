@@ -248,5 +248,5 @@ This project uses [pytest](https://docs.pytest.org/) for testing.
 | Name                    | Email                          | Role/Contribution                                                                                 |
 | ----------------------- | ------------------------------ | ------------------------------------------------------------------------------------------------- |
 | Andrés Quesada-González | <andresquesadagon4@gmail.com>  | Operator and literal token definition, documentation, project structure, test scripts, test cases |
-| David Obando-Cortés     | <david.obandocortes@ucr.ac.cr> | TODO                                                                                              |
-| Randy Agüero-Bermúdez   | <randy.aguero@ucr.ac.cr>       | TODO                                                                                              |
+| David Obando-Cortés     | <david.obandocortes@ucr.ac.cr> | Indentation Handling, Keywords definition                                                                                              |
+| Randy Agüero-Bermúdez   | <randy.aguero@ucr.ac.cr>       | Testing, comment handling, Identifier token definition recognition                                                                                             |
