@@ -19,8 +19,8 @@ Lexer must provide:
 """
 
 def process_indent_dedent(lexer, t, tab_width):
-    if not lexer._at_line_start:
-        return None  # whitespace interno se ignora
+    #if not lexer._at_line_start:
+    #   return None  # whitespace interno se ignora
 
     # 1. Count indentation (tab == tab_width)
     spaces = sum(tab_width if ch == "\t" else 1 for ch in t.value)
