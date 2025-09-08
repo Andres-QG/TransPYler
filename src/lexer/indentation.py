@@ -19,6 +19,31 @@ Lexer must provide:
 """
 
 def process_indent_dedent(lexer, t, tab_width):
+    """
+    Process indentation and dedentation at the start of a line.
+
+    This function is intended to be called from the `t_INDENT_DEDENT` rule
+    in a PLY lexer. It compares the current indentation level (measured in
+    spaces, with tabs expanded to multiples of `tab_width`) with the last
+    recorded level in `lexer._indent_stack`.
+
+    Behavior:
+        - If the indentation is unchanged, nothing is emitted.
+        - If the indentation increases, one or more `INDENT` tokens are queued.
+        - If the indentation decreases, one or more `DEDENT` tokens are queued.
+        - If indentation is not a multiple of `tab_width`, `_indent_error`
+          is invoked.
+        - Blank lines or comment-only lines are ignored.
+
+    Args:
+        lexer: The lexer instance managing indentation state.
+        t: The PLY token containing leading whitespace.
+        tab_width (int): Number of spaces per tab (default 4).
+
+    Returns:
+        A single queued `INDENT`/`DEDENT` token if available, or `None`.
+    """
+
     if not lexer._at_line_start:
         return None  # whitespace interno se ignora
 
@@ -69,6 +94,32 @@ def process_indent_dedent(lexer, t, tab_width):
 
 
 def wrapped_token(lexer, base_token_callable):
+    """
+    Token wrapper that handles queued indentation/dedentation tokens.
+
+    This function wraps the base lexer token generator and ensures that
+    `INDENT`/`DEDENT` tokens are returned in the correct order. It also
+    injects final `DEDENT` tokens at end-of-file (EOF) to close any open
+    indentation levels.
+
+    Behavior:
+        - At the start of a line, if no whitespace token is present, checks
+          whether outstanding `DEDENT`s should be generated.
+        - If `_pending` tokens exist, returns them before requesting a new
+          token from PLY.
+        - If EOF is reached but the indentation stack is not back to the
+          base level, emits one `DEDENT` per open block.
+
+    Args:
+        lexer: The lexer instance managing indentation state.
+        base_token_callable (callable): Function that retrieves the next
+            token from the underlying PLY lexer.
+
+    Returns:
+        The next token (real or synthetic `INDENT`/`DEDENT`), or `None`
+        when no more tokens are available.
+    """
+     
     # DEDENT at the beginning of the line if applicable
     if lexer._at_line_start and not lexer._pending:
         pos, data = lexer.lex.lexpos, lexer.lex.lexdata
