@@ -22,6 +22,8 @@ KEYWORDS = {
     "and": "AND",
     "or": "OR",
     "not": "NOT",
+    
+    "in": "IN",
 }
 
 TOKENS = (
