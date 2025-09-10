@@ -42,10 +42,15 @@ from ply import lex
 from ..core.utils import Error
 from ..core.symbol_table import SymbolTable
 from .tokens import TOKENS, KEYWORDS, TAB_WIDTH
-from .indentation import wrapped_token, process_indent_dedent
+from .indentation import process_newline_and_indent  # NUEVO
+
+# Helper sets used by the lexer to track suites and delimiter nesting.
+SUITE_COLON = {"COLON"}  # ':' fuera de delimitadores abre bloque
+OPEN_DELIMS  = {"LPAREN", "LBRACKET", "LBRACE"}
+CLOSE_DELIMS = {"RPAREN", "RBRACKET", "RBRACE"}
 
 
-class Lexer:  # TODO: Too much instance attributes?
+class Lexer:
     """
     Lexer for a Fangless Python language using PLY.
 
@@ -98,10 +103,20 @@ class Lexer:  # TODO: Too much instance attributes?
     t_COMMA = r"\,"
     t_DOT = r"\."
 
-    t_ignore = ""
+    t_ignore = "" # global ignore empty because the whitespace is handled by rules.
 
     #   Lifecycle
     def __init__(self, errors: list[Error], debug: bool = False):
+        """
+        Initialize a new lexer instance.
+
+        Parameters:
+        errors : list[Error]
+            A list that will receive lexical errors discovered during scanning.
+        debug : bool, optional
+            When True, prints indentation diagnostics, by default False.   
+
+        """
         self.lex = None
         self.data = None
         self.debug = debug
@@ -109,49 +124,82 @@ class Lexer:  # TODO: Too much instance attributes?
         self.symbol_table = SymbolTable()
 
         # Indentation state
-        self._indent_stack = [0]  # indentation levels in spaces (0, 4, 8, ...)
-        self._pending = []  # queue of INDENT/DEDENT tokens to return
-        self._at_line_start = True  # true when the next char is at start of a line
+        self._indent_stack = [0]     # absolute columns (0, 4, 8, ...)
+        self._pending = []           # queue of synthetic INDENT/DEDENT tokens
+        self._expect_indent = False  # becomes True after ':' outside delimiters
+        self._delim_depth = 0        # (), [], {} 
+
 
     def build(self):
         """
-        Builds and initializes the lexical analyzer (lexer).
+        Build and initialize the underlying PLY lexer.
+        Creates the PLY lexer with `module=self` so PLY can discover the `t_...` rules.
+        Captures the original `token` function.
+        Installs `_next_token` as the token producer to interleave pending INDENT/DEDENT.
 
-        This method sets up the lexer using the PLY library's lex module and wraps
-        the base token function with custom token handling logic.
-
-        The lexer is built using the current instance (self) as the module, which
-        contains all the token definitions and rules. It also replaces the default
-        token function with a wrapped version that provides additional functionality.
-
-        Returns:
-            None
-
-        Side Effects:
-            - Initializes self.lex with a new lexer instance
-            - Stores original token function in self._base_token
-            - Replaces lexer's token function with wrapped version
         """
         self.lex = lex.lex(module=self)
         self._base_token = self.lex.token
-        self.lex.token = lambda: wrapped_token(self, self._base_token)
+        self.lex.token = self._next_token  
 
-    #   Private helpers
+
+    def input(self, data: str):
+        """
+        Feed source text to the lexer.
+        A leading newline is prepended to ensure the first physical line passes through
+        `t_NEWLINE`, which is where indentation is evaluated and the base indent (0)
+        is asserted.
+
+        """
+        self.data = data
+        if not data.startswith("\n"):
+            data = "\n" + data  
+        self.lex.input(data)
+
+ 
+    def _next_token(self):
+        """
+        Token source that can also emit extra INDENT/DEDENT tokens.
+        Returns lex.LexToken | None
+        The next token to emit, or None when the input has truly ended (EOF).
+
+        """
+        while True:         
+            if self._pending:
+                return self._pending.pop(0)
+           
+            tok = self._base_token()
+           
+            if tok is None:            
+                if self.lex.lexpos >= len(self.lex.lexdata):                    
+                    return None               
+                continue
+
+            if tok.type in OPEN_DELIMS:
+                self._delim_depth += 1
+            elif tok.type in CLOSE_DELIMS:
+                if self._delim_depth > 0:
+                    self._delim_depth -= 1
+            if tok.type in SUITE_COLON and self._delim_depth == 0:
+                self._expect_indent = True
+
+            if self._pending:
+                self._pending.append(tok)
+                return self._pending.pop(0)
+            
+            return tok
+
+    # ---- Internal helpers (also used by `.indentation`) ----
     def _make_token(self, type_, value, lineno, lexpos):
         """
         Creates and returns a LexToken object with the specified attributes.
-
         Args:
             type_ (str): The type/category of the token
             value: The actual value/text of the token
             lineno (int): The line number where the token appears
             lexpos (int): The position/index where the token starts in the input
-
         Returns:
             lex.LexToken: A token object containing the specified type, value, line number and position
-
-        Example:
-            token = self._make_token('NUMBER', '42', 1, 0)
         """
         tok = lex.LexToken()
         tok.type = type_
@@ -163,27 +211,20 @@ class Lexer:  # TODO: Too much instance attributes?
     def _indent_error(self, msg, lineno, lexpos):
         """
         Reports an indentation error during lexical analysis.
-
         This method adds the indentation error to the error collection and
         optionally prints debug information.
-
         Args:
             msg (str): The error message describing the indentation issue.
             lineno (int): The line number where the error occurred.
             lexpos (int): The position in the input where the error occurred.
 
-        Returns:
-            None
-
-        Side Effects:
-            - Adds an Error object to self.errors list
-            - Prints debug message if self.debug is True
         """
         self.errors.append(Error(msg, lineno, lexpos, "lexer", self.data))
         if self.debug:
             print(f"[INDENT-ERROR] {msg} @ line {lineno}")
 
-    #   PLY rules (t_...)
+
+    # ---- PLY rules (t_...) ----
     def t_ID(self, t):
         r"[A-Za-z_][A-Za-z0-9_]*"
         t.type = self.keywords.get(t.value, "ID")
@@ -193,8 +234,12 @@ class Lexer:  # TODO: Too much instance attributes?
                 self.symbol_table.add(t.value, t.lexpos, t.lineno, "identifier")
             except Exception:
                 pass
-        self._at_line_start = False
         return t
+    
+    def t_WS(self, t):
+        r"[ \t]+"
+        # NOTE: Inline spaces/tabs are ignored. Indentation at line start is handled in `t_NEWLINE`.
+        return None
 
     # TODO: Fix (Not a one line comment)
     def t_COMMENT(self, t):
@@ -204,13 +249,12 @@ class Lexer:  # TODO: Too much instance attributes?
     def t_STRING(self, t):
         # TODO(Andres): Multiline doesn't allow \n inside single/double quotes. Asks if this is correct.
         r"(?:\"\"\"(?:[^\"\\]|\\.|\"(?!\"\"))*\"\"\"|\'\'\'(?:[^\'\\]|\\.|\'(?!\'\'))*\'\'\'|\"(?:[^\"\\\n]|\\.)*\"|\'(?:[^\'\\\n]|\\.)*\')"
-
         if t.value.startswith('"""') or t.value.startswith("'''"):
-            content = t.value[3:-3]  # Triple quotes - multiline OK
+            content = t.value[3:-3] # Triple quotes - multiline OK
         else:
-            content = t.value[1:-1]  # Single/double quotes
+            content = t.value[1:-1] # Single/double quotes
 
-        # Process basic escapes
+        # Process basic escapes    
         content = (
             content.replace(r"\\", "\\")
             .replace(r"\"", '"')
@@ -219,9 +263,7 @@ class Lexer:  # TODO: Too much instance attributes?
             .replace(r"\t", "\t")
             .replace(r"\r", "\r")
         )
-
         t.value = content
-        self._at_line_start = False
         return t
 
     def t_error_unterminated_string(self, t):
@@ -231,16 +273,13 @@ class Lexer:  # TODO: Too much instance attributes?
         t.lexer.skip(len(t.value))
         return None
 
-    # Note: This is a PLY special rule, not a token
     def t_NEWLINE(self, t):
-        r"\n+"
-        t.lexer.lineno += len(t.value)
-        self._at_line_start = True
+        r"(?:\r?\n[ \t]*)+"
+        # NOTE: Delegates indentation logic to `.indentation.process_newline_and_indent`.
+        #       This rule never returns a token; it only enqueues INDENT/DEDENT to `self._pending`.
+        process_newline_and_indent(self, t, TAB_WIDTH)
+        process_newline_and_indent(self, t, TAB_WIDTH)
         return None
-
-    def t_INDENT_DEDENT(self, t):
-        r"[ \t]+"
-        return process_indent_dedent(self, t, TAB_WIDTH)
 
     def t_NUMBER(self, t):
         r"((\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?)"
@@ -248,10 +287,36 @@ class Lexer:  # TODO: Too much instance attributes?
             t.value = float(t.value)
         else:
             t.value = int(t.value)
-        self._at_line_start = False
         return t
 
     def t_error(self, t):
+        """
+        Default error handler for illegal/unrecognized characters.
+        Parameters   
+        t : lex.LexToken
+            Token positioned at the offending character.
+
+        """
         msg = f"Illegal character '{t.value[0]}'"
         self.errors.append(Error(msg, t.lineno, t.lexpos, "lexer", self.data))
         t.lexer.skip(1)
+
+    def t_eof(self, t):
+        """
+        End-of-file used by PLY to finalize token emission.
+        If there are pending INDENT/DEDENT tokens in `self._pending`, return them first.
+        If `_indent_stack` holds more than the base level, pop one level and emit a DEDENT.
+        PLY will call `t_eof` again until the stack is fully drained.
+        If nothing remains, return None to signal end-of-input.
+        Parameters:
+        t : lex.LexToken
+            The (unused) token object provided by PLY at EOF.
+
+        """
+        if self._pending:
+            return self._pending.pop(0)
+
+        if len(self._indent_stack) > 1:
+            self._indent_stack.pop()
+            return self._make_token("DEDENT", "", getattr(self.lex, "lineno", 1), getattr(self.lex, "lexpos", 0))
+        return None    
