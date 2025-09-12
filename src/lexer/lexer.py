@@ -155,6 +155,7 @@ class Lexer:
         if not data.startswith("\n"):
             data = "\n" + data  
         self.lex.input(data)
+        
 
  
     def _next_token(self):
@@ -277,7 +278,6 @@ class Lexer:
         r"(?:\r?\n[ \t]*)+"
         # NOTE: Delegates indentation logic to `.indentation.process_newline_and_indent`.
         #       This rule never returns a token; it only enqueues INDENT/DEDENT to `self._pending`.
-        process_newline_and_indent(self, t, TAB_WIDTH)
         process_newline_and_indent(self, t, TAB_WIDTH)
         return None
 

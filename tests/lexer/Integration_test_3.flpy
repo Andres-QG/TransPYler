@@ -1,4 +1,3 @@
-
 def tuple_ex():    
     a = (5,6,'joseph')    b = (1,2, 'valverde')
         return a + b
