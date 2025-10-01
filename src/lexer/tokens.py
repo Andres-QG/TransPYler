@@ -18,6 +18,8 @@ KEYWORDS = {
     # Booleans (case-sensitive like Python)
     "True": "TRUE",
     "False": "FALSE",
+    # Null literal
+    "None": "NONE", 
     # Logical operators
     "and": "AND",
     "or": "OR",
