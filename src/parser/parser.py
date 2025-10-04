@@ -2,7 +2,8 @@ from ply import yacc
 from typing import Optional, List
 
 # LEXER / TOKENS
-from ..lexer.tokens import TOKENS    
+from ..lexer.tokens import TOKENS 
+print(TOKENS)   
 from ..lexer.lexer import Lexer             
 
 tokens = TOKENS    # tuple of tokens defined in the lexer                          
@@ -41,8 +42,11 @@ class Parser:
     
     - Syntactically analyze language expressions and generate the corresponding AST.
     - Implement operator precedence rules and ensure that expressions are evaluated correctly.  
-      
+
     """
+    tokens = TOKENS
+    precedence = precedence
+
     def __init__(self, debug: bool = False):
         self.debug = debug
         self.errors: List[Error] = []
