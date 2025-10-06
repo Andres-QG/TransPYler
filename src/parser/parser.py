@@ -4,7 +4,7 @@ from typing import Optional, List
 # LEXER / TOKENS
 from ..lexer.tokens import TOKENS
 
-print(TOKENS)
+# print(TOKENS)
 from ..lexer.lexer import Lexer
 
 tokens = TOKENS  # tuple of tokens defined in the lexer

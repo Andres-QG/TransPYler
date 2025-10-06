@@ -1,5 +1,5 @@
 ### PRUEBAS
-$
+
 def random_operation(a, b):             ###FUNCION 1
     c = a + b
 
