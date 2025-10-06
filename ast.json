@@ -1,29 +1,29 @@
 {
   "_type": "BinaryExpr",
   "left": {
+    "_type": "LiteralExpr",
+    "value": 1,
+    "line": 2,
+    "col": 1
+  },
+  "op": "+",
+  "right": {
     "_type": "BinaryExpr",
     "left": {
-      "_type": "LiteralExpr",
-      "value": 1,
-      "line": 2,
-      "col": 1
-    },
-    "op": "+",
-    "right": {
       "_type": "LiteralExpr",
       "value": 2,
       "line": 2,
       "col": 5
     },
+    "op": "*",
+    "right": {
+      "_type": "LiteralExpr",
+      "value": 3,
+      "line": 2,
+      "col": 9
+    },
     "line": 0,
     "col": 0
-  },
-  "op": "*",
-  "right": {
-    "_type": "LiteralExpr",
-    "value": 3,
-    "line": 2,
-    "col": 9
   },
   "line": 0,
   "col": 0
