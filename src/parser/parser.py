@@ -24,10 +24,8 @@ from ..core.utils import Error
 
 # PRECEDENCE
 precedence = (
-    ("right", "POWER"),
-    ("right", "UPLUS", "UMINUS", "NOT"),
-    ("left", "TIMES", "DIVIDE", "FLOOR_DIVIDE", "MOD"),
-    ("left", "PLUS", "MINUS"),
+    ("left", "OR"),  # lowest
+    ("left", "AND"),
     (
         "left",
         "EQUALS",
@@ -37,8 +35,10 @@ precedence = (
         "GREATER_THAN",
         "GREATER_THAN_EQUALS",
     ),
-    ("left", "AND"),
-    ("left", "OR"),
+    ("left", "PLUS", "MINUS"),
+    ("left", "TIMES", "DIVIDE", "FLOOR_DIVIDE", "MOD"),
+    ("right", "UPLUS", "UMINUS", "NOT"),
+    ("right", "POWER"),  # highest
 )
 
 
