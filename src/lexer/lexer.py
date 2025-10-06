@@ -36,7 +36,6 @@ Example usage:
         print(token)
 """
 
-import re
 from ply import lex
 
 from ..core.utils import Error
@@ -46,7 +45,7 @@ from .indentation import process_newline_and_indent  # NUEVO
 
 # Helper sets used by the lexer to track suites and delimiter nesting.
 SUITE_COLON = {"COLON"}  # ':' fuera de delimitadores abre bloque
-OPEN_DELIMS  = {"LPAREN", "LBRACKET", "LBRACE"}
+OPEN_DELIMS = {"LPAREN", "LBRACKET", "LBRACE"}
 CLOSE_DELIMS = {"RPAREN", "RBRACKET", "RBRACE"}
 
 
@@ -103,7 +102,7 @@ class Lexer:
     t_COMMA = r"\,"
     t_DOT = r"\."
 
-    t_ignore = "" # global ignore empty because the whitespace is handled by rules.
+    t_ignore = ""  # global ignore empty because the whitespace is handled by rules.
 
     #   Lifecycle
     def __init__(self, errors: list[Error], debug: bool = False):
@@ -114,7 +113,7 @@ class Lexer:
         errors : list[Error]
             A list that will receive lexical errors discovered during scanning.
         debug : bool, optional
-            When True, prints indentation diagnostics, by default False.   
+            When True, prints indentation diagnostics, by default False.
 
         """
         self.lex = None
@@ -124,11 +123,10 @@ class Lexer:
         self.symbol_table = SymbolTable()
 
         # Indentation state
-        self._indent_stack = [0]     # absolute columns (0, 4, 8, ...)
-        self._pending = []           # queue of synthetic INDENT/DEDENT tokens
+        self._indent_stack = [0]  # absolute columns (0, 4, 8, ...)
+        self._pending = []  # queue of synthetic INDENT/DEDENT tokens
         self._expect_indent = False  # becomes True after ':' outside delimiters
-        self._delim_depth = 0        # (), [], {} 
-
+        self._delim_depth = 0  # (), [], {}
 
     def build(self):
         """
@@ -140,8 +138,7 @@ class Lexer:
         """
         self.lex = lex.lex(module=self)
         self._base_token = self.lex.token
-        self.lex.token = self._next_token  
-
+        self.lex.token = self._next_token
 
     def input(self, data: str):
         """
@@ -153,11 +150,9 @@ class Lexer:
         """
         self.data = data
         if not data.startswith("\n"):
-            data = "\n" + data  
+            data = "\n" + data
         self.lex.input(data)
-        
 
- 
     def _next_token(self):
         """
         Token source that can also emit extra INDENT/DEDENT tokens.
@@ -165,15 +160,15 @@ class Lexer:
         The next token to emit, or None when the input has truly ended (EOF).
 
         """
-        while True:         
+        while True:
             if self._pending:
                 return self._pending.pop(0)
-           
+
             tok = self._base_token()
-           
-            if tok is None:            
-                if self.lex.lexpos >= len(self.lex.lexdata):                    
-                    return None               
+
+            if tok is None:
+                if self.lex.lexpos >= len(self.lex.lexdata):
+                    return None
                 continue
 
             if tok.type in OPEN_DELIMS:
@@ -187,7 +182,7 @@ class Lexer:
             if self._pending:
                 self._pending.append(tok)
                 return self._pending.pop(0)
-            
+
             return tok
 
     # ---- Internal helpers (also used by `.indentation`) ----
@@ -224,7 +219,6 @@ class Lexer:
         if self.debug:
             print(f"[INDENT-ERROR] {msg} @ line {lineno}")
 
-
     # ---- PLY rules (t_...) ----
     def t_ID(self, t):
         r"[A-Za-z_][A-Za-z0-9_]*"
@@ -236,26 +230,24 @@ class Lexer:
             except Exception:
                 pass
         return t
-    
+
     def t_WS(self, t):
         r"[ \t]+"
         # NOTE: Inline spaces/tabs are ignored. Indentation at line start is handled in `t_NEWLINE`.
         return None
 
-    # TODO: Fix (Not a one line comment)
     def t_COMMENT(self, t):
         r"\#.*"
         return None
 
     def t_STRING(self, t):
-        # TODO(Andres): Multiline doesn't allow \n inside single/double quotes. Asks if this is correct.
         r"(?:\"\"\"(?:[^\"\\]|\\.|\"(?!\"\"))*\"\"\"|\'\'\'(?:[^\'\\]|\\.|\'(?!\'\'))*\'\'\'|\"(?:[^\"\\\n]|\\.)*\"|\'(?:[^\'\\\n]|\\.)*\')"
         if t.value.startswith('"""') or t.value.startswith("'''"):
-            content = t.value[3:-3] # Triple quotes - multiline OK
+            content = t.value[3:-3]  # Triple quotes - multiline OK
         else:
-            content = t.value[1:-1] # Single/double quotes
+            content = t.value[1:-1]  # Single/double quotes
 
-        # Process basic escapes    
+        # Process basic escapes
         content = (
             content.replace(r"\\", "\\")
             .replace(r"\"", '"')
@@ -292,7 +284,7 @@ class Lexer:
     def t_error(self, t):
         """
         Default error handler for illegal/unrecognized characters.
-        Parameters   
+        Parameters
         t : lex.LexToken
             Token positioned at the offending character.
 
@@ -318,5 +310,10 @@ class Lexer:
 
         if len(self._indent_stack) > 1:
             self._indent_stack.pop()
-            return self._make_token("DEDENT", "", getattr(self.lex, "lineno", 1), getattr(self.lex, "lexpos", 0))
-        return None    
+            return self._make_token(
+                "DEDENT",
+                "",
+                getattr(self.lex, "lineno", 1),
+                getattr(self.lex, "lexpos", 0),
+            )
+        return None

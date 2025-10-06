@@ -6,12 +6,12 @@ from .ast_base import AstNode
 # ---------- Atomic expressions ----------
 @dataclass
 class LiteralExpr(AstNode):
-    value: Any = None  # numbers, strings, True/False/None (y luego colecciones básicas)
+    value: Any = None  # numbers, strings, True/False/None (and basic collections after)
 
 
 @dataclass
 class Identifier(AstNode):
-    name: str = ""  # variable / función
+    name: str = ""  # variable / function
 
 
 # ---------- Operators ----------
@@ -24,7 +24,7 @@ class UnaryExpr(AstNode):
 @dataclass
 class BinaryExpr(AstNode):
     left: AstNode = None
-    op: str = ""  # "PLUS", "MINUS", "TIMES", "POWER", etc. (token o símbolo)
+    op: str = ""  # "PLUS", "MINUS", "TIMES", "POWER", etc. (token o symbol)
     right: AstNode = None
 
 
@@ -33,11 +33,11 @@ class ComparisonExpr(AstNode):
     left: AstNode = None
     op: str = ""  # "EQUALS", "LESS_THAN", ...
     right: AstNode = None
-    # Nota: si luego quieren comparaciones encadenadas (a < b < c), se puede extender a listas.
+    # Note: could be chained comparisons (a < b < c) but for simplicity, we keep it binary
 
 
 # ---------- Calls ----------
 @dataclass
 class CallExpr(AstNode):
-    callee: AstNode = None  # normalmente Identifier, pero puede ser otra expresión
-    args: List[AstNode] = field(default_factory=list)  # argumentos posicionales
+    callee: AstNode = None  # Identifier, but could be more complex (e.g., obj.method)
+    args: List[AstNode] = field(default_factory=list)  # positional arguments

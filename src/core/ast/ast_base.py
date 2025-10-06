@@ -16,20 +16,27 @@ class AstNode:
 
     def to_dict(self) -> Dict[str, Any]:
         """
-        converts the node into a dictionary, which helps it to be saved in a serializable format (such as JSON)
+        converts the node into a dictionary, which helps it to be saved in a 
+        serializable format (such as JSON)
         """
-        d: Dict[str, Any] = {"_type": self.__class__.__name__}
-        for k, v in self.__dict__.items():
-            if k in ("line", "col"):
+        dictionary: Dict[str, Any] = {"_type": self.__class__.__name__}
+        for key, value in self.__dict__.items():
+            # If the key is "line" or "col", we skip it for now and add it later if it's not None
+            if key in ("line", "col"):
                 continue
-            if isinstance(v, AstNode):
-                d[k] = v.to_dict()
-            elif isinstance(v, list):
-                d[k] = [x.to_dict() if isinstance(x, AstNode) else x for x in v]
+            # If the value is another AstNode
+            if isinstance(value, AstNode):
+                dictionary[key] = value.to_dict()
+            # If the value is a list of AstNodes
+            elif isinstance(value, list):
+                # Build a list converting AstNode elements to dicts, leaving others unchanged
+                dictionary[key] = [
+                    x.to_dict() if isinstance(x, AstNode) else x for x in value
+                ]
             else:
-                d[k] = v
+                dictionary[key] = value
         if self.line is not None:
-            d["line"] = self.line
+            dictionary["line"] = self.line
         if self.col is not None:
-            d["col"] = self.col
-        return d
+            dictionary["col"] = self.col
+        return dictionary
