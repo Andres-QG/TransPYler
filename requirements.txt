@@ -5,3 +5,4 @@ pluggy==1.6.0
 ply==3.11
 Pygments==2.19.2
 pytest==8.4.2
+rich==14.1.0
