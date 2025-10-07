@@ -14,9 +14,10 @@ class AstNode:
     )
     col: Optional[int] = None
 
+    # TODO(any): Refactor
     def to_dict(self) -> Dict[str, Any]:
         """
-        converts the node into a dictionary, which helps it to be saved in a 
+        converts the node into a dictionary, which helps it to be saved in a
         serializable format (such as JSON)
         """
         dictionary: Dict[str, Any] = {"_type": self.__class__.__name__}
@@ -33,10 +34,20 @@ class AstNode:
                 dictionary[key] = [
                     x.to_dict() if isinstance(x, AstNode) else x for x in value
                 ]
+            elif value is None:
+                # For None values, we can choose to include them or not (JSON null)
+                dictionary[key] = None
             else:
-                dictionary[key] = value
+                # Is it JSON serializable?
+                if isinstance(value, (str, int, float, bool)):
+                    dictionary[key] = value
+                # If it's not serializable, convert to string as a fallback
+                else:
+                    dictionary[key] = str(value)
+        # Add line and col at the end if they exist
         if self.line is not None:
             dictionary["line"] = self.line
         if self.col is not None:
             dictionary["col"] = self.col
+
         return dictionary
