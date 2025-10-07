@@ -1,0 +1,62 @@
+graph TD
+n0[Node]
+n1[Node: {'_type': 'LiteralExpr', 'value': 5, 'line': 4, 'col': 44}]
+n2[Node: x]
+n1 --> n2
+n0 --> n1
+n3[Node: {'_type': 'LiteralExpr', 'value': 10, 'line': 5, 'col': 50}]
+n4[Node: y]
+n3 --> n4
+n0 --> n3
+n5[Node]
+n6[Node]
+n7[Node: x]
+n6 --> n7
+n8[Node: 10]
+n6 --> n8
+n5 --> n6
+n9[Node]
+n10[Node: {'_type': 'BinaryExpr', 'left': {'_type': 'Identifier', 'name': 'x', 'line': 8, 'col': 78}, 'op': '*', 'right': {'_type': 'LiteralExpr', 'value': 2, 'line': 8, 'col': 82}, 'line': 0, 'col': 0}]
+n11[Node: result]
+n10 --> n11
+n9 --> n10
+n12[Node]
+n9 --> n12
+n5 --> n9
+n13[Node]
+n14[Node: {'_type': 'LiteralExpr', 'value': 0, 'line': 13, 'col': 145}]
+n15[Node: result]
+n14 --> n15
+n13 --> n14
+n5 --> n13
+n0 --> n5
+n16[Node]
+n17[Node]
+n18[Node: x]
+n17 --> n18
+n19[Node: 10]
+n17 --> n19
+n16 --> n17
+n20[Node]
+n21[Node: {'_type': 'LiteralExpr', 'value': 1, 'line': 16, 'col': 171}]
+n22[Node: x]
+n21 --> n22
+n20 --> n21
+n23[Node]
+n20 --> n23
+n16 --> n20
+n0 --> n16
+n24[Node]
+n25[Node: i]
+n24 --> n25
+n26[Node]
+n27[Node: range]
+n26 --> n27
+n28[Node: 3]
+n26 --> n28
+n24 --> n26
+n29[Node]
+n30[Node: {'_type': 'CallExpr', 'callee': {'_type': 'Identifier', 'name': 'print', 'line': 20, 'col': 210}, 'args': [{'_type': 'Identifier', 'name': 'i', 'line': 20, 'col': 216}], 'line': 20, 'col': 210}]
+n29 --> n30
+n24 --> n29
+n0 --> n24

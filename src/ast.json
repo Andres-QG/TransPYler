@@ -1,0 +1,421 @@
+{
+  "_type": "Module",
+  "body": [
+    {
+      "_type": "Assign",
+      "target": {
+        "_type": "Identifier",
+        "name": "a",
+        "line": 3,
+        "col": 24
+      },
+      "op": "=",
+      "value": {
+        "_type": "LiteralExpr",
+        "value": 1,
+        "line": 3,
+        "col": 28
+      },
+      "line": 3,
+      "col": 24
+    },
+    {
+      "_type": "Assign",
+      "target": {
+        "_type": "Identifier",
+        "name": "b",
+        "line": 4,
+        "col": 30
+      },
+      "op": "=",
+      "value": {
+        "_type": "LiteralExpr",
+        "value": 2,
+        "line": 4,
+        "col": 34
+      },
+      "line": 4,
+      "col": 30
+    },
+    {
+      "_type": "Assign",
+      "target": {
+        "_type": "Identifier",
+        "name": "c",
+        "line": 5,
+        "col": 36
+      },
+      "op": "=",
+      "value": {
+        "_type": "LiteralExpr",
+        "value": 3,
+        "line": 5,
+        "col": 40
+      },
+      "line": 5,
+      "col": 36
+    },
+    {
+      "_type": "Assign",
+      "target": {
+        "_type": "Identifier",
+        "name": "x",
+        "line": 6,
+        "col": 42
+      },
+      "op": "=",
+      "value": {
+        "_type": "BinaryExpr",
+        "left": {
+          "_type": "Identifier",
+          "name": "a",
+          "line": 6,
+          "col": 46
+        },
+        "op": "+",
+        "right": {
+          "_type": "Identifier",
+          "name": "b",
+          "line": 6,
+          "col": 50
+        },
+        "line": 0,
+        "col": 0
+      },
+      "line": 6,
+      "col": 42
+    },
+    {
+      "_type": "If",
+      "cond": {
+        "_type": "ComparisonExpr",
+        "left": {
+          "_type": "Identifier",
+          "name": "x",
+          "line": 9,
+          "col": 75
+        },
+        "op": ">",
+        "right": {
+          "_type": "LiteralExpr",
+          "value": 5,
+          "line": 9,
+          "col": 79
+        },
+        "line": 0,
+        "col": 0
+      },
+      "body": {
+        "_type": "Block",
+        "statements": [
+          {
+            "_type": "Assign",
+            "target": {
+              "_type": "Identifier",
+              "name": "result",
+              "line": 10,
+              "col": 86
+            },
+            "op": "=",
+            "value": {
+              "_type": "BinaryExpr",
+              "left": {
+                "_type": "Identifier",
+                "name": "x",
+                "line": 10,
+                "col": 95
+              },
+              "op": "*",
+              "right": {
+                "_type": "LiteralExpr",
+                "value": 2,
+                "line": 10,
+                "col": 99
+              },
+              "line": 0,
+              "col": 0
+            },
+            "line": 10,
+            "col": 86
+          },
+          {
+            "_type": "Pass"
+          }
+        ],
+        "line": 10,
+        "col": 86
+      },
+      "elifs": [
+        [
+          {
+            "_type": "ComparisonExpr",
+            "left": {
+              "_type": "Identifier",
+              "name": "x",
+              "line": 12,
+              "col": 115
+            },
+            "op": "==",
+            "right": {
+              "_type": "LiteralExpr",
+              "value": 3,
+              "line": 12,
+              "col": 120
+            },
+            "line": 0,
+            "col": 0
+          },
+          {
+            "_type": "Block",
+            "statements": [
+              {
+                "_type": "Assign",
+                "target": {
+                  "_type": "Identifier",
+                  "name": "result",
+                  "line": 13,
+                  "col": 127
+                },
+                "op": "=",
+                "value": {
+                  "_type": "BinaryExpr",
+                  "left": {
+                    "_type": "Identifier",
+                    "name": "x",
+                    "line": 13,
+                    "col": 136
+                  },
+                  "op": "/",
+                  "right": {
+                    "_type": "LiteralExpr",
+                    "value": 2,
+                    "line": 13,
+                    "col": 140
+                  },
+                  "line": 0,
+                  "col": 0
+                },
+                "line": 13,
+                "col": 127
+              }
+            ],
+            "line": 13,
+            "col": 127
+          }
+        ]
+      ],
+      "orelse": {
+        "_type": "Block",
+        "statements": [
+          {
+            "_type": "Assign",
+            "target": {
+              "_type": "Identifier",
+              "name": "result",
+              "line": 15,
+              "col": 152
+            },
+            "op": "=",
+            "value": {
+              "_type": "LiteralExpr",
+              "value": 0,
+              "line": 15,
+              "col": 161
+            },
+            "line": 15,
+            "col": 152
+          }
+        ],
+        "line": 15,
+        "col": 152
+      }
+    },
+    {
+      "_type": "Assign",
+      "target": {
+        "_type": "Identifier",
+        "name": "counter",
+        "line": 18,
+        "col": 193
+      },
+      "op": "=",
+      "value": {
+        "_type": "LiteralExpr",
+        "value": 0,
+        "line": 18,
+        "col": 203
+      },
+      "line": 18,
+      "col": 193
+    },
+    {
+      "_type": "While",
+      "cond": {
+        "_type": "ComparisonExpr",
+        "left": {
+          "_type": "Identifier",
+          "name": "counter",
+          "line": 19,
+          "col": 211
+        },
+        "op": "<",
+        "right": {
+          "_type": "LiteralExpr",
+          "value": 3,
+          "line": 19,
+          "col": 221
+        },
+        "line": 0,
+        "col": 0
+      },
+      "body": {
+        "_type": "Block",
+        "statements": [
+          {
+            "_type": "Assign",
+            "target": {
+              "_type": "Identifier",
+              "name": "counter",
+              "line": 20,
+              "col": 228
+            },
+            "op": "+=",
+            "value": {
+              "_type": "LiteralExpr",
+              "value": 1,
+              "line": 20,
+              "col": 239
+            },
+            "line": 20,
+            "col": 228
+          },
+          {
+            "_type": "If",
+            "cond": {
+              "_type": "ComparisonExpr",
+              "left": {
+                "_type": "Identifier",
+                "name": "counter",
+                "line": 21,
+                "col": 248
+              },
+              "op": "==",
+              "right": {
+                "_type": "LiteralExpr",
+                "value": 2,
+                "line": 21,
+                "col": 259
+              },
+              "line": 0,
+              "col": 0
+            },
+            "body": {
+              "_type": "Block",
+              "statements": [
+                {
+                  "_type": "Continue"
+                }
+              ]
+            },
+            "elifs": [],
+            "orelse": null
+          },
+          {
+            "_type": "If",
+            "cond": {
+              "_type": "ComparisonExpr",
+              "left": {
+                "_type": "Identifier",
+                "name": "counter",
+                "line": 23,
+                "col": 286
+              },
+              "op": "==",
+              "right": {
+                "_type": "LiteralExpr",
+                "value": 3,
+                "line": 23,
+                "col": 297
+              },
+              "line": 0,
+              "col": 0
+            },
+            "body": {
+              "_type": "Block",
+              "statements": [
+                {
+                  "_type": "Break"
+                }
+              ]
+            },
+            "elifs": [],
+            "orelse": null
+          }
+        ],
+        "line": 20,
+        "col": 228
+      }
+    },
+    {
+      "_type": "For",
+      "target": {
+        "_type": "Identifier",
+        "name": "i",
+        "line": 27,
+        "col": 337
+      },
+      "iterable": {
+        "_type": "CallExpr",
+        "callee": {
+          "_type": "Identifier",
+          "name": "range",
+          "line": 27,
+          "col": 342
+        },
+        "args": [
+          {
+            "_type": "LiteralExpr",
+            "value": 2,
+            "line": 27,
+            "col": 348
+          }
+        ],
+        "line": 27,
+        "col": 342
+      },
+      "body": {
+        "_type": "Block",
+        "statements": [
+          {
+            "_type": "ExprStmt",
+            "value": {
+              "_type": "CallExpr",
+              "callee": {
+                "_type": "Identifier",
+                "name": "print",
+                "line": 28,
+                "col": 356
+              },
+              "args": [
+                {
+                  "_type": "Identifier",
+                  "name": "i",
+                  "line": 28,
+                  "col": 362
+                }
+              ],
+              "line": 28,
+              "col": 356
+            },
+            "line": 0,
+            "col": 0
+          }
+        ],
+        "line": 0,
+        "col": 0
+      }
+    }
+  ],
+  "line": 1,
+  "col": 0
+}

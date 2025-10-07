@@ -4,7 +4,10 @@ from pathlib import Path
 
 # Parser and AST types
 from ...parser.parser import Parser
-from ...core.ast.ast_base import AstNode  # type: ignore
+from ...core.ast.ast_statements import If, While, For, Assign, Block, Pass, Continue, Break, ExprStmt
+from ...core.ast.ast_base import AstNode, Module
+
+
 
 # ---- Rich (pretty console view) ----
 try:
@@ -158,45 +161,85 @@ def build_expr_tree(node: AstNode):
 # ASCII "circles" diagram (no Rich required)
 # =========================================================
 def _expr_label(node):
-    if all(hasattr(node, a) for a in ("left", "right", "op")):
-        return str(getattr(node, "op"))
-    if hasattr(node, "op") and hasattr(node, "operand"):
-        return str(getattr(node, "op"))
-    if hasattr(node, "expression") or hasattr(node, "expr"):
-        return "Expr"
-    if hasattr(node, "name"):
-        return str(getattr(node, "name"))
-    if hasattr(node, "value"):
-        return repr(getattr(node, "value"))
-    if (hasattr(node, "callee") and hasattr(node, "args")) or (hasattr(node, "func") and hasattr(node, "args")):
-        return "call"
-    if hasattr(node, "obj") and hasattr(node, "index"):
-        return "[]"
-    if hasattr(node, "obj") and hasattr(node, "attr"):
-        return "."
-    if hasattr(node, "elements"):
-        return "[]" if getattr(node, "is_list", True) else "()"
-    if hasattr(node, "keys") and hasattr(node, "values"):
-        return "{}"
-    return node.__class__.__name__
+    """Etiqueta simple para el nodo en el diagrama ASCII."""
+    cls_name = node.__class__.__name__
 
+    # Manejamos bloques y declaraciones compuestas
+    if cls_name == "Module":
+        return "Module"
+    if cls_name == "Block":
+        return "Block"
+    if cls_name == "If":
+        return "If"
+    if cls_name == "While":
+        return "While"
+    if cls_name == "For":
+        return "For"
+    if cls_name == "Assign":
+        return "Assign"
+    if cls_name == "Pass":
+        return "Pass"
+    if cls_name == "ExprStmt":
+        return "ExprStmt"
+
+    # Expresiones
+    if hasattr(node, "op"):
+        return str(node.op)
+    if hasattr(node, "name"):
+        return str(node.name)
+    if hasattr(node, "value"):
+        return repr(node.value)
+    if hasattr(node, "callee") or hasattr(node, "func"):
+        return "call"
+
+    return cls_name
 def _expr_children(node):
+    # Bloques y módulos
+    if hasattr(node, "body") and isinstance(node.body, list):
+        return node.body
+    if hasattr(node, "statements") and isinstance(node.statements, list):
+        return node.statements
+
+    # If / While / For
+    if isinstance(node, If):
+        children = [node.cond, node.body]
+        for cond, blk in node.elifs or []:
+            children.extend([cond, blk])
+        if node.orelse:
+            children.append(node.orelse)
+        return children
+
+    if isinstance(node, While):
+        return [node.cond, node.body]
+
+    if isinstance(node, For):
+        return [node.target, node.iterable, node.body]
+
+    # Expresiones binarias/unarias
     if all(hasattr(node, a) for a in ("left", "right", "op")):
         return [node.left, node.right]
     if hasattr(node, "op") and hasattr(node, "operand"):
         return [node.operand]
+
+    # Expresiones agrupadas
     if hasattr(node, "expression"):
         return [node.expression]
     if hasattr(node, "expr"):
         return [node.expr]
+
+    # Call
     if hasattr(node, "callee") and hasattr(node, "args"):
         return [node.callee] + list(node.args)
     if hasattr(node, "func") and hasattr(node, "args"):
         return [node.func] + list(node.args)
+
+    # Index / Attribute
     if hasattr(node, "obj") and hasattr(node, "index"):
         return [node.obj, node.index]
     if hasattr(node, "obj") and hasattr(node, "attr"):
         return [node.obj]
+
+    # List / Dict
     if hasattr(node, "elements"):
         return list(node.elements)
     if hasattr(node, "keys") and hasattr(node, "values"):
@@ -204,71 +247,78 @@ def _expr_children(node):
         for k, v in zip(node.keys, node.values):
             out.extend([k, v])
         return out
+
     return []
 
-def _merge_ascii(left, right):
-    w1, w2 = (len(left[0]) if left else 0), (len(right[0]) if right else 0)
-    h1, h2 = len(left), len(right)
-    height = max(h1, h2)
-    left += [" " * w1] * (height - h1)
-    right += [" " * w2] * (height - h2)
-    return [l + r for l, r in zip(left, right)]
+def _merge_ascii_multiple(children_lines, gap=4):
+    """
+    Merge multiple ASCII blocks horizontally with a gap.
+    children_lines: list of tuples (lines, width, mid)
+    Returns: merged_lines, total_width, root_mid
+    """
+    if not children_lines:
+        return [], 0, 0
 
-def _render_ascii(node):
-    label = f"({ _expr_label(node) })"
+    heights = [len(lines) for lines, _, _ in children_lines]
+    max_height = max(heights)
+
+    # Pad all children to max_height
+    padded = []
+    for lines, w, m in children_lines:
+        padded_lines = lines + [" " * w] * (max_height - len(lines))
+        padded.append((padded_lines, w, m))
+
+    # Merge lines horizontally
+    merged_lines = []
+    total_width = sum(w for _, w, _ in padded) + gap * (len(padded) - 1)
+    positions = []
+    x = 0
+    for lines, w, m in padded:
+        positions.append(x + m)
+        x += w + gap
+
+    for row in range(max_height):
+        line = ""
+        for i, (lines, w, m) in enumerate(padded):
+            line += lines[row]
+            if i < len(padded) - 1:
+                line += " " * gap
+        merged_lines.append(line)
+
+    root_mid = sum(positions) // len(positions)
+    return merged_lines, total_width, root_mid
+
+
+def _render_ascii(node: AstNode):
+    label = f"({_expr_label(node)})"
     children = [c for c in _expr_children(node) if c is not None]
 
     if not children:
         line = label
         return [line], len(line), len(line) // 2
 
-    if len(children) == 1:
-        child_lines, child_w, child_m = _render_ascii(children[0])
-        root_w = max(len(label), child_w)
-        first = " " * child_m + label + " " * max(0, root_w - (child_m + len(label)))
-        second = " " * (child_m + len(label)//2) + "│"
-        pad_left = child_m + len(label)//2
-        child_lines = [(" " * pad_left) + ln for ln in child_lines]
-        return [first, second] + child_lines, max(root_w, len(first)), (child_m + len(label)//2)
+    # Render all children recursively
+    rendered_children = [_render_ascii(c) for c in children]
+    merged_children, merged_width, merged_mid = _merge_ascii_multiple(rendered_children)
 
-    left_lines, lw, lm = _render_ascii(children[0])
-    right_lines, rw, rm = _render_ascii(children[1])
-    gap = 4
-    root_center = lw + gap // 2
-    root = " " * (root_center - len(label)//2) + label
-    root_w = max(len(root), lw + gap + rw)
-    root = root.ljust(root_w)
+    root_width = len(label)
+    root_mid = root_width // 2
+    total_width = max(root_width, merged_width)
+    left_padding = merged_mid - root_mid
+    first_line = " " * max(0, left_padding) + label
+    second_line = [" "] * total_width
 
-    # Connectors
-    conn_v = [" "] * root_w
-    conn_v[root_center] = "│"
-    conn_d = [" "] * root_w
-    # left
-    li = lm
-    for i in range(li + 1, root_center):
-        conn_d[i] = "─"
-    if li + 1 < root_center:
-        conn_d[li + 1] = "┌"
-    if root_center - 1 >= 0:
-        conn_d[root_center - 1] = "┘"
-    # right
-    ri = lw + gap + rm
-    for i in range(root_center + 1, ri):
-        conn_d[i] = "─"
-    if root_center + 1 < root_w:
-        conn_d[root_center + 1] = "└"
-    if ri - 1 >= 0:
-        conn_d[ri - 1] = "┐"
+    # Conecta el nodo raíz con los hijos
+    for child_mid in [mid for _, _, mid in rendered_children]:
+        if 0 <= child_mid < total_width:
+            second_line[child_mid] = "│"
+    second_line = "".join(second_line)
 
-    h = max(len(left_lines), len(right_lines))
-    left_lines += [" " * lw] * (h - len(left_lines))
-    right_lines += [" " * rw] * (h - len(right_lines))
-    merged_children = _merge_ascii(left_lines, [" " * gap + ln for ln in right_lines])
+    return [first_line, second_line] + merged_children, total_width, merged_mid
 
-    return [root, "".join(conn_v), "".join(conn_d)] + merged_children, root_w, root_center
 
 def render_expression_diagram(ast_root: AstNode) -> str:
-    """ASCII diagram similar to the reference image (no Rich required)."""
+    """ASCII diagram compatible con cualquier AST (no Rich)."""
     if ast_root is None:
         return "<< empty AST >>"
     lines, _, _ = _render_ascii(ast_root)
@@ -276,6 +326,7 @@ def render_expression_diagram(ast_root: AstNode) -> str:
     top = " " * max(0, (len(lines[0]) - len(title)) // 2) + title
     arrow = " " * (len(lines[0]) // 2) + "↓"
     return "\n".join([top, arrow] + lines)
+
 
 
 # =========================================================
@@ -335,6 +386,10 @@ def main():
 
     # 4) Save JSON (overwrite)
     out_path.parent.mkdir(parents=True, exist_ok=True)
+    # <-- Depuración: imprime el diccionario del AST -->
+    print("DEBUG: ast_root.to_dict() output:")
+    import pprint
+    pprint.pprint(ast_root.to_dict())
     out_path.write_text(to_json(ast_root), encoding="utf-8")
 
     # 5) Print according to the selected view

@@ -1,21 +1,28 @@
-# tests/parser/prueba_sentencias.flpy
+# Asignaciones simples
+a = 1
+b = 2
+c = 3
+x = a + b
 
-x = 5
-y = 10
-
-if x > 10:
+# If / Elif / Else
+if x > 5:
     result = x * 2
     pass
-elif x == 10:
+elif x == 3:
     result = x / 2
 else:
     result = 0
 
-while x < 10:
-    x += 1
-    continue
+# While con break y continue
+counter = 0
+while counter < 3:
+    counter += 1
+    if counter == 2:
+        continue
+    if counter == 3:
+        break
 
-for i in range(3):
+# For loop simple
+for i in range(2):
     print(i)
-
 

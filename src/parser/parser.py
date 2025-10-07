@@ -391,22 +391,30 @@ class Parser:
         """suite : simple_statement
                  | INDENT statement_list DEDENT"""
         if len(p) == 2:
-            p[0] = Block(statements=[p[1]])
+            # Un solo statement → convertir a Block
+            stmt = p[1]
+            p[0] = Block(statements=[stmt], line=getattr(stmt, "line", None), col=getattr(stmt, "col", None))
         else:
-            p[0] = Block(statements=p[3])
+            # Lista de statements con indentación
+            stmts = p[2]
+            if stmts:
+                p[0] = Block(statements=stmts, line=getattr(stmts[0], "line", None), col=getattr(stmts[0], "col", None))
+            else:
+                p[0] = Block(statements=[])
 
     # ********************************************** Rules for Definitions *******************************
 
     def p_funcdef(self, p):
         "funcdef : DEF ID LPAREN param_list_opt RPAREN COLON statement_list"
         line, col = _pos(p, 1)
-        p[0] = FunctionDef(
-            name=p[2],  # ID
-            params=p[4],  # param_list_opt
-            body=p[7],  # statements
-            line=line,
-            col=col,
-        )
+        body = Block(statements=p[7]) if not isinstance(p[7], Block) else p[7]
+        p[0] = FunctionDef(name=p[2], params=p[4], body=body, line=line, col=col)
+
+    def p_classdef(self, p):
+        "classdef : CLASS ID COLON statement_list"
+        line, col = _pos(p, 1)
+        body = Block(statements=p[3]) if not isinstance(p[3], Block) else p[3]
+        p[0] = ClassDef(name=p[2], body=body, line=line, col=col)
 
     def p_param_list_opt(self, p):
         """param_list_opt : param COMMA param_list_opt
