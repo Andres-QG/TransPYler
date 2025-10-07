@@ -106,10 +106,19 @@ class Parser:
         )
         raise SyntaxError(self.errors[-1].exact())
 
-    # TODO this should be changed: module : stmt_list
-    def p_module(self, p):
-        "module : expr"
-        p[0] = p[1]
+def p_module(self, p):
+    """
+    module : stmt_list
+           | empty
+    """
+    # if empty -> return empty module as Block with empty statements
+    if len(p) == 2 and p[1] is None:
+        p[0] = Block(statements=[])
+    else:
+        # p[1] is a list of statements
+        # Filter out None statements (blank lines)
+        statements = [s for s in p[1] if s is not None]
+        p[0] = Block(statements=statements)
 
     # ********************************************** Rules for expressions *******************************
 
@@ -251,7 +260,140 @@ class Parser:
 
 
 # ********************************************** Rules for Statements *******************************
-# TODO RANDY
+
+# Utility: empty rule
+def p_empty(p):
+    "empty :"
+    p[0] = None
+
+
+# --- Statement list and block handling ---
+def p_stmt_list(p):
+    """stmt_list : stmt_list stmt
+                 | stmt"""
+    if len(p) == 2:
+        p[0] = [p[1]]
+    else:
+        p[0] = p[1] + [p[2]]
+
+
+def p_block(p):
+    """block : COLON NEWLINE INDENT stmt_list DEDENT"""
+    p[0] = Block(statements=p[4])
+
+
+# --- Simple statements ---
+def p_stmt_expr(p):
+    """stmt : expr NEWLINE"""
+    # Wrap expression as a statement node
+    line, col = _pos(p, 1)
+    p[0] = ExprStmt(value=p[1], line=line, col=col)
+
+def p_stmt_blank(p):
+    """stmt : NEWLINE"""
+    # Blank line -> no-op; represent as Pass
+    p[0] = None
+
+def p_stmt_pass(p):
+    """stmt : PASS NEWLINE"""
+    line, col = _pos(p, 1)
+    p[0] = Pass(line=line, col=col)
+
+
+def p_stmt_break(p):
+    """stmt : BREAK NEWLINE"""
+    line, col = _pos(p, 1)
+    p[0] = Break(line=line, col=col)
+
+
+
+def p_stmt_continue(p):
+    """stmt : CONTINUE NEWLINE"""
+    line, col = _pos(p, 1)
+    p[0] = Continue(line=line, col=col)
+
+
+def p_stmt_return(p):
+    """stmt : RETURN expr NEWLINE
+            | RETURN NEWLINE"""
+    line, col = _pos(p, 1)
+    if len(p) == 3:
+        p[0] = Return(value=None, line=line, col=col)
+    else:
+        p[0] = Return(value=p[2], line=line, col=col)
+
+
+# --- Assignments ---
+def p_stmt_assign(p):
+    """stmt : ID ASSIGN expr NEWLINE
+            | ID PLUS_ASSIGN expr NEWLINE
+            | ID MINUS_ASSIGN expr NEWLINE
+            | ID TIMES_ASSIGN expr NEWLINE
+            | ID DIVIDE_ASSIGN expr NEWLINE"""
+    line, col = _pos(p, 1)
+    p[0] = Assign(
+        target=Identifier(name=p[1], line=line, col=col),
+        op=p[2],
+        value=p[3],
+        line=line,
+        col=col,
+    )
+
+
+# --- If / Elif / Else ---
+def p_stmt_if(p):
+    """stmt : IF expr block
+            | IF expr block elif_list_opt
+            | IF expr block elif_list_opt ELSE block"""
+    cond = p[2]
+    body = p[3]
+    elifs = []
+    orelse = None
+
+    if len(p) > 4:
+        if isinstance(p[4], list):
+            elifs = p[4]
+        if len(p) == 7:
+            orelse = p[6]
+
+    line, col = _pos(p, 1)
+    p[0] = If(cond=cond, body=body, elifs=elifs, orelse=orelse, line=line, col=col)
+
+
+def p_elif_list_opt(p):
+    """elif_list_opt : elif_list
+                     | empty"""
+    p[0] = p[1]
+
+
+def p_elif_list(p):
+    """elif_list : ELIF expr block
+                 | ELIF expr block elif_list"""
+    if len(p) == 4:
+        p[0] = [(p[2], p[3])]
+    else:
+        p[0] = [(p[2], p[3])] + p[4]
+
+
+# --- While ---
+def p_stmt_while(p):
+    """stmt : WHILE expr block"""
+    line, col = _pos(p, 1)
+    p[0] = While(cond=p[2], body=p[3], line=line, col=col)
+
+
+# --- For ---
+def p_stmt_for(p):
+    """stmt : FOR ID IN expr block"""
+    line, col = _pos(p, 1)
+    target = Identifier(name=p[2], line=line, col=col)
+    p[0] = For(target=target, iterable=p[4], body=p[5], line=line, col=col)
+
+
+# Utility: empty rule (already present)
+def p_empty(p):
+    "empty :"
+    p[0] = None
 
 
 # ********************************************** Rules for Definitions *******************************
