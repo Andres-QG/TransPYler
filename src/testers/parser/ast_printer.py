@@ -3,8 +3,8 @@ import argparse, json, sys
 from pathlib import Path
 
 # Parser and AST types
-from ..parser.parser import Parser
-from ..core.ast.ast_base import AstNode  # type: ignore
+from ...parser.parser import Parser
+from ...core.ast.ast_base import AstNode  # type: ignore
 
 # ---- Rich (pretty console view) ----
 try:
