@@ -102,10 +102,16 @@ class Parser:
         # PLY takes tokens from self.lexer.lex
         return self._parser.parse(lexer=self.lexer.lex, debug=self.debug)
 
+    # ---------------------- MODULE ----------------------
+    # Parse a module: top-level container of statements
     def p_module(self, p):
         """module : statement_list"""
         p[0] = Module(body=p[1], line=1, col=0)
 
+
+    # ---------------------- STATEMENT LIST ----------------------
+    # Parse a list of statements recursively
+    # Can be a single statement or multiple statements
     def p_statement_list(self, p):
         """statement_list : statement
                         | statement_list statement"""
@@ -277,16 +283,20 @@ class Parser:
 
 
     # ---------------------- STATEMENT ----------------------
+
+    # Parse a generic statement: can be simple or compound
     def p_statement(self, p):
         """statement : simple_statement
                     | compound_statement"""
         p[0] = p[1]
-
-    # ---------------------- SIMPLE STATEMENTS ----------------------
+    
+    # Parse a simple statement, delegates to small_stmt
     def p_simple_statement(self, p):
         """simple_statement : small_stmt"""
         p[0] = p[1]
-
+    
+    # Parse the smallest unit of a statement
+    # Can be assignment, return, break, continue, pass, or expression
     def p_small_stmt(self, p):
         """small_stmt : assignment
                   | return_stmt
@@ -296,7 +306,6 @@ class Parser:
                   | expr"""
         
         if len(p) == 2:
-            # Si es una expr simple, convertir a ExprStmt
             if hasattr(p[1], '__class__') and not isinstance(p[1], (Assign, Return, Break, Continue, Pass)):
                 line, col = _pos(p, 1)
                 p[0] = ExprStmt(value=p[1], line=line, col=col)
@@ -344,6 +353,7 @@ class Parser:
         p[0] = Pass()
 
     # ---------------------- COMPOUND STATEMENTS ----------------------
+    # Parse a compound statement: if, while, for, function, or class
     def p_compound_statement(self, p):
         """compound_statement : if_stmt
                           | while_stmt
@@ -353,11 +363,13 @@ class Parser:
         p[0] = p[1]
 
 
-    # if / elif / else
+    # ---------------------- IF / ELIF / ELSE ----------------------
+    # Parse an if statement with optional elif and else blocks
     def p_if_stmt(self, p):
         """if_stmt : IF expr COLON suite elif_blocks else_block_opt"""
         p[0] = If(cond=p[2], body=p[4], elifs=p[5], orelse=p[6])
 
+    # Parse zero or more elif blocks
     def p_elif_blocks(self, p):
         """elif_blocks : ELIF expr COLON suite elif_blocks
                        |"""
@@ -366,17 +378,21 @@ class Parser:
         else:
             p[0] = [(p[2], p[4])] + p[5]
 
+    # Parse an optional else block
     def p_else_block_opt(self, p):
         """else_block_opt : ELSE COLON suite
                           |"""
         p[0] = p[3] if len(p) > 1 else None
 
-    # while
+    # ---------------------- WHILE ----------------------
+    # Parse a while loop statement
     def p_while_stmt(self, p):
         """while_stmt : WHILE expr COLON suite"""
         p[0] = While(cond=p[2], body=p[4])
 
-    # for
+
+    # ---------------------- FOR ----------------------
+    # Parse a for loop statement
     def p_for_stmt(self, p):
         """for_stmt : FOR ID IN expr COLON suite"""
         line, col = _pos(p, 2)
@@ -387,15 +403,14 @@ class Parser:
         )
 
     # ---------------------- SUITE (BLOCKS) ----------------------
+    # Parse a suite of statements: single statement or indented block
     def p_suite(self, p):
         """suite : simple_statement
                  | INDENT statement_list DEDENT"""
         if len(p) == 2:
-            # Un solo statement → convertir a Block
             stmt = p[1]
             p[0] = Block(statements=[stmt], line=getattr(stmt, "line", None), col=getattr(stmt, "col", None))
         else:
-            # Lista de statements con indentación
             stmts = p[2]
             if stmts:
                 p[0] = Block(statements=stmts, line=getattr(stmts[0], "line", None), col=getattr(stmts[0], "col", None))
