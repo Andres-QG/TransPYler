@@ -1,5 +1,5 @@
-from dataclasses import dataclass
-from typing import Any, Dict, Optional
+from dataclasses import dataclass, field
+from typing import Any, Dict, Optional, List
 
 
 @dataclass
@@ -40,3 +40,8 @@ class AstNode:
         if self.col is not None:
             dictionary["col"] = self.col
         return dictionary
+    
+@dataclass    
+class Module(AstNode):
+    """Top-level AST node representing a complete module or file."""
+    body: List[AstNode] = field(default_factory=list)

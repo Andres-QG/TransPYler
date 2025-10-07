@@ -1,0 +1,21 @@
+# tests/parser/prueba_sentencias.flpy
+
+x = 5
+y = 10
+
+if x > 10:
+    result = x * 2
+    pass
+elif x == 10:
+    result = x / 2
+else:
+    result = 0
+
+while x < 10:
+    x += 1
+    continue
+
+for i in range(3):
+    print(i)
+
+

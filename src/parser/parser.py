@@ -7,6 +7,8 @@ from ..lexer.tokens import TOKENS
 # print(TOKENS)
 from ..lexer.lexer import Lexer
 
+
+
 tokens = TOKENS  # tuple of tokens defined in the lexer
 
 # AST NODES
@@ -18,9 +20,20 @@ from ..core.ast import (
     BinaryExpr,
     ComparisonExpr,
     CallExpr,
-    Module,
     FunctionDef,
     ClassDef,
+    ExprStmt,
+    Pass,
+    Assign,
+    Return,
+    Block,
+    Break,
+    Continue,
+    If,
+    While,
+    For,
+    Module,
+
 )
 
 from ..core.utils import Error
@@ -89,6 +102,18 @@ class Parser:
         # PLY takes tokens from self.lexer.lex
         return self._parser.parse(lexer=self.lexer.lex, debug=self.debug)
 
+    def p_module(self, p):
+        """module : statement_list"""
+        p[0] = Module(body=p[1], line=1, col=0)
+
+    def p_statement_list(self, p):
+        """statement_list : statement
+                        | statement_list statement"""
+        if len(p) == 2:
+            p[0] = [p[1]]
+        else:
+            p[0] = p[1] + [p[2]]
+
     # ERRORS
     def p_error(self, t):
         if t is None:
@@ -108,26 +133,8 @@ class Parser:
                 self.data,
             )
         )
-        # Skip tokens until we find a safe point
-        closing_tokens = {"DEDENT", "COLON", "RPAREN", "RBRACKET", "RBRACE", "NEWLINE"}
+        raise SyntaxError(self.errors[-1].exact())
 
-        while True:
-            tok = self._parser.token()
-            if not tok:
-                break  # EOF reached or safe token found
-            if tok.type in closing_tokens:
-                self._parser.errok()  # Clear the error state
-                return tok
-
-        return None  # No more tokens
-
-    def p_module(self, p):
-        """module : statement_list"""
-        p[0] = Module(body=p[1], line=1, col=0)
-
-    def p_module_empty(self, p):
-        """module :"""
-        p[0] = Module(body=[], line=1, col=0)
 
     # ********************************************** Rules for expressions *******************************
 
@@ -268,9 +275,125 @@ class Parser:
         p[0] = []
 
 
-# ********************************************** Rules for Statements *******************************
-# TODO RANDY
 
+    # ---------------------- STATEMENT ----------------------
+    def p_statement(self, p):
+        """statement : simple_statement
+                    | compound_statement"""
+        p[0] = p[1]
+
+    # ---------------------- SIMPLE STATEMENTS ----------------------
+    def p_simple_statement(self, p):
+        """simple_statement : small_stmt"""
+        p[0] = p[1]
+
+    def p_small_stmt(self, p):
+        """small_stmt : assignment
+                  | return_stmt
+                  | break_stmt
+                  | continue_stmt
+                  | pass_stmt
+                  | expr"""
+        
+        if len(p) == 2:
+            # Si es una expr simple, convertir a ExprStmt
+            if hasattr(p[1], '__class__') and not isinstance(p[1], (Assign, Return, Break, Continue, Pass)):
+                line, col = _pos(p, 1)
+                p[0] = ExprStmt(value=p[1], line=line, col=col)
+            else:
+                p[0] = p[1]
+
+    # Assignment (x = expr | x += expr)
+    def p_assignment(self, p):
+        """assignment : ID ASSIGN expr
+                      | ID PLUS_ASSIGN expr
+                      | ID MINUS_ASSIGN expr
+                      | ID TIMES_ASSIGN expr
+                      | ID DIVIDE_ASSIGN expr"""
+        line, col = _pos(p, 1)
+        p[0] = Assign(
+            target=Identifier(name=p[1], line=line, col=col),
+            op=p[2],
+            value=p[3],
+            line=line,
+            col=col,
+        )
+
+    # return
+    def p_return_stmt(self, p):
+        """return_stmt : RETURN expr
+                       | RETURN"""
+        if len(p) == 3:
+            p[0] = Return(value=p[2])
+        else:
+            p[0] = Return(value=None)
+
+    # break
+    def p_break_stmt(self, p):
+        "break_stmt : BREAK"
+        p[0] = Break()
+
+    # continue
+    def p_continue_stmt(self, p):
+        "continue_stmt : CONTINUE"
+        p[0] = Continue()
+
+    # pass
+    def p_pass_stmt(self, p):
+        "pass_stmt : PASS"
+        p[0] = Pass()
+
+    # ---------------------- COMPOUND STATEMENTS ----------------------
+    def p_compound_statement(self, p):
+        """compound_statement : if_stmt
+                          | while_stmt
+                          | for_stmt
+                          | funcdef
+                          | classdef"""
+        p[0] = p[1]
+
+
+    # if / elif / else
+    def p_if_stmt(self, p):
+        """if_stmt : IF expr COLON suite elif_blocks else_block_opt"""
+        p[0] = If(cond=p[2], body=p[4], elifs=p[5], orelse=p[6])
+
+    def p_elif_blocks(self, p):
+        """elif_blocks : ELIF expr COLON suite elif_blocks
+                       |"""
+        if len(p) == 1:
+            p[0] = []
+        else:
+            p[0] = [(p[2], p[4])] + p[5]
+
+    def p_else_block_opt(self, p):
+        """else_block_opt : ELSE COLON suite
+                          |"""
+        p[0] = p[3] if len(p) > 1 else None
+
+    # while
+    def p_while_stmt(self, p):
+        """while_stmt : WHILE expr COLON suite"""
+        p[0] = While(cond=p[2], body=p[4])
+
+    # for
+    def p_for_stmt(self, p):
+        """for_stmt : FOR ID IN expr COLON suite"""
+        line, col = _pos(p, 2)
+        p[0] = For(
+            target=Identifier(name=p[2], line=line, col=col),
+            iterable=p[4],
+            body=p[6],
+        )
+
+    # ---------------------- SUITE (BLOCKS) ----------------------
+    def p_suite(self, p):
+        """suite : simple_statement
+                 | INDENT statement_list DEDENT"""
+        if len(p) == 2:
+            p[0] = Block(statements=[p[1]])
+        else:
+            p[0] = Block(statements=p[3])
 
     # ********************************************** Rules for Definitions *******************************
 
