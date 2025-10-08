@@ -1,22 +1,5 @@
-from ply import yacc
 from typing import Optional, List
-
-# LEXER / TOKENS
-from ..lexer.tokens import TOKENS
-
-# print(TOKENS)
-from ..lexer.lexer import Lexer
-
-# Parser Modules
-
-from .parser_expressions import ExpressionRules
-from .parser_statements import StatementRules
-from .parser_loops import LoopRules
-from .parser_conditionals import ConditionalRules
-from .parser_definitions import DefinitionRules
-from .parser_blocks import BlockRules
-
-tokens = TOKENS  # tuple of tokens defined in the lexer
+from ply import yacc
 
 # AST NODES
 from ..core.ast import (
@@ -25,6 +8,22 @@ from ..core.ast import (
 )
 
 from ..core.utils import Error
+
+# LEXER / TOKENS
+from ..lexer.tokens import TOKENS
+
+# print(TOKENS)
+from ..lexer.lexer import Lexer
+
+# Parser Modules
+from .parser_expressions import ExpressionRules
+from .parser_statements import StatementRules
+from .parser_loops import LoopRules
+from .parser_conditionals import ConditionalRules
+from .parser_definitions import DefinitionRules
+from .parser_blocks import BlockRules
+
+tokens = TOKENS  # tuple of tokens defined in the lexer
 
 # PRECEDENCE
 precedence = (
@@ -46,9 +45,14 @@ precedence = (
 )
 
 
-
-
-class Parser (ExpressionRules, StatementRules, LoopRules, ConditionalRules, DefinitionRules, BlockRules):
+class Parser(
+    ExpressionRules,
+    StatementRules,
+    LoopRules,
+    ConditionalRules,
+    DefinitionRules,
+    BlockRules,
+):
     """
     Implementation of the parser.
     It takes the source code tokenized by the lexer and converts it into an
@@ -92,15 +96,13 @@ class Parser (ExpressionRules, StatementRules, LoopRules, ConditionalRules, Defi
     def p_module(self, p):
         """module : statement_list"""
         p[0] = Module(body=p[1], line=1, col=0)
-        
-
 
     # ---------------------- STATEMENT LIST ----------------------
     # Parse a list of statements recursively
     # Can be a single statement or multiple statements
     def p_statement_list(self, p):
         """statement_list : statement
-                        | statement_list statement"""
+        | statement_list statement"""
         if len(p) == 2:
             p[0] = [p[1]]
         else:

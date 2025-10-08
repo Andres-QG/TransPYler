@@ -1,14 +1,22 @@
-# parser/parser_expressions.py
 from ..core.ast import (
-    LiteralExpr, Identifier, UnaryExpr, BinaryExpr, 
-    ComparisonExpr, CallExpr, TupleExpr, ListExpr, DictExpr, Attribute
+    LiteralExpr,
+    Identifier,
+    UnaryExpr,
+    BinaryExpr,
+    ComparisonExpr,
+    CallExpr,
+    TupleExpr,
+    ListExpr,
+    DictExpr,
+    Attribute,
+    Subscript
 )
 from .parser_utils import _pos
 
 
 class ExpressionRules:
     """Rules for parsing expressions."""
-    
+
     # ---------------------- BASIC EXPRESSIONS ----------------------
     def p_expr_atom(self, p):
         "expr : atom"
@@ -22,7 +30,7 @@ class ExpressionRules:
         "atom : atom DOT ID"
         line, col = _pos(p, 2)
         p[0] = Attribute(value=p[1], attr=p[3], line=line, col=col)
-        
+
     # ---------------------- LITERALS ----------------------
     def p_atom_number(self, p):
         "atom : NUMBER"
@@ -68,6 +76,12 @@ class ExpressionRules:
         """atom : LBRACKET elements_opt RBRACKET"""
         line, col = _pos(p, 1)
         p[0] = ListExpr(elements=p[2], line=line, col=col)
+
+    def p_atom_subscript(self, p):
+        "atom : atom LBRACKET expr RBRACKET"
+        line, col = _pos(p, 2)
+        p[0] = Subscript(value=p[1], index=p[3], line=line, col=col)
+        # Situation like x = a[b] is handled in assignment rules
 
     def p_atom_dict(self, p):
         """atom : LBRACE key_value_list_opt RBRACE"""
@@ -132,12 +146,8 @@ class ExpressionRules:
     def p_expr_call(self, p):
         "expr : atom LPAREN arg_list_opt RPAREN"
         line, col = _pos(p, 2)
-        p[0] = CallExpr(
-            callee=p[1], 
-            args=p[3],
-            line=line,
-            col=col
-        )
+        p[0] = CallExpr(callee=p[1], args=p[3], line=line, col=col)
+
     # ---------------------- EXPRESSION LISTS ----------------------
     def p_arg_list_opt(self, p):
         """arg_list_opt : expr COMMA arg_list_opt
@@ -153,7 +163,7 @@ class ExpressionRules:
 
     def p_key_value_list(self, p):
         """key_value_list : key_value
-                        | key_value COMMA key_value_list"""
+        | key_value COMMA key_value_list"""
         if len(p) == 2:
             p[0] = [p[1]]
         else:
@@ -161,25 +171,25 @@ class ExpressionRules:
 
     def p_key_value_list_opt(self, p):
         """key_value_list_opt : key_value_list
-                            | empty"""
+        | empty"""
         p[0] = p[1]
 
     def p_key_value(self, p):
         "key_value : expr COLON expr"
         p[0] = (p[1], p[3])
 
+    def p_elements_opt(self, p):
+        """elements_opt : elements
+        | empty"""
+        p[0] = p[1] if len(p) > 1 else []
+
     def p_elements(self, p):
         """elements : expr
-                    | elements COMMA expr"""
+        | elements COMMA expr"""
         if len(p) == 2:
             p[0] = [p[1]]
         else:
             p[0] = p[1] + [p[3]]
-
-    def p_elements_opt(self, p):
-        """elements_opt : elements
-                        | empty"""
-        p[0] = p[1] if len(p) > 1 else []
 
     def p_empty(self, p):
         "empty :"

@@ -7,7 +7,7 @@ into Python-like INDENT/DEDENT tokens. It is invoked exclusively by the lexer ru
 
 The lexer instance passed here (`lexer`) MUST provide:
 lexer._indent_stack : list[int]
-   Stack of absolute indentation columns. Base level is 0.
+Stack of absolute indentation columns. Base level is 0.
 lexer._pending : list[lex.LexToken]
     FIFO queue where synthesized INDENT/DEDENT tokens are enqueued.
 lexer._expect_indent : bool
@@ -16,6 +16,7 @@ lexer._delim_depth : int
     Nesting level of (), [], {}; indentation is disabled when > 0.
 
 """
+
 
 def _expand_tabs_count(s: str, tab_width: int) -> int:
     col = 0
@@ -26,7 +27,7 @@ def _expand_tabs_count(s: str, tab_width: int) -> int:
             col += 1
     return col
 
-
+# TODO(any): Refactor
 def process_newline_and_indent(lexer, t, tab_width: int):
     """
     Handles a block of one or more line breaks followed by spaces/tabs.
@@ -66,9 +67,11 @@ def process_newline_and_indent(lexer, t, tab_width: int):
         return None
 
     # 8. Increased indent
-    if spaces > top:        
+    if spaces > top:
         if spaces % tab_width != 0:
-            lexer._indent_error("Indentation is not a multiple of 4", t.lineno, t.lexpos)
+            lexer._indent_error(
+                "Indentation is not a multiple of 4", t.lineno, t.lexpos
+            )
 
         # If we don't come from “:”, it's unexpected indentation.
         if not getattr(lexer, "_expect_indent", False):
@@ -78,7 +81,9 @@ def process_newline_and_indent(lexer, t, tab_width: int):
         delta = spaces - top
         levels = delta // tab_width
         if getattr(lexer, "_strict_single_step_indent", False) and levels > 1:
-            lexer._indent_error(f"Over-indented: increased by {levels} levels", t.lineno, t.lexpos)
+            lexer._indent_error(
+                f"Over-indented: increased by {levels} levels", t.lineno, t.lexpos
+            )
 
         # Store the absolute column of the new level.
         lexer._indent_stack.append(spaces)
@@ -97,8 +102,7 @@ def process_newline_and_indent(lexer, t, tab_width: int):
     # If we did not fall exactly on a valid previous level
     if lexer._indent_stack and lexer._indent_stack[-1] != spaces:
         lexer._indent_error(
-            "Unindent does not match any outer indentation level",
-            t.lineno, t.lexpos
+            "Unindent does not match any outer indentation level", t.lineno, t.lexpos
         )
 
     lexer._expect_indent = False

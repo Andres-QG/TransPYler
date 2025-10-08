@@ -1,11 +1,10 @@
-# parser/parser_loops.py
 from ..core.ast import While, For, Identifier
 from .parser_utils import _pos
 
 
 class LoopRules:
     """Rules for parsing loop statements."""
-    
+
     def p_while_stmt(self, p):
         """while_stmt : WHILE expr COLON suite"""
         p[0] = While(cond=p[2], body=p[4])

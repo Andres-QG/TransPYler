@@ -1,3 +1,16 @@
+"""
+This module defines the foundational classes for Abstract Syntax Tree (AST) nodes
+used in the TransPYler compiler.
+
+The module provides:
+- AstNode: Base class for all AST nodes with common functionality
+- Module: Top-level container representing a complete source file
+- Utility functions for AST manipulation and serialization
+
+Each AST node tracks its source code position (line, column) and can be
+converted to a dictionary representation for debugging and processing.
+"""
+
 from dataclasses import dataclass, field
 from typing import Any, Dict, Optional, List
 
@@ -14,7 +27,6 @@ class AstNode:
     )
     col: Optional[int] = None
 
-    # TODO(any): Refactor
     def to_dict(self) -> Dict[str, Any]:
         dictionary = {"_type": self.__class__.__name__}
         for key, value in self.__dict__.items():
@@ -26,18 +38,20 @@ class AstNode:
         if self.col is not None:
             dictionary["col"] = self.col
         return dictionary
-    
-@dataclass    
+
+
+@dataclass
 class Module(AstNode):
     """Top-level AST node representing a complete module or file."""
+
     body: List[AstNode] = field(default_factory=list)
+
 
 def _convert(value):
     if isinstance(value, AstNode):
         return value.to_dict()
-    elif isinstance(value, (list, tuple)):
+    if isinstance(value, (list, tuple)):
         return [_convert(x) for x in value]
-    elif isinstance(value, dict):
+    if isinstance(value, dict):
         return {k: _convert(v) for k, v in value.items()}
-    else:
-        return value  # str, int, float, bool, None
+    return value  # str, int, float, bool, None

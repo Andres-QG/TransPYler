@@ -19,12 +19,11 @@ KEYWORDS = {
     "True": "TRUE",
     "False": "FALSE",
     # Null literal
-    "None": "NONE", 
+    "None": "NONE",
     # Logical operators
     "and": "AND",
     "or": "OR",
     "not": "NOT",
-    
     "in": "IN",
 }
 

@@ -1,21 +1,22 @@
-# parser/parser_definitions.py
 from ..core.ast import FunctionDef, ClassDef, Block, Identifier
 from .parser_utils import _pos
 
 
 class DefinitionRules:
     """Rules for parsing function and class definitions."""
-    
+
     def p_funcdef(self, p):
-        "funcdef : DEF ID LPAREN param_list_opt RPAREN COLON statement_list"
+        "funcdef : DEF ID LPAREN param_list_opt RPAREN COLON suite"
         line, col = _pos(p, 1)
+        # TODO(Andres): Suite already returns a Block, so this check is redundant.
         body = Block(statements=p[7]) if not isinstance(p[7], Block) else p[7]
         p[0] = FunctionDef(name=p[2], params=p[4], body=body, line=line, col=col)
 
     def p_classdef(self, p):
-        "classdef : CLASS ID COLON statement_list"
+        "classdef : CLASS ID COLON suite"
         line, col = _pos(p, 1)
-        body = Block(statements=p[3]) if not isinstance(p[3], Block) else p[3]
+        # TODO(Andres): Suite already returns a Block, so this check is redundant.
+        body = Block(statements=p[4]) if not isinstance(p[4], Block) else p[4]
         p[0] = ClassDef(name=p[2], body=body, line=line, col=col)
 
     def p_param_list_opt(self, p):

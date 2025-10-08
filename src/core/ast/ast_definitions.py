@@ -1,13 +1,8 @@
+"""AST nodes for definitions like functions, classes, and modules."""
+
 from dataclasses import dataclass, field
 from typing import List
 from .ast_base import AstNode
-
-
-@dataclass
-class Module(AstNode):
-    """Root node representing an entire module/file"""
-
-    body: List[AstNode] = field(default_factory=list)  # list of statements/definitions
 
 
 @dataclass
@@ -26,16 +21,26 @@ class ClassDef(AstNode):
     name: str = ""
     body: List[AstNode] = field(default_factory=list)  # methods and statements
 
+
 @dataclass
 class Subscript(AstNode):
+    """
+    Represents a subscript operation, such as accessing an element of a list or dictionary.
+    """
+
     def __init__(self, value, index, line=None, col=None):
         self.value = value
         self.index = index
         self.line = line
         self.col = col
 
+
 @dataclass
 class Attribute(AstNode):
+    """
+    Represents an attribute access operation, such as accessing a property of an object.
+    """
+
     def __init__(self, value, attr, line=None, col=None):
         self.value = value
         self.attr = attr

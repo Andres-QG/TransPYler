@@ -137,7 +137,7 @@ class Lexer:
 
         """
         self.lex = lex.lex(module=self)
-        self._base_token = self.lex.token
+        self._base_token = self.lex.token # TODO(any): Use init() to set up
         self.lex.token = self._next_token
 
     def input(self, data: str):

@@ -1,31 +1,37 @@
+"""
+AST nodes for statements and blocks.
+"""
+
+# TODO(Andres): Review the Optional[AstNode] = None
+
 from dataclasses import dataclass, field
 from typing import List, Optional, Tuple
 from .ast_base import AstNode
 
-# Ast Nodes for statments and blocks
-
 @dataclass
 class Block(AstNode):
     """
-    Represents a block of statements, such as the body of a function, 
+    Represents a block of statements, such as the body of a function,
     if/elif/else, while, or for loop.
 
     Attributes:
         statements (List[AstNode]): A list of statements contained in the block.
     """
+
     statements: List[AstNode] = field(default_factory=list)
 
 
 @dataclass
 class ExprStmt(AstNode):
     """
-    Represents an expression used as a statement. 
+    Represents an expression used as a statement.
     Typically used for function calls or standalone expressions.
 
     Attributes:
         value (AstNode): The expression being executed as a statement.
     """
-    value: AstNode = None
+
+    value: Optional[AstNode] = None
 
 
 @dataclass
@@ -42,9 +48,10 @@ class Assign(AstNode):
         op (str): The assignment operator, e.g., '=', '+=', '-='.
         value (AstNode): The expression assigned to the target.
     """
-    target: AstNode = None
+
+    target: Optional[AstNode] = None
     op: str = "="
-    value: AstNode = None
+    value: Optional[AstNode] = None
 
 
 @dataclass
@@ -56,9 +63,10 @@ class Return(AstNode):
         return x + y
 
     Attributes:
-        value (Optional[AstNode]): The expression being returned, 
-                                   or None for bare 'return'.
+        value (Optional[AstNode]): The expression being returned,
+        or None for bare 'return'.
     """
+
     value: Optional[AstNode] = None
 
 
@@ -70,8 +78,6 @@ class Break(AstNode):
     Usage:
         Used to exit the nearest enclosing while or for loop immediately.
     """
-    pass
-
 
 @dataclass
 class Continue(AstNode):
@@ -79,11 +85,9 @@ class Continue(AstNode):
     Represents a 'continue' statement inside a loop.
 
     Usage:
-        Skips the remaining statements in the current iteration 
+        Skips the remaining statements in the current iteration
         and continues with the next iteration of the loop.
     """
-    pass
-
 
 @dataclass
 class Pass(AstNode):
@@ -93,8 +97,6 @@ class Pass(AstNode):
     Usage:
         'pass' is used as a placeholder where a statement is syntactically required.
     """
-    pass
-
 
 @dataclass
 class If(AstNode):
@@ -115,8 +117,9 @@ class If(AstNode):
         elifs (List[Tuple[AstNode, Block]]): Optional list of (condition, block) for 'elif' clauses.
         orelse (Optional[Block]): Optional block executed if all conditions are False.
     """
-    cond: AstNode = None
-    body: Block = None
+
+    cond: Optional[AstNode] = None
+    body: Optional[Block] = None
     elifs: List[Tuple[AstNode, Block]] = field(default_factory=list)
     orelse: Optional[Block] = None
 
@@ -130,8 +133,9 @@ class While(AstNode):
         cond (AstNode): The loop condition expression.
         body (Block): The block of statements executed as long as 'cond' is True.
     """
-    cond: AstNode = None
-    body: Block = None
+
+    cond: Optional[AstNode] = None
+    body: Optional[Block] = None
 
 
 @dataclass
@@ -148,6 +152,7 @@ class For(AstNode):
         iterable (AstNode): The expression being iterated over.
         body (Block): The block of statements executed in each iteration.
     """
-    target: AstNode = None
-    iterable: AstNode = None
-    body: Block = None
+
+    target: Optional[AstNode] = None
+    iterable: Optional[AstNode] = None
+    body: Optional[Block] = None
