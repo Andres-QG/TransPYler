@@ -387,9 +387,9 @@ def main():
     # 4) Save JSON (overwrite)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     # <-- Depuración: imprime el diccionario del AST -->
-    print("DEBUG: ast_root.to_dict() output:")
-    import pprint
-    pprint.pprint(ast_root.to_dict())
+    #print("DEBUG: ast_root.to_dict() output:")
+    #import pprint
+   # pprint.pprint(ast_root.to_dict())
     out_path.write_text(to_json(ast_root), encoding="utf-8")
 
     # 5) Print according to the selected view
