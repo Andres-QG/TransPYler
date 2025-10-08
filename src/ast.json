@@ -833,8 +833,8 @@
       "target": {
         "_type": "Identifier",
         "name": "nested_list",
-        "line": 48,
-        "col": 628
+        "line": 47,
+        "col": 612
       },
       "op": "=",
       "value": {
@@ -843,8 +843,8 @@
           {
             "_type": "LiteralExpr",
             "value": 1,
-            "line": 48,
-            "col": 643
+            "line": 47,
+            "col": 627
           },
           {
             "_type": "ListExpr",
@@ -852,8 +852,8 @@
               {
                 "_type": "LiteralExpr",
                 "value": 2,
-                "line": 48,
-                "col": 647
+                "line": 47,
+                "col": 631
               },
               {
                 "_type": "ListExpr",
@@ -861,8 +861,8 @@
                   {
                     "_type": "LiteralExpr",
                     "value": 3,
-                    "line": 48,
-                    "col": 651
+                    "line": 47,
+                    "col": 635
                   },
                   {
                     "_type": "ListExpr",
@@ -870,8 +870,8 @@
                       {
                         "_type": "LiteralExpr",
                         "value": 4,
-                        "line": 48,
-                        "col": 655
+                        "line": 47,
+                        "col": 639
                       },
                       {
                         "_type": "ListExpr",
@@ -879,28 +879,28 @@
                           {
                             "_type": "LiteralExpr",
                             "value": 5,
-                            "line": 48,
-                            "col": 659
+                            "line": 47,
+                            "col": 643
                           }
                         ],
-                        "line": 48,
-                        "col": 658
+                        "line": 47,
+                        "col": 642
                       }
                     ],
-                    "line": 48,
-                    "col": 654
+                    "line": 47,
+                    "col": 638
                   }
                 ],
-                "line": 48,
-                "col": 650
+                "line": 47,
+                "col": 634
               }
             ],
-            "line": 48,
-            "col": 646
+            "line": 47,
+            "col": 630
           }
         ],
-        "line": 48,
-        "col": 642
+        "line": 47,
+        "col": 626
       },
       "line": 0,
       "col": 0
@@ -910,8 +910,8 @@
       "target": {
         "_type": "Identifier",
         "name": "nested_tuple",
-        "line": 51,
-        "col": 685
+        "line": 49,
+        "col": 651
       },
       "op": "=",
       "value": {
@@ -920,8 +920,8 @@
           {
             "_type": "LiteralExpr",
             "value": 1,
-            "line": 51,
-            "col": 701
+            "line": 49,
+            "col": 667
           },
           {
             "_type": "TupleExpr",
@@ -929,8 +929,8 @@
               {
                 "_type": "LiteralExpr",
                 "value": 2,
-                "line": 51,
-                "col": 705
+                "line": 49,
+                "col": 671
               },
               {
                 "_type": "TupleExpr",
@@ -938,8 +938,8 @@
                   {
                     "_type": "LiteralExpr",
                     "value": 3,
-                    "line": 51,
-                    "col": 709
+                    "line": 49,
+                    "col": 675
                   },
                   {
                     "_type": "TupleExpr",
@@ -947,30 +947,30 @@
                       {
                         "_type": "LiteralExpr",
                         "value": 4,
-                        "line": 51,
-                        "col": 713
+                        "line": 49,
+                        "col": 679
                       },
                       {
                         "_type": "LiteralExpr",
                         "value": 5,
-                        "line": 51,
-                        "col": 716
+                        "line": 49,
+                        "col": 682
                       }
                     ],
-                    "line": 51,
-                    "col": 712
+                    "line": 49,
+                    "col": 678
                   }
                 ],
-                "line": 51,
-                "col": 708
+                "line": 49,
+                "col": 674
               }
             ],
-            "line": 51,
-            "col": 704
+            "line": 49,
+            "col": 670
           }
         ],
-        "line": 51,
-        "col": 700
+        "line": 49,
+        "col": 666
       },
       "line": 0,
       "col": 0
@@ -980,8 +980,8 @@
       "target": {
         "_type": "Identifier",
         "name": "nested_dict",
-        "line": 54,
-        "col": 747
+        "line": 51,
+        "col": 689
       },
       "op": "=",
       "value": {
@@ -991,8 +991,8 @@
             {
               "_type": "LiteralExpr",
               "value": "level1",
-              "line": 55,
-              "col": 767
+              "line": 52,
+              "col": 709
             },
             {
               "_type": "DictExpr",
@@ -1001,8 +1001,8 @@
                   {
                     "_type": "LiteralExpr",
                     "value": "level2",
-                    "line": 56,
-                    "col": 787
+                    "line": 53,
+                    "col": 729
                   },
                   {
                     "_type": "DictExpr",
@@ -1011,8 +1011,8 @@
                         {
                           "_type": "LiteralExpr",
                           "value": "level3",
-                          "line": 57,
-                          "col": 811
+                          "line": 54,
+                          "col": 753
                         },
                         {
                           "_type": "DictExpr",
@@ -1021,8 +1021,8 @@
                               {
                                 "_type": "LiteralExpr",
                                 "value": "numbers",
-                                "line": 58,
-                                "col": 839
+                                "line": 55,
+                                "col": 781
                               },
                               {
                                 "_type": "ListExpr",
@@ -1030,32 +1030,32 @@
                                   {
                                     "_type": "LiteralExpr",
                                     "value": 1,
-                                    "line": 58,
-                                    "col": 851
+                                    "line": 55,
+                                    "col": 793
                                   },
                                   {
                                     "_type": "LiteralExpr",
                                     "value": 2,
-                                    "line": 58,
-                                    "col": 854
+                                    "line": 55,
+                                    "col": 796
                                   },
                                   {
                                     "_type": "LiteralExpr",
                                     "value": 3,
-                                    "line": 58,
-                                    "col": 857
+                                    "line": 55,
+                                    "col": 799
                                   }
                                 ],
-                                "line": 58,
-                                "col": 850
+                                "line": 55,
+                                "col": 792
                               }
                             ],
                             [
                               {
                                 "_type": "LiteralExpr",
                                 "value": "letters",
-                                "line": 59,
-                                "col": 877
+                                "line": 56,
+                                "col": 819
                               },
                               {
                                 "_type": "TupleExpr",
@@ -1063,58 +1063,58 @@
                                   {
                                     "_type": "LiteralExpr",
                                     "value": "a",
-                                    "line": 59,
-                                    "col": 889
+                                    "line": 56,
+                                    "col": 831
                                   },
                                   {
                                     "_type": "LiteralExpr",
                                     "value": "b",
-                                    "line": 59,
-                                    "col": 894
+                                    "line": 56,
+                                    "col": 836
                                   },
                                   {
                                     "_type": "LiteralExpr",
                                     "value": "c",
-                                    "line": 59,
-                                    "col": 899
+                                    "line": 56,
+                                    "col": 841
                                   }
                                 ],
-                                "line": 59,
-                                "col": 888
+                                "line": 56,
+                                "col": 830
                               }
                             ],
                             [
                               {
                                 "_type": "LiteralExpr",
                                 "value": "flag",
-                                "line": 60,
-                                "col": 921
+                                "line": 57,
+                                "col": 863
                               },
                               {
                                 "_type": "LiteralExpr",
                                 "value": true,
-                                "line": 60,
-                                "col": 929
+                                "line": 57,
+                                "col": 871
                               }
                             ]
                           ],
-                          "line": 57,
-                          "col": 821
+                          "line": 54,
+                          "col": 763
                         }
                       ]
                     ],
-                    "line": 56,
-                    "col": 797
+                    "line": 53,
+                    "col": 739
                   }
                 ]
               ],
-              "line": 55,
-              "col": 777
+              "line": 52,
+              "col": 719
             }
           ]
         ],
-        "line": 54,
-        "col": 761
+        "line": 51,
+        "col": 703
       },
       "line": 0,
       "col": 0
@@ -1126,15 +1126,15 @@
         "left": {
           "_type": "Identifier",
           "name": "a",
-          "line": 66,
-          "col": 970
+          "line": 63,
+          "col": 912
         },
         "op": "<",
         "right": {
           "_type": "LiteralExpr",
           "value": 5,
-          "line": 66,
-          "col": 974
+          "line": 63,
+          "col": 916
         },
         "line": 0,
         "col": 0
@@ -1147,27 +1147,27 @@
             "target": {
               "_type": "Identifier",
               "name": "i",
-              "line": 67,
-              "col": 985
+              "line": 64,
+              "col": 927
             },
             "iterable": {
               "_type": "CallExpr",
               "callee": {
                 "_type": "Identifier",
                 "name": "range",
-                "line": 67,
-                "col": 990
+                "line": 64,
+                "col": 932
               },
               "args": [
                 {
                   "_type": "LiteralExpr",
                   "value": 2,
-                  "line": 67,
-                  "col": 996
+                  "line": 64,
+                  "col": 938
                 }
               ],
-              "line": 67,
-              "col": 995
+              "line": 64,
+              "col": 937
             },
             "body": {
               "_type": "Block",
@@ -1179,15 +1179,15 @@
                     "left": {
                       "_type": "Identifier",
                       "name": "b",
-                      "line": 68,
-                      "col": 1014
+                      "line": 65,
+                      "col": 956
                     },
                     "op": "<",
                     "right": {
                       "_type": "LiteralExpr",
                       "value": 4,
-                      "line": 68,
-                      "col": 1018
+                      "line": 65,
+                      "col": 960
                     },
                     "line": 0,
                     "col": 0
@@ -1200,8 +1200,8 @@
                         "target": {
                           "_type": "Identifier",
                           "name": "c",
-                          "line": 69,
-                          "col": 1033
+                          "line": 66,
+                          "col": 975
                         },
                         "op": "=",
                         "value": {
@@ -1209,15 +1209,15 @@
                           "left": {
                             "_type": "Identifier",
                             "name": "c",
-                            "line": 69,
-                            "col": 1037
+                            "line": 66,
+                            "col": 979
                           },
                           "op": "+",
                           "right": {
                             "_type": "LiteralExpr",
                             "value": 1,
-                            "line": 69,
-                            "col": 1041
+                            "line": 66,
+                            "col": 983
                           },
                           "line": 0,
                           "col": 0
@@ -1232,15 +1232,15 @@
                           "left": {
                             "_type": "Identifier",
                             "name": "c",
-                            "line": 70,
-                            "col": 1058
+                            "line": 67,
+                            "col": 1000
                           },
                           "op": "==",
                           "right": {
                             "_type": "LiteralExpr",
                             "value": 5,
-                            "line": 70,
-                            "col": 1063
+                            "line": 67,
+                            "col": 1005
                           },
                           "line": 0,
                           "col": 0
@@ -1257,23 +1257,23 @@
                                   "value": {
                                     "_type": "Identifier",
                                     "name": "nested_list",
-                                    "line": 71,
-                                    "col": 1082
+                                    "line": 68,
+                                    "col": 1024
                                   },
                                   "attr": "append",
-                                  "line": 71,
-                                  "col": 1093
+                                  "line": 68,
+                                  "col": 1035
                                 },
                                 "args": [
                                   {
                                     "_type": "Identifier",
                                     "name": "c",
-                                    "line": 71,
-                                    "col": 1101
+                                    "line": 68,
+                                    "col": 1043
                                   }
                                 ],
-                                "line": 71,
-                                "col": 1100
+                                "line": 68,
+                                "col": 1042
                               },
                               "line": 0,
                               "col": 0
@@ -1291,8 +1291,8 @@
                               "value": {
                                 "_type": "Identifier",
                                 "name": "nested_dict",
-                                "line": 73,
-                                "col": 1138
+                                "line": 70,
+                                "col": 1080
                               },
                               "line": 0,
                               "col": 0
@@ -1311,18 +1311,18 @@
                                         {
                                           "_type": "LiteralExpr",
                                           "value": "level1",
-                                          "line": 73,
-                                          "col": 1150
+                                          "line": 70,
+                                          "col": 1092
                                         }
                                       ],
-                                      "line": 73,
-                                      "col": 1149
+                                      "line": 70,
+                                      "col": 1091
                                     },
                                     "index": {
                                       "_type": "LiteralExpr",
                                       "value": "level2",
-                                      "line": 73,
-                                      "col": 1160
+                                      "line": 70,
+                                      "col": 1102
                                     },
                                     "line": 0,
                                     "col": 0
@@ -1330,8 +1330,8 @@
                                   "index": {
                                     "_type": "LiteralExpr",
                                     "value": "level3",
-                                    "line": 73,
-                                    "col": 1170
+                                    "line": 70,
+                                    "col": 1112
                                   },
                                   "line": 0,
                                   "col": 0
@@ -1339,8 +1339,8 @@
                                 "index": {
                                   "_type": "LiteralExpr",
                                   "value": "extra",
-                                  "line": 73,
-                                  "col": 1180
+                                  "line": 70,
+                                  "col": 1122
                                 },
                                 "line": 0,
                                 "col": 0
@@ -1349,8 +1349,8 @@
                               "value": {
                                 "_type": "Identifier",
                                 "name": "c",
-                                "line": 73,
-                                "col": 1191
+                                "line": 70,
+                                "col": 1133
                               },
                               "line": 0,
                               "col": 0
@@ -1365,15 +1365,15 @@
                         "target": {
                           "_type": "Identifier",
                           "name": "b",
-                          "line": 74,
-                          "col": 1205
+                          "line": 71,
+                          "col": 1147
                         },
                         "op": "+=",
                         "value": {
                           "_type": "LiteralExpr",
                           "value": 1,
-                          "line": 74,
-                          "col": 1210
+                          "line": 71,
+                          "col": 1152
                         },
                         "line": 0,
                         "col": 0
@@ -1397,15 +1397,15 @@
             "target": {
               "_type": "Identifier",
               "name": "nested_list",
-              "line": 76,
-              "col": 1222
+              "line": 73,
+              "col": 1164
             },
             "op": "=",
             "value": {
               "_type": "ListExpr",
               "elements": [],
-              "line": 76,
-              "col": 1236
+              "line": 73,
+              "col": 1178
             },
             "line": 0,
             "col": 0
@@ -1420,8 +1420,8 @@
       "target": {
         "_type": "Identifier",
         "name": "final_structure",
-        "line": 78,
-        "col": 1240
+        "line": 75,
+        "col": 1182
       },
       "op": "=",
       "value": {
@@ -1430,20 +1430,20 @@
           {
             "_type": "Identifier",
             "name": "nested_list",
-            "line": 79,
-            "col": 1264
+            "line": 76,
+            "col": 1206
           },
           {
             "_type": "Identifier",
             "name": "nested_tuple",
-            "line": 80,
-            "col": 1281
+            "line": 77,
+            "col": 1223
           },
           {
             "_type": "Identifier",
             "name": "nested_dict",
-            "line": 81,
-            "col": 1299
+            "line": 78,
+            "col": 1241
           },
           {
             "_type": "ListExpr",
@@ -1455,8 +1455,8 @@
                     {
                       "_type": "LiteralExpr",
                       "value": "inner_list",
-                      "line": 82,
-                      "col": 1318
+                      "line": 79,
+                      "col": 1260
                     },
                     {
                       "_type": "ListExpr",
@@ -1464,14 +1464,14 @@
                         {
                           "_type": "LiteralExpr",
                           "value": 0,
-                          "line": 82,
-                          "col": 1333
+                          "line": 79,
+                          "col": 1275
                         },
                         {
                           "_type": "LiteralExpr",
                           "value": 1,
-                          "line": 82,
-                          "col": 1336
+                          "line": 79,
+                          "col": 1278
                         },
                         {
                           "_type": "DictExpr",
@@ -1480,8 +1480,8 @@
                               {
                                 "_type": "LiteralExpr",
                                 "value": "deep",
-                                "line": 82,
-                                "col": 1340
+                                "line": 79,
+                                "col": 1282
                               },
                               {
                                 "_type": "ListExpr",
@@ -1489,40 +1489,40 @@
                                   {
                                     "_type": "LiteralExpr",
                                     "value": 10,
-                                    "line": 82,
-                                    "col": 1349
+                                    "line": 79,
+                                    "col": 1291
                                   },
                                   {
                                     "_type": "LiteralExpr",
                                     "value": 20,
-                                    "line": 82,
-                                    "col": 1353
+                                    "line": 79,
+                                    "col": 1295
                                   }
                                 ],
-                                "line": 82,
-                                "col": 1348
+                                "line": 79,
+                                "col": 1290
                               }
                             ]
                           ],
-                          "line": 82,
-                          "col": 1339
+                          "line": 79,
+                          "col": 1281
                         }
                       ],
-                      "line": 82,
-                      "col": 1332
+                      "line": 79,
+                      "col": 1274
                     }
                   ]
                 ],
-                "line": 82,
-                "col": 1317
+                "line": 79,
+                "col": 1259
               }
             ],
-            "line": 82,
-            "col": 1316
+            "line": 79,
+            "col": 1258
           }
         ],
-        "line": 78,
-        "col": 1258
+        "line": 75,
+        "col": 1200
       },
       "line": 0,
       "col": 0

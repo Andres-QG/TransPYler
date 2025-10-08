@@ -1,0 +1,21 @@
+1 = a
+(a + b) = 5
+
+if True:
+print("bad indent")
+
+for i in range(3)
+    print(i)
+
+while x < 5
+    x += 1
+
+print(,1,2)
+print(1 2)
+
+nums = [1, 2,, 3]
+data = {"key": 1, "value"}
+coords = (10, 20,,)
+broken = [1, [2, [3, 4]]
+weird_dict = {"a": 1, "b": 2
+x = 5 @ 3
