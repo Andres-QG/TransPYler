@@ -43,13 +43,10 @@ while counter < 3:
 for i in range(2):
     print(i)
 
-# Lista anidada
 nested_list = [1, [2, [3, [4, [5]]]]]
 
-# Tuplas anidadas
 nested_tuple = (1, (2, (3, (4, 5))))
 
-# Diccionarios anidados
 nested_dict = {
     "level1": {
         "level2": {
