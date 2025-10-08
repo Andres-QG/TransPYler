@@ -1,7 +1,7 @@
 # parser/parser_expressions.py
 from ..core.ast import (
     LiteralExpr, Identifier, UnaryExpr, BinaryExpr, 
-    ComparisonExpr, CallExpr, TupleExpr, ListExpr, DictExpr
+    ComparisonExpr, CallExpr, TupleExpr, ListExpr, DictExpr, Attribute
 )
 from .parser_utils import _pos
 
@@ -18,6 +18,11 @@ class ExpressionRules:
         "expr : LPAREN expr RPAREN"
         p[0] = p[2]
 
+    def p_atom_attribute(self, p):
+        "atom : atom DOT ID"
+        line, col = _pos(p, 2)
+        p[0] = Attribute(value=p[1], attr=p[3], line=line, col=col)
+        
     # ---------------------- LITERALS ----------------------
     def p_atom_number(self, p):
         "atom : NUMBER"
@@ -125,15 +130,14 @@ class ExpressionRules:
 
     # ---------------------- FUNCTION CALLS ----------------------
     def p_expr_call(self, p):
-        "expr : ID LPAREN arg_list_opt RPAREN"
-        line, col = _pos(p, 1)
+        "expr : atom LPAREN arg_list_opt RPAREN"
+        line, col = _pos(p, 2)
         p[0] = CallExpr(
-            callee=Identifier(name=p[1], line=line, col=col),
+            callee=p[1], 
             args=p[3],
             line=line,
-            col=col,
+            col=col
         )
-
     # ---------------------- EXPRESSION LISTS ----------------------
     def p_arg_list_opt(self, p):
         """arg_list_opt : expr COMMA arg_list_opt

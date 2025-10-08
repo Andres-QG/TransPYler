@@ -43,3 +43,42 @@ while counter < 3:
 for i in range(2):
     print(i)
 
+# Lista anidada
+nested_list = [1, [2, [3, [4, [5]]]]]
+
+# Tuplas anidadas
+nested_tuple = (1, (2, (3, (4, 5))))
+
+# Diccionarios anidados
+nested_dict = {
+    "level1": {
+        "level2": {
+            "level3": {
+                "numbers": [1, 2, 3],
+                "letters": ("a", "b", "c"),
+                "flag": True
+            }
+        }
+    }
+}
+
+# Estructura de control anidada
+if a < 5:
+    for i in range(2):
+        while b < 4:
+            c = c + 1
+            if c == 5:
+                nested_list.append(c)
+            else:
+                nested_dict["level1"]["level2"]["level3"]["extra"] = c
+            b += 1
+else:
+    nested_list = []
+
+# Más anidamiento con listas y diccionarios
+final_structure = [
+    nested_list,
+    nested_tuple,
+    nested_dict,
+    [{"inner_list": [0, 1, {"deep": [10, 20]}]}]
+]

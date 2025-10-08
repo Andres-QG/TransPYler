@@ -327,7 +327,48 @@ def render_expression_diagram(ast_root: AstNode) -> str:
     arrow = " " * (len(lines[0]) // 2) + "↓"
     return "\n".join([top, arrow] + lines)
 
+def ast_to_mermaid(node: AstNode, node_id=None, counter=None):
+    """Convierte un AST a líneas Mermaid (graph TD)"""
+    if counter is None:
+        counter = {"count": 0}
 
+    if node_id is None:
+        node_id = f"N{counter['count']}"
+        counter['count'] += 1
+
+    label = node.__class__.__name__
+    if hasattr(node, "name"):
+        label += f": {node.name}"
+    elif hasattr(node, "value"):
+        label += f": {repr(node.value)}"
+
+    label = sanitize_label(label)
+    lines = [f'{node_id}["{label}"]']
+
+    for child in _expr_children(node):
+        child_id = f"N{counter['count']}"
+        counter['count'] += 1
+        lines.append(f"{node_id} --> {child_id}")
+        lines.extend(ast_to_mermaid(child, child_id, counter))
+
+    return lines
+
+def sanitize_label(label: str) -> str:
+    """Sanitiza texto para Mermaid (quita {} y comillas problemáticas)"""
+    replacements = {
+        '"': "'", '{': '(', '}': ')', '\n': ' '
+    }
+    for k, v in replacements.items():
+        label = label.replace(k, v)
+    return label
+
+def render_mermaid(ast_root: AstNode) -> str:
+    """Genera el diagrama Mermaid a partir del AST"""
+    if ast_root is None:
+        return "graph TD\nEmptyAST"
+    lines = ["graph TD"]
+    lines.extend(ast_to_mermaid(ast_root))
+    return "\n".join(lines)
 
 # =========================================================
 # CLI
@@ -342,9 +383,9 @@ def main():
     ap.add_argument("--out", help="Custom JSON output path (default is repo_root/ast.json)")
     ap.add_argument(
         "--view",
-        choices=["expr", "generic", "diagram"],
+        choices=["expr", "generic", "diagram", "mermaid"], 
         default="expr",
-        help="expr: expression tree (Rich). generic: all fields (Rich). diagram: ASCII 'circles' diagram.",
+        help="expr: expression tree (Rich). generic: all fields (Rich). diagram: ASCII 'circles' diagram. mermaid: generate Mermaid diagram.",
     )
     args = ap.parse_args()
 
@@ -386,18 +427,28 @@ def main():
 
     # 4) Save JSON (overwrite)
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    # <-- Depuración: imprime el diccionario del AST -->
     #print("DEBUG: ast_root.to_dict() output:")
     #import pprint
    # pprint.pprint(ast_root.to_dict())
     out_path.write_text(to_json(ast_root), encoding="utf-8")
 
-    # 5) Print according to the selected view
+   # 5) Print according to the selected view
     if args.view == "diagram":
         # Simple header + ASCII diagram
         print(f"[TransPyler] AST generated\nSource: {src_label}\nJSON:   {out_path}\n")
         print(render_expression_diagram(ast_root))
+    elif args.view == "mermaid":
+
+        mermaid_code = render_mermaid(ast_root)
+
+        mermaid_out_path = out_path.with_suffix(".mmd")  # si JSON es ast.json -> ast.mmd
+        mermaid_out_path.parent.mkdir(parents=True, exist_ok=True)
+        mermaid_out_path.write_text(mermaid_code, encoding="utf-8")
+
+        print(f"[TransPyler] AST Mermaid diagram saved to {mermaid_out_path}")
+
     else:
+        # Rich
         if not RICH_OK:
             print(f"[TransPyler] AST generated\nSource: {src_label}\nJSON:   {out_path}\n")
             print("(Rich is not installed) Use --view diagram for the ASCII diagram.")
@@ -411,6 +462,7 @@ def main():
         console.print(header)
         tree = build_expr_tree(ast_root) if args.view == "expr" else build_rich_tree_generic(ast_root)
         console.print(tree)
+
 
 
 if __name__ == "__main__":

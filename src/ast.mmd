@@ -1,62 +1,172 @@
 graph TD
-n0[Node]
-n1[Node: {'_type': 'LiteralExpr', 'value': 5, 'line': 4, 'col': 44}]
-n2[Node: x]
-n1 --> n2
-n0 --> n1
-n3[Node: {'_type': 'LiteralExpr', 'value': 10, 'line': 5, 'col': 50}]
-n4[Node: y]
-n3 --> n4
-n0 --> n3
-n5[Node]
-n6[Node]
-n7[Node: x]
-n6 --> n7
-n8[Node: 10]
-n6 --> n8
-n5 --> n6
-n9[Node]
-n10[Node: {'_type': 'BinaryExpr', 'left': {'_type': 'Identifier', 'name': 'x', 'line': 8, 'col': 78}, 'op': '*', 'right': {'_type': 'LiteralExpr', 'value': 2, 'line': 8, 'col': 82}, 'line': 0, 'col': 0}]
-n11[Node: result]
-n10 --> n11
-n9 --> n10
-n12[Node]
-n9 --> n12
-n5 --> n9
-n13[Node]
-n14[Node: {'_type': 'LiteralExpr', 'value': 0, 'line': 13, 'col': 145}]
-n15[Node: result]
-n14 --> n15
-n13 --> n14
-n5 --> n13
-n0 --> n5
-n16[Node]
-n17[Node]
-n18[Node: x]
-n17 --> n18
-n19[Node: 10]
-n17 --> n19
-n16 --> n17
-n20[Node]
-n21[Node: {'_type': 'LiteralExpr', 'value': 1, 'line': 16, 'col': 171}]
-n22[Node: x]
-n21 --> n22
-n20 --> n21
-n23[Node]
-n20 --> n23
-n16 --> n20
-n0 --> n16
-n24[Node]
-n25[Node: i]
-n24 --> n25
-n26[Node]
-n27[Node: range]
-n26 --> n27
-n28[Node: 3]
-n26 --> n28
-n24 --> n26
-n29[Node]
-n30[Node: {'_type': 'CallExpr', 'callee': {'_type': 'Identifier', 'name': 'print', 'line': 20, 'col': 210}, 'args': [{'_type': 'Identifier', 'name': 'i', 'line': 20, 'col': 216}], 'line': 20, 'col': 210}]
-n29 --> n30
-n24 --> n29
-n0 --> n24
+N0["Module"]
+N0 --> N1
+N1["Assign: LiteralExpr(line=3, col=19, value=1)"]
+N0 --> N2
+N2["Assign: LiteralExpr(line=4, col=25, value=2)"]
+N0 --> N3
+N3["Assign: LiteralExpr(line=5, col=31, value=3)"]
+N0 --> N4
+N4["Assign: BinaryExpr(line=0, col=0, left=Identifier(line=6, col=37, name='a'), op='+', right=Identifier(line=6, col=41, name='b'))"]
+N0 --> N5
+N5["Assign: ListExpr(line=9, col=58, elements=[LiteralExpr(line=9, col=59, value=1), LiteralExpr(line=9, col=62, value=2), LiteralExpr(line=9, col=65, value=3), LiteralExpr(line=9, col=68, value=4)])"]
+N0 --> N6
+N6["Assign: ListExpr(line=10, col=84, elements=[])"]
+N0 --> N7
+N7["Assign: TupleExpr(line=13, col=105, elements=[LiteralExpr(line=13, col=106, value=10), LiteralExpr(line=13, col=109, value=20)])"]
+N0 --> N8
+N8["Assign: TupleExpr(line=14, col=128, elements=[TupleExpr(line=14, col=129, elements=[LiteralExpr(line=14, col=130, value=1), LiteralExpr(line=14, col=133, value=2)]), TupleExpr(line=14, col=137, elements=[LiteralExpr(line=14, col=138, value=3), LiteralExpr(line=14, col=141, value=4)])])"]
+N0 --> N9
+N9["Assign: DictExpr(line=17, col=170, pairs=[(LiteralExpr(line=17, col=171, value='name'), LiteralExpr(line=17, col=179, value='Alice')), (LiteralExpr(line=17, col=188, value='age'), LiteralExpr(line=17, col=195, value=30))])"]
+N0 --> N10
+N10["Assign: DictExpr(line=19, col=213, pairs=[])"]
+N0 --> N11
+N11["Assign: DictExpr(line=21, col=224, pairs=[(LiteralExpr(line=21, col=225, value='sum'), BinaryExpr(line=0, col=0, left=LiteralExpr(line=21, col=232, value=1), op='+', right=LiteralExpr(line=21, col=236, value=2))), (LiteralExpr(line=21, col=239, value='nested'), DictExpr(line=21, col=249, pairs=[(LiteralExpr(line=21, col=250, value='ok'), LiteralExpr(line=21, col=256, value=True)), (LiteralExpr(line=21, col=262, value='list'), ListExpr(line=21, col=270, elements=[LiteralExpr(line=21, col=271, value=1), LiteralExpr(line=21, col=274, value=2), LiteralExpr(line=21, col=277, value=3)]))]))])"]
+N0 --> N12
+N12["Assign: ListExpr(line=23, col=291, elements=[LiteralExpr(line=23, col=292, value=1), TupleExpr(line=23, col=295, elements=[LiteralExpr(line=23, col=296, value=2), LiteralExpr(line=23, col=299, value=3)]), DictExpr(line=23, col=303, pairs=[(LiteralExpr(line=23, col=304, value='a'), LiteralExpr(line=23, col=309, value=4)), (LiteralExpr(line=23, col=312, value='b'), ListExpr(line=23, col=317, elements=[LiteralExpr(line=23, col=318, value=5), LiteralExpr(line=23, col=321, value=6)]))])])"]
+N0 --> N13
+N13["If"]
+N13 --> N14
+N14["ComparisonExpr"]
+N14 --> N15
+N15["Identifier: x"]
+N14 --> N16
+N16["LiteralExpr: 5"]
+N13 --> N17
+N17["Block"]
+N17 --> N18
+N18["Assign: BinaryExpr(line=0, col=0, left=Identifier(line=27, col=369, name='x'), op='*', right=LiteralExpr(line=27, col=373, value=2))"]
+N17 --> N19
+N19["Pass"]
+N13 --> N20
+N20["ComparisonExpr"]
+N20 --> N21
+N21["Identifier: x"]
+N20 --> N22
+N22["LiteralExpr: 3"]
+N13 --> N23
+N23["Block"]
+N23 --> N24
+N24["Assign: BinaryExpr(line=0, col=0, left=Identifier(line=30, col=410, name='x'), op='/', right=LiteralExpr(line=30, col=414, value=2))"]
+N13 --> N25
+N25["Block"]
+N25 --> N26
+N26["Assign: LiteralExpr(line=32, col=435, value=0)"]
+N0 --> N27
+N27["Assign: LiteralExpr(line=35, col=456, value=0)"]
+N0 --> N28
+N28["While"]
+N28 --> N29
+N29["ComparisonExpr"]
+N29 --> N30
+N30["Identifier: counter"]
+N29 --> N31
+N31["LiteralExpr: 3"]
+N28 --> N32
+N32["Block"]
+N32 --> N33
+N33["Assign: LiteralExpr(line=37, col=492, value=1)"]
+N32 --> N34
+N34["If"]
+N34 --> N35
+N35["ComparisonExpr"]
+N35 --> N36
+N36["Identifier: counter"]
+N35 --> N37
+N37["LiteralExpr: 2"]
+N34 --> N38
+N38["Block"]
+N38 --> N39
+N39["Continue"]
+N32 --> N40
+N40["If"]
+N40 --> N41
+N41["ComparisonExpr"]
+N41 --> N42
+N42["Identifier: counter"]
+N41 --> N43
+N43["LiteralExpr: 3"]
+N40 --> N44
+N44["Block"]
+N44 --> N45
+N45["Break"]
+N0 --> N46
+N46["For"]
+N46 --> N47
+N47["Identifier: i"]
+N46 --> N48
+N48["CallExpr"]
+N48 --> N49
+N49["Identifier: range"]
+N48 --> N50
+N50["LiteralExpr: 2"]
+N46 --> N51
+N51["Block"]
+N51 --> N52
+N52["ExprStmt: CallExpr(line=45, col=607, callee=Identifier(line=45, col=602, name='print'), args=[Identifier(line=45, col=608, name='i')])"]
+N0 --> N53
+N53["Assign: ListExpr(line=48, col=642, elements=[LiteralExpr(line=48, col=643, value=1), ListExpr(line=48, col=646, elements=[LiteralExpr(line=48, col=647, value=2), ListExpr(line=48, col=650, elements=[LiteralExpr(line=48, col=651, value=3), ListExpr(line=48, col=654, elements=[LiteralExpr(line=48, col=655, value=4), ListExpr(line=48, col=658, elements=[LiteralExpr(line=48, col=659, value=5)])])])])])"]
+N0 --> N54
+N54["Assign: TupleExpr(line=51, col=700, elements=[LiteralExpr(line=51, col=701, value=1), TupleExpr(line=51, col=704, elements=[LiteralExpr(line=51, col=705, value=2), TupleExpr(line=51, col=708, elements=[LiteralExpr(line=51, col=709, value=3), TupleExpr(line=51, col=712, elements=[LiteralExpr(line=51, col=713, value=4), LiteralExpr(line=51, col=716, value=5)])])])])"]
+N0 --> N55
+N55["Assign: DictExpr(line=54, col=761, pairs=[(LiteralExpr(line=55, col=767, value='level1'), DictExpr(line=55, col=777, pairs=[(LiteralExpr(line=56, col=787, value='level2'), DictExpr(line=56, col=797, pairs=[(LiteralExpr(line=57, col=811, value='level3'), DictExpr(line=57, col=821, pairs=[(LiteralExpr(line=58, col=839, value='numbers'), ListExpr(line=58, col=850, elements=[LiteralExpr(line=58, col=851, value=1), LiteralExpr(line=58, col=854, value=2), LiteralExpr(line=58, col=857, value=3)])), (LiteralExpr(line=59, col=877, value='letters'), TupleExpr(line=59, col=888, elements=[LiteralExpr(line=59, col=889, value='a'), LiteralExpr(line=59, col=894, value='b'), LiteralExpr(line=59, col=899, value='c')])), (LiteralExpr(line=60, col=921, value='flag'), LiteralExpr(line=60, col=929, value=True))]))]))]))])"]
+N0 --> N56
+N56["If"]
+N56 --> N57
+N57["ComparisonExpr"]
+N57 --> N58
+N58["Identifier: a"]
+N57 --> N59
+N59["LiteralExpr: 5"]
+N56 --> N60
+N60["Block"]
+N60 --> N61
+N61["For"]
+N61 --> N62
+N62["Identifier: i"]
+N61 --> N63
+N63["CallExpr"]
+N63 --> N64
+N64["Identifier: range"]
+N63 --> N65
+N65["LiteralExpr: 2"]
+N61 --> N66
+N66["Block"]
+N66 --> N67
+N67["While"]
+N67 --> N68
+N68["ComparisonExpr"]
+N68 --> N69
+N69["Identifier: b"]
+N68 --> N70
+N70["LiteralExpr: 4"]
+N67 --> N71
+N71["Block"]
+N71 --> N72
+N72["Assign: BinaryExpr(line=0, col=0, left=Identifier(line=70, col=1069, name='c'), op='+', right=LiteralExpr(line=70, col=1073, value=1))"]
+N71 --> N73
+N73["If"]
+N73 --> N74
+N74["ComparisonExpr"]
+N74 --> N75
+N75["Identifier: c"]
+N74 --> N76
+N76["LiteralExpr: 5"]
+N73 --> N77
+N77["Block"]
+N77 --> N78
+N78["ExprStmt: CallExpr(line=72, col=1132, callee=Attribute(line=72, col=1125), args=[Identifier(line=72, col=1133, name='c')])"]
+N73 --> N79
+N79["Block"]
+N79 --> N80
+N80["ExprStmt: Identifier(line=74, col=1170, name='nested_dict')"]
+N79 --> N81
+N81["Assign: Identifier(line=74, col=1223, name='c')"]
+N71 --> N82
+N82["Assign: LiteralExpr(line=75, col=1242, value=1)"]
+N56 --> N83
+N83["Block"]
+N83 --> N84
+N84["Assign: ListExpr(line=77, col=1268, elements=[])"]
+N0 --> N85
+N85["Assign: ListExpr(line=80, col=1334, elements=[Identifier(line=81, col=1340, name='nested_list'), Identifier(line=82, col=1357, name='nested_tuple'), Identifier(line=83, col=1375, name='nested_dict'), ListExpr(line=84, col=1392, elements=[DictExpr(line=84, col=1393, pairs=[(LiteralExpr(line=84, col=1394, value='inner_list'), ListExpr(line=84, col=1408, elements=[LiteralExpr(line=84, col=1409, value=0), LiteralExpr(line=84, col=1412, value=1), DictExpr(line=84, col=1415, pairs=[(LiteralExpr(line=84, col=1416, value='deep'), ListExpr(line=84, col=1424, elements=[LiteralExpr(line=84, col=1425, value=10), LiteralExpr(line=84, col=1429, value=20)]))])]))])])])"]
