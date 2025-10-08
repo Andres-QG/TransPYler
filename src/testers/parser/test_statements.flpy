@@ -62,7 +62,6 @@ nested_dict = {
     }
 }
 
-# Estructura de control anidada
 if a < 5:
     for i in range(2):
         while b < 4:
@@ -75,7 +74,6 @@ if a < 5:
 else:
     nested_list = []
 
-# Más anidamiento con listas y diccionarios
 final_structure = [
     nested_list,
     nested_tuple,
