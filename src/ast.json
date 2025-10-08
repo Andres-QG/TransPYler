@@ -7,14 +7,14 @@
         "_type": "Identifier",
         "name": "a",
         "line": 3,
-        "col": 24
+        "col": 15
       },
       "op": "=",
       "value": {
         "_type": "LiteralExpr",
         "value": 1,
         "line": 3,
-        "col": 28
+        "col": 19
       },
       "line": 0,
       "col": 0
@@ -25,14 +25,14 @@
         "_type": "Identifier",
         "name": "b",
         "line": 4,
-        "col": 30
+        "col": 21
       },
       "op": "=",
       "value": {
         "_type": "LiteralExpr",
         "value": 2,
         "line": 4,
-        "col": 34
+        "col": 25
       },
       "line": 0,
       "col": 0
@@ -43,14 +43,14 @@
         "_type": "Identifier",
         "name": "c",
         "line": 5,
-        "col": 36
+        "col": 27
       },
       "op": "=",
       "value": {
         "_type": "LiteralExpr",
         "value": 3,
         "line": 5,
-        "col": 40
+        "col": 31
       },
       "line": 0,
       "col": 0
@@ -61,7 +61,7 @@
         "_type": "Identifier",
         "name": "x",
         "line": 6,
-        "col": 42
+        "col": 33
       },
       "op": "=",
       "value": {
@@ -70,14 +70,14 @@
           "_type": "Identifier",
           "name": "a",
           "line": 6,
-          "col": 46
+          "col": 37
         },
         "op": "+",
         "right": {
           "_type": "Identifier",
           "name": "b",
           "line": 6,
-          "col": 50
+          "col": 41
         },
         "line": 0,
         "col": 0
@@ -91,7 +91,7 @@
         "_type": "Identifier",
         "name": "nums",
         "line": 9,
-        "col": 60
+        "col": 51
       },
       "op": "=",
       "value": {
@@ -101,29 +101,29 @@
             "_type": "LiteralExpr",
             "value": 1,
             "line": 9,
-            "col": 68
+            "col": 59
           },
           {
             "_type": "LiteralExpr",
             "value": 2,
             "line": 9,
-            "col": 71
+            "col": 62
           },
           {
             "_type": "LiteralExpr",
             "value": 3,
             "line": 9,
-            "col": 74
+            "col": 65
           },
           {
             "_type": "LiteralExpr",
             "value": 4,
             "line": 9,
-            "col": 77
+            "col": 68
           }
         ],
         "line": 9,
-        "col": 67
+        "col": 58
       },
       "line": 0,
       "col": 0
@@ -134,14 +134,14 @@
         "_type": "Identifier",
         "name": "empty_list",
         "line": 10,
-        "col": 80
+        "col": 71
       },
       "op": "=",
       "value": {
         "_type": "ListExpr",
         "elements": [],
         "line": 10,
-        "col": 93
+        "col": 84
       },
       "line": 0,
       "col": 0
@@ -152,7 +152,7 @@
         "_type": "Identifier",
         "name": "coords",
         "line": 13,
-        "col": 105
+        "col": 96
       },
       "op": "=",
       "value": {
@@ -162,17 +162,17 @@
             "_type": "LiteralExpr",
             "value": 10,
             "line": 13,
-            "col": 115
+            "col": 106
           },
           {
             "_type": "LiteralExpr",
             "value": 20,
             "line": 13,
-            "col": 118
+            "col": 109
           }
         ],
         "line": 13,
-        "col": 114
+        "col": 105
       },
       "line": 0,
       "col": 0
@@ -183,7 +183,7 @@
         "_type": "Identifier",
         "name": "nested_tuple",
         "line": 14,
-        "col": 122
+        "col": 113
       },
       "op": "=",
       "value": {
@@ -196,17 +196,17 @@
                 "_type": "LiteralExpr",
                 "value": 1,
                 "line": 14,
-                "col": 139
+                "col": 130
               },
               {
                 "_type": "LiteralExpr",
                 "value": 2,
                 "line": 14,
-                "col": 142
+                "col": 133
               }
             ],
             "line": 14,
-            "col": 138
+            "col": 129
           },
           {
             "_type": "TupleExpr",
@@ -215,21 +215,21 @@
                 "_type": "LiteralExpr",
                 "value": 3,
                 "line": 14,
-                "col": 147
+                "col": 138
               },
               {
                 "_type": "LiteralExpr",
                 "value": 4,
                 "line": 14,
-                "col": 150
+                "col": 141
               }
             ],
             "line": 14,
-            "col": 146
+            "col": 137
           }
         ],
         "line": 14,
-        "col": 137
+        "col": 128
       },
       "line": 0,
       "col": 0
@@ -240,7 +240,7 @@
         "_type": "Identifier",
         "name": "person",
         "line": 17,
-        "col": 170
+        "col": 161
       },
       "op": "=",
       "value": {
@@ -251,13 +251,13 @@
               "_type": "LiteralExpr",
               "value": "name",
               "line": 17,
-              "col": 180
+              "col": 171
             },
             {
               "_type": "LiteralExpr",
               "value": "Alice",
               "line": 17,
-              "col": 188
+              "col": 179
             }
           ],
           [
@@ -265,18 +265,18 @@
               "_type": "LiteralExpr",
               "value": "age",
               "line": 17,
-              "col": 197
+              "col": 188
             },
             {
               "_type": "LiteralExpr",
               "value": 30,
               "line": 17,
-              "col": 204
+              "col": 195
             }
           ]
         ],
         "line": 17,
-        "col": 179
+        "col": 170
       },
       "line": 0,
       "col": 0
@@ -287,14 +287,14 @@
         "_type": "Identifier",
         "name": "empty_dict",
         "line": 19,
-        "col": 209
+        "col": 200
       },
       "op": "=",
       "value": {
         "_type": "DictExpr",
         "pairs": [],
         "line": 19,
-        "col": 222
+        "col": 213
       },
       "line": 0,
       "col": 0
@@ -305,7 +305,7 @@
         "_type": "Identifier",
         "name": "data",
         "line": 21,
-        "col": 226
+        "col": 217
       },
       "op": "=",
       "value": {
@@ -316,7 +316,7 @@
               "_type": "LiteralExpr",
               "value": "sum",
               "line": 21,
-              "col": 234
+              "col": 225
             },
             {
               "_type": "BinaryExpr",
@@ -324,14 +324,14 @@
                 "_type": "LiteralExpr",
                 "value": 1,
                 "line": 21,
-                "col": 241
+                "col": 232
               },
               "op": "+",
               "right": {
                 "_type": "LiteralExpr",
                 "value": 2,
                 "line": 21,
-                "col": 245
+                "col": 236
               },
               "line": 0,
               "col": 0
@@ -342,7 +342,7 @@
               "_type": "LiteralExpr",
               "value": "nested",
               "line": 21,
-              "col": 248
+              "col": 239
             },
             {
               "_type": "DictExpr",
@@ -352,13 +352,13 @@
                     "_type": "LiteralExpr",
                     "value": "ok",
                     "line": 21,
-                    "col": 259
+                    "col": 250
                   },
                   {
                     "_type": "LiteralExpr",
                     "value": true,
                     "line": 21,
-                    "col": 265
+                    "col": 256
                   }
                 ],
                 [
@@ -366,7 +366,7 @@
                     "_type": "LiteralExpr",
                     "value": "list",
                     "line": 21,
-                    "col": 271
+                    "col": 262
                   },
                   {
                     "_type": "ListExpr",
@@ -375,33 +375,33 @@
                         "_type": "LiteralExpr",
                         "value": 1,
                         "line": 21,
-                        "col": 280
+                        "col": 271
                       },
                       {
                         "_type": "LiteralExpr",
                         "value": 2,
                         "line": 21,
-                        "col": 283
+                        "col": 274
                       },
                       {
                         "_type": "LiteralExpr",
                         "value": 3,
                         "line": 21,
-                        "col": 286
+                        "col": 277
                       }
                     ],
                     "line": 21,
-                    "col": 279
+                    "col": 270
                   }
                 ]
               ],
               "line": 21,
-              "col": 258
+              "col": 249
             }
           ]
         ],
         "line": 21,
-        "col": 233
+        "col": 224
       },
       "line": 0,
       "col": 0
@@ -412,7 +412,7 @@
         "_type": "Identifier",
         "name": "mixed",
         "line": 23,
-        "col": 292
+        "col": 283
       },
       "op": "=",
       "value": {
@@ -422,7 +422,7 @@
             "_type": "LiteralExpr",
             "value": 1,
             "line": 23,
-            "col": 301
+            "col": 292
           },
           {
             "_type": "TupleExpr",
@@ -431,17 +431,17 @@
                 "_type": "LiteralExpr",
                 "value": 2,
                 "line": 23,
-                "col": 305
+                "col": 296
               },
               {
                 "_type": "LiteralExpr",
                 "value": 3,
                 "line": 23,
-                "col": 308
+                "col": 299
               }
             ],
             "line": 23,
-            "col": 304
+            "col": 295
           },
           {
             "_type": "DictExpr",
@@ -451,13 +451,13 @@
                   "_type": "LiteralExpr",
                   "value": "a",
                   "line": 23,
-                  "col": 313
+                  "col": 304
                 },
                 {
                   "_type": "LiteralExpr",
                   "value": 4,
                   "line": 23,
-                  "col": 318
+                  "col": 309
                 }
               ],
               [
@@ -465,7 +465,7 @@
                   "_type": "LiteralExpr",
                   "value": "b",
                   "line": 23,
-                  "col": 321
+                  "col": 312
                 },
                 {
                   "_type": "ListExpr",
@@ -474,26 +474,26 @@
                       "_type": "LiteralExpr",
                       "value": 5,
                       "line": 23,
-                      "col": 327
+                      "col": 318
                     },
                     {
                       "_type": "LiteralExpr",
                       "value": 6,
                       "line": 23,
-                      "col": 330
+                      "col": 321
                     }
                   ],
                   "line": 23,
-                  "col": 326
+                  "col": 317
                 }
               ]
             ],
             "line": 23,
-            "col": 312
+            "col": 303
           }
         ],
         "line": 23,
-        "col": 300
+        "col": 291
       },
       "line": 0,
       "col": 0
@@ -506,14 +506,14 @@
           "_type": "Identifier",
           "name": "x",
           "line": 26,
-          "col": 358
+          "col": 349
         },
         "op": ">",
         "right": {
           "_type": "LiteralExpr",
           "value": 5,
           "line": 26,
-          "col": 362
+          "col": 353
         },
         "line": 0,
         "col": 0
@@ -527,7 +527,7 @@
               "_type": "Identifier",
               "name": "result",
               "line": 27,
-              "col": 369
+              "col": 360
             },
             "op": "=",
             "value": {
@@ -536,14 +536,14 @@
                 "_type": "Identifier",
                 "name": "x",
                 "line": 27,
-                "col": 378
+                "col": 369
               },
               "op": "*",
               "right": {
                 "_type": "LiteralExpr",
                 "value": 2,
                 "line": 27,
-                "col": 382
+                "col": 373
               },
               "line": 0,
               "col": 0
@@ -566,14 +566,14 @@
               "_type": "Identifier",
               "name": "x",
               "line": 29,
-              "col": 398
+              "col": 389
             },
             "op": "==",
             "right": {
               "_type": "LiteralExpr",
               "value": 3,
               "line": 29,
-              "col": 403
+              "col": 394
             },
             "line": 0,
             "col": 0
@@ -587,7 +587,7 @@
                   "_type": "Identifier",
                   "name": "result",
                   "line": 30,
-                  "col": 410
+                  "col": 401
                 },
                 "op": "=",
                 "value": {
@@ -596,14 +596,14 @@
                     "_type": "Identifier",
                     "name": "x",
                     "line": 30,
-                    "col": 419
+                    "col": 410
                   },
                   "op": "/",
                   "right": {
                     "_type": "LiteralExpr",
                     "value": 2,
                     "line": 30,
-                    "col": 423
+                    "col": 414
                   },
                   "line": 0,
                   "col": 0
@@ -626,14 +626,14 @@
               "_type": "Identifier",
               "name": "result",
               "line": 32,
-              "col": 435
+              "col": 426
             },
             "op": "=",
             "value": {
               "_type": "LiteralExpr",
               "value": 0,
               "line": 32,
-              "col": 444
+              "col": 435
             },
             "line": 0,
             "col": 0
@@ -649,14 +649,14 @@
         "_type": "Identifier",
         "name": "counter",
         "line": 35,
-        "col": 476
+        "col": 446
       },
       "op": "=",
       "value": {
         "_type": "LiteralExpr",
         "value": 0,
         "line": 35,
-        "col": 486
+        "col": 456
       },
       "line": 0,
       "col": 0
@@ -669,14 +669,14 @@
           "_type": "Identifier",
           "name": "counter",
           "line": 36,
-          "col": 494
+          "col": 464
         },
         "op": "<",
         "right": {
           "_type": "LiteralExpr",
           "value": 3,
           "line": 36,
-          "col": 504
+          "col": 474
         },
         "line": 0,
         "col": 0
@@ -690,14 +690,14 @@
               "_type": "Identifier",
               "name": "counter",
               "line": 37,
-              "col": 511
+              "col": 481
             },
             "op": "+=",
             "value": {
               "_type": "LiteralExpr",
               "value": 1,
               "line": 37,
-              "col": 522
+              "col": 492
             },
             "line": 0,
             "col": 0
@@ -710,14 +710,14 @@
                 "_type": "Identifier",
                 "name": "counter",
                 "line": 38,
-                "col": 531
+                "col": 501
               },
               "op": "==",
               "right": {
                 "_type": "LiteralExpr",
                 "value": 2,
                 "line": 38,
-                "col": 542
+                "col": 512
               },
               "line": 0,
               "col": 0
@@ -741,14 +741,14 @@
                 "_type": "Identifier",
                 "name": "counter",
                 "line": 40,
-                "col": 569
+                "col": 539
               },
               "op": "==",
               "right": {
                 "_type": "LiteralExpr",
                 "value": 3,
                 "line": 40,
-                "col": 580
+                "col": 550
               },
               "line": 0,
               "col": 0
@@ -775,7 +775,7 @@
         "_type": "Identifier",
         "name": "i",
         "line": 44,
-        "col": 620
+        "col": 583
       },
       "iterable": {
         "_type": "CallExpr",
@@ -783,18 +783,18 @@
           "_type": "Identifier",
           "name": "range",
           "line": 44,
-          "col": 625
+          "col": 588
         },
         "args": [
           {
             "_type": "LiteralExpr",
             "value": 2,
             "line": 44,
-            "col": 631
+            "col": 594
           }
         ],
         "line": 44,
-        "col": 625
+        "col": 588
       },
       "body": {
         "_type": "Block",
@@ -807,18 +807,18 @@
                 "_type": "Identifier",
                 "name": "print",
                 "line": 45,
-                "col": 639
+                "col": 602
               },
               "args": [
                 {
                   "_type": "Identifier",
                   "name": "i",
                   "line": 45,
-                  "col": 645
+                  "col": 608
                 }
               ],
               "line": 45,
-              "col": 639
+              "col": 602
             },
             "line": 0,
             "col": 0
