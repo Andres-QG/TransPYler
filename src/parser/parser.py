@@ -20,6 +20,11 @@ from ..core.ast import (
     BinaryExpr,
     ComparisonExpr,
     CallExpr,
+    
+    TupleExpr,
+    ListExpr,
+    DictExpr,
+
     FunctionDef,
     ClassDef,
     ExprStmt,
@@ -141,6 +146,34 @@ class Parser:
         )
         raise SyntaxError(self.errors[-1].exact())
 
+    # Parse a generic statement: can be simple or compound
+    def p_statement(self, p):
+        """statement : simple_statement
+                    | compound_statement"""
+        p[0] = p[1]
+    
+    # Parse a simple statement, delegates to small_stmt
+    def p_simple_statement(self, p):
+        """simple_statement : small_stmt"""
+        p[0] = p[1]
+    
+    # Parse the smallest unit of a statement
+    # Can be assignment, return, break, continue, pass, or expression
+    def p_small_stmt(self, p):
+        """small_stmt : assignment
+                  | return_stmt
+                  | break_stmt
+                  | continue_stmt
+                  | pass_stmt
+                  | expr"""
+        
+        if len(p) == 2:
+            if hasattr(p[1], '__class__') and not isinstance(p[1], (Assign, Return, Break, Continue, Pass)):
+                line, col = _pos(p, 1)
+                p[0] = ExprStmt(value=p[1], line=line, col=col)
+            else:
+                p[0] = p[1]
+
 
     # ********************************************** Rules for expressions *******************************
 
@@ -188,6 +221,29 @@ class Parser:
         "atom : ID"
         line, col = _pos(p, 1)
         p[0] = Identifier(name=p[1], line=line, col=col)
+
+    # ----- List, Tuples, Dictionaries -----
+    def p_atom_paren(self, p):
+        """atom : LPAREN elements_opt RPAREN"""
+        line, col = _pos(p, 1)
+        elements = p[2]  # list of expressions (may be empty)
+        # If it's a single element *without* trailing comma it's still parsed here,
+        # but in our grammar the presence/absence of comma is not exposed; treat (x) as x
+        # To preserve semantics: if expr_list_opt returned exactly one element, we return that element (parenthesized)
+        if len(elements) == 1:
+            p[0] = elements[0]
+        else:
+            p[0] = TupleExpr(elements=elements, line=line, col=col)
+
+    def p_atom_list(self, p):
+        """atom : LBRACKET elements_opt RBRACKET"""
+        line, col = _pos(p, 1)
+        p[0] = ListExpr(elements=p[2], line=line, col=col)
+
+    def p_atom_dict(self, p):
+        """atom : LBRACE key_value_list_opt RBRACE"""
+        line, col = _pos(p, 1)
+        p[0] = DictExpr(pairs=p[2], line=line, col=col)
 
     # ----------------------Unary------------------------------------
     # These rules define how nodes are constructed for unary operators such as +x, -x, not x.
@@ -280,53 +336,86 @@ class Parser:
         "arg_list_opt :"
         p[0] = []
 
-
-
-    # ---------------------- STATEMENT ----------------------
-
-    # Parse a generic statement: can be simple or compound
-    def p_statement(self, p):
-        """statement : simple_statement
-                    | compound_statement"""
-        p[0] = p[1]
+    def p_empty(self, p):
+        "empty :"
+        p[0] = []
     
-    # Parse a simple statement, delegates to small_stmt
-    def p_simple_statement(self, p):
-        """simple_statement : small_stmt"""
-        p[0] = p[1]
-    
-    # Parse the smallest unit of a statement
-    # Can be assignment, return, break, continue, pass, or expression
-    def p_small_stmt(self, p):
-        """small_stmt : assignment
-                  | return_stmt
-                  | break_stmt
-                  | continue_stmt
-                  | pass_stmt
-                  | expr"""
-        
+ # ----- Dictionaries -----
+    def p_key_value_list(self, p):
+        """key_value_list : key_value
+                        | key_value COMMA key_value_list"""
         if len(p) == 2:
-            if hasattr(p[1], '__class__') and not isinstance(p[1], (Assign, Return, Break, Continue, Pass)):
-                line, col = _pos(p, 1)
-                p[0] = ExprStmt(value=p[1], line=line, col=col)
-            else:
-                p[0] = p[1]
+            p[0] = [p[1]]
+        else:
+            p[0] = [p[1]] + p[3]
 
-    # Assignment (x = expr | x += expr)
+    def p_key_value_list_opt(self, p):
+        """key_value_list_opt : key_value_list
+                            | empty"""
+        p[0] = p[1]
+
+    def p_key_value(self, p):
+        "key_value : expr COLON expr"
+        p[0] = (p[1], p[3])
+
+        
+    # ----- List elements -----
+    def p_elements(self, p):
+        """elements : expr
+                    | elements COMMA expr"""
+        if len(p) == 2:
+            p[0] = [p[1]]
+        else:
+            p[0] = p[1] + [p[3]]
+
+    def p_elements_opt(self, p):
+        """elements_opt : elements
+                        | empty"""
+        p[0] = p[1] if len(p) > 1 else []
+
+
+
+    # ---------------------- ASSIGNMENTS ----------------------
+
+    # Handles: a = b = c = 0   and   a, b = 1, 2
     def p_assignment(self, p):
-        """assignment : ID ASSIGN expr
-                      | ID PLUS_ASSIGN expr
-                      | ID MINUS_ASSIGN expr
-                      | ID TIMES_ASSIGN expr
-                      | ID DIVIDE_ASSIGN expr"""
+        """assignment : assign_targets ASSIGN expr
+                    | assign_targets PLUS_ASSIGN expr
+                    | assign_targets MINUS_ASSIGN expr
+                    | assign_targets TIMES_ASSIGN expr
+                    | assign_targets DIVIDE_ASSIGN expr
+                    | assign_targets FLOOR_DIVIDE_ASSIGN expr
+                    | assign_targets MOD_ASSIGN expr
+                    | assign_targets POWER_ASSIGN expr"""
+        value = p[3]
         line, col = _pos(p, 1)
-        p[0] = Assign(
-            target=Identifier(name=p[1], line=line, col=col),
-            op=p[2],
-            value=p[3],
-            line=line,
-            col=col,
-        )
+        for target in reversed(p[1]):
+            # p[2] contiene el operador ('=', '+=', '-=', etc.)
+            value = Assign(target=target, op=p[2], value=value, line=line, col=col)
+        p[0] = value
+
+    def p_assign_targets(self, p):
+        """assign_targets : assign_targets ASSIGN target
+                          | target"""
+        if len(p) == 2:
+            p[0] = [p[1]]
+        else:
+            p[0] = p[1] + [p[3]]
+
+    def p_target(self, p):
+        """target : ID
+                  | LPAREN elements_opt RPAREN
+                  | LBRACKET elements_opt RBRACKET"""
+        if len(p) == 2:
+            line, col = _pos(p, 1)
+            p[0] = Identifier(name=p[1], line=line, col=col)
+        else:
+            line, col = _pos(p, 1)
+            if p[1] == "(":
+                p[0] = TupleExpr(elements=p[2], line=line, col=col)
+            else:
+                p[0] = ListExpr(elements=p[2], line=line, col=col)
+        
 
     # return
     def p_return_stmt(self, p):
@@ -447,12 +536,3 @@ class Parser:
         line, col = _pos(p, 1)
         p[0] = Identifier(name=p[1], line=line, col=col)
 
-    def p_classdef(self, p):
-        "classdef : CLASS ID COLON statement_list"
-        line, col = _pos(p, 1)
-        p[0] = ClassDef(
-            name=p[2],  # ID
-            body=p[4],  # statements
-            line=line,
-            col=col,
-        )

@@ -4,6 +4,23 @@ b = 2
 c = 3
 x = a + b
 
+# List
+nums = [1, 2, 3, 4]
+empty_list = []
+
+# Tuple
+coords = (10,20)
+nested_tuple = ((1, 2), (3, 4))
+
+# Diccionaries
+person = {"name": "Alice", "age": 30}
+
+empty_dict = {}
+
+data = {"sum": 1 + 2, "nested": {"ok": True, "list": [1, 2, 3]}}
+
+mixed = [1, (2, 3), {"a": 4, "b": [5, 6]}]
+
 # If / Elif / Else
 if x > 5:
     result = x * 2
