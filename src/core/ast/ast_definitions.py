@@ -25,3 +25,19 @@ class ClassDef(AstNode):
 
     name: str = ""
     body: List[AstNode] = field(default_factory=list)  # methods and statements
+
+@dataclass
+class Subscript(AstNode):
+    def __init__(self, value, index, line=None, col=None):
+        self.value = value
+        self.index = index
+        self.line = line
+        self.col = col
+
+@dataclass
+class Attribute(AstNode):
+    def __init__(self, value, attr, line=None, col=None):
+        self.value = value
+        self.attr = attr
+        self.line = line
+        self.col = col

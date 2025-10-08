@@ -1,0 +1,1533 @@
+{
+  "_type": "Module",
+  "body": [
+    {
+      "_type": "Assign",
+      "target": {
+        "_type": "Identifier",
+        "name": "a",
+        "line": 3,
+        "col": 15
+      },
+      "op": "=",
+      "value": {
+        "_type": "LiteralExpr",
+        "value": 1,
+        "line": 3,
+        "col": 19
+      },
+      "line": 0,
+      "col": 0
+    },
+    {
+      "_type": "Assign",
+      "target": {
+        "_type": "Identifier",
+        "name": "b",
+        "line": 4,
+        "col": 21
+      },
+      "op": "=",
+      "value": {
+        "_type": "LiteralExpr",
+        "value": 2,
+        "line": 4,
+        "col": 25
+      },
+      "line": 0,
+      "col": 0
+    },
+    {
+      "_type": "Assign",
+      "target": {
+        "_type": "Identifier",
+        "name": "c",
+        "line": 5,
+        "col": 27
+      },
+      "op": "=",
+      "value": {
+        "_type": "LiteralExpr",
+        "value": 3,
+        "line": 5,
+        "col": 31
+      },
+      "line": 0,
+      "col": 0
+    },
+    {
+      "_type": "Assign",
+      "target": {
+        "_type": "Identifier",
+        "name": "x",
+        "line": 6,
+        "col": 33
+      },
+      "op": "=",
+      "value": {
+        "_type": "BinaryExpr",
+        "left": {
+          "_type": "Identifier",
+          "name": "a",
+          "line": 6,
+          "col": 37
+        },
+        "op": "+",
+        "right": {
+          "_type": "Identifier",
+          "name": "b",
+          "line": 6,
+          "col": 41
+        },
+        "line": 0,
+        "col": 0
+      },
+      "line": 0,
+      "col": 0
+    },
+    {
+      "_type": "Assign",
+      "target": {
+        "_type": "Identifier",
+        "name": "nums",
+        "line": 9,
+        "col": 51
+      },
+      "op": "=",
+      "value": {
+        "_type": "ListExpr",
+        "elements": [
+          {
+            "_type": "LiteralExpr",
+            "value": 1,
+            "line": 9,
+            "col": 59
+          },
+          {
+            "_type": "LiteralExpr",
+            "value": 2,
+            "line": 9,
+            "col": 62
+          },
+          {
+            "_type": "LiteralExpr",
+            "value": 3,
+            "line": 9,
+            "col": 65
+          },
+          {
+            "_type": "LiteralExpr",
+            "value": 4,
+            "line": 9,
+            "col": 68
+          }
+        ],
+        "line": 9,
+        "col": 58
+      },
+      "line": 0,
+      "col": 0
+    },
+    {
+      "_type": "Assign",
+      "target": {
+        "_type": "Identifier",
+        "name": "empty_list",
+        "line": 10,
+        "col": 71
+      },
+      "op": "=",
+      "value": {
+        "_type": "ListExpr",
+        "elements": [],
+        "line": 10,
+        "col": 84
+      },
+      "line": 0,
+      "col": 0
+    },
+    {
+      "_type": "Assign",
+      "target": {
+        "_type": "Identifier",
+        "name": "coords",
+        "line": 13,
+        "col": 96
+      },
+      "op": "=",
+      "value": {
+        "_type": "TupleExpr",
+        "elements": [
+          {
+            "_type": "LiteralExpr",
+            "value": 10,
+            "line": 13,
+            "col": 106
+          },
+          {
+            "_type": "LiteralExpr",
+            "value": 20,
+            "line": 13,
+            "col": 109
+          }
+        ],
+        "line": 13,
+        "col": 105
+      },
+      "line": 0,
+      "col": 0
+    },
+    {
+      "_type": "Assign",
+      "target": {
+        "_type": "Identifier",
+        "name": "nested_tuple",
+        "line": 14,
+        "col": 113
+      },
+      "op": "=",
+      "value": {
+        "_type": "TupleExpr",
+        "elements": [
+          {
+            "_type": "TupleExpr",
+            "elements": [
+              {
+                "_type": "LiteralExpr",
+                "value": 1,
+                "line": 14,
+                "col": 130
+              },
+              {
+                "_type": "LiteralExpr",
+                "value": 2,
+                "line": 14,
+                "col": 133
+              }
+            ],
+            "line": 14,
+            "col": 129
+          },
+          {
+            "_type": "TupleExpr",
+            "elements": [
+              {
+                "_type": "LiteralExpr",
+                "value": 3,
+                "line": 14,
+                "col": 138
+              },
+              {
+                "_type": "LiteralExpr",
+                "value": 4,
+                "line": 14,
+                "col": 141
+              }
+            ],
+            "line": 14,
+            "col": 137
+          }
+        ],
+        "line": 14,
+        "col": 128
+      },
+      "line": 0,
+      "col": 0
+    },
+    {
+      "_type": "Assign",
+      "target": {
+        "_type": "Identifier",
+        "name": "person",
+        "line": 17,
+        "col": 161
+      },
+      "op": "=",
+      "value": {
+        "_type": "DictExpr",
+        "pairs": [
+          [
+            {
+              "_type": "LiteralExpr",
+              "value": "name",
+              "line": 17,
+              "col": 171
+            },
+            {
+              "_type": "LiteralExpr",
+              "value": "Alice",
+              "line": 17,
+              "col": 179
+            }
+          ],
+          [
+            {
+              "_type": "LiteralExpr",
+              "value": "age",
+              "line": 17,
+              "col": 188
+            },
+            {
+              "_type": "LiteralExpr",
+              "value": 30,
+              "line": 17,
+              "col": 195
+            }
+          ]
+        ],
+        "line": 17,
+        "col": 170
+      },
+      "line": 0,
+      "col": 0
+    },
+    {
+      "_type": "Assign",
+      "target": {
+        "_type": "Identifier",
+        "name": "empty_dict",
+        "line": 19,
+        "col": 200
+      },
+      "op": "=",
+      "value": {
+        "_type": "DictExpr",
+        "pairs": [],
+        "line": 19,
+        "col": 213
+      },
+      "line": 0,
+      "col": 0
+    },
+    {
+      "_type": "Assign",
+      "target": {
+        "_type": "Identifier",
+        "name": "data",
+        "line": 21,
+        "col": 217
+      },
+      "op": "=",
+      "value": {
+        "_type": "DictExpr",
+        "pairs": [
+          [
+            {
+              "_type": "LiteralExpr",
+              "value": "sum",
+              "line": 21,
+              "col": 225
+            },
+            {
+              "_type": "BinaryExpr",
+              "left": {
+                "_type": "LiteralExpr",
+                "value": 1,
+                "line": 21,
+                "col": 232
+              },
+              "op": "+",
+              "right": {
+                "_type": "LiteralExpr",
+                "value": 2,
+                "line": 21,
+                "col": 236
+              },
+              "line": 0,
+              "col": 0
+            }
+          ],
+          [
+            {
+              "_type": "LiteralExpr",
+              "value": "nested",
+              "line": 21,
+              "col": 239
+            },
+            {
+              "_type": "DictExpr",
+              "pairs": [
+                [
+                  {
+                    "_type": "LiteralExpr",
+                    "value": "ok",
+                    "line": 21,
+                    "col": 250
+                  },
+                  {
+                    "_type": "LiteralExpr",
+                    "value": true,
+                    "line": 21,
+                    "col": 256
+                  }
+                ],
+                [
+                  {
+                    "_type": "LiteralExpr",
+                    "value": "list",
+                    "line": 21,
+                    "col": 262
+                  },
+                  {
+                    "_type": "ListExpr",
+                    "elements": [
+                      {
+                        "_type": "LiteralExpr",
+                        "value": 1,
+                        "line": 21,
+                        "col": 271
+                      },
+                      {
+                        "_type": "LiteralExpr",
+                        "value": 2,
+                        "line": 21,
+                        "col": 274
+                      },
+                      {
+                        "_type": "LiteralExpr",
+                        "value": 3,
+                        "line": 21,
+                        "col": 277
+                      }
+                    ],
+                    "line": 21,
+                    "col": 270
+                  }
+                ]
+              ],
+              "line": 21,
+              "col": 249
+            }
+          ]
+        ],
+        "line": 21,
+        "col": 224
+      },
+      "line": 0,
+      "col": 0
+    },
+    {
+      "_type": "Assign",
+      "target": {
+        "_type": "Identifier",
+        "name": "mixed",
+        "line": 23,
+        "col": 283
+      },
+      "op": "=",
+      "value": {
+        "_type": "ListExpr",
+        "elements": [
+          {
+            "_type": "LiteralExpr",
+            "value": 1,
+            "line": 23,
+            "col": 292
+          },
+          {
+            "_type": "TupleExpr",
+            "elements": [
+              {
+                "_type": "LiteralExpr",
+                "value": 2,
+                "line": 23,
+                "col": 296
+              },
+              {
+                "_type": "LiteralExpr",
+                "value": 3,
+                "line": 23,
+                "col": 299
+              }
+            ],
+            "line": 23,
+            "col": 295
+          },
+          {
+            "_type": "DictExpr",
+            "pairs": [
+              [
+                {
+                  "_type": "LiteralExpr",
+                  "value": "a",
+                  "line": 23,
+                  "col": 304
+                },
+                {
+                  "_type": "LiteralExpr",
+                  "value": 4,
+                  "line": 23,
+                  "col": 309
+                }
+              ],
+              [
+                {
+                  "_type": "LiteralExpr",
+                  "value": "b",
+                  "line": 23,
+                  "col": 312
+                },
+                {
+                  "_type": "ListExpr",
+                  "elements": [
+                    {
+                      "_type": "LiteralExpr",
+                      "value": 5,
+                      "line": 23,
+                      "col": 318
+                    },
+                    {
+                      "_type": "LiteralExpr",
+                      "value": 6,
+                      "line": 23,
+                      "col": 321
+                    }
+                  ],
+                  "line": 23,
+                  "col": 317
+                }
+              ]
+            ],
+            "line": 23,
+            "col": 303
+          }
+        ],
+        "line": 23,
+        "col": 291
+      },
+      "line": 0,
+      "col": 0
+    },
+    {
+      "_type": "If",
+      "cond": {
+        "_type": "ComparisonExpr",
+        "left": {
+          "_type": "Identifier",
+          "name": "x",
+          "line": 26,
+          "col": 349
+        },
+        "op": ">",
+        "right": {
+          "_type": "LiteralExpr",
+          "value": 5,
+          "line": 26,
+          "col": 353
+        },
+        "line": 0,
+        "col": 0
+      },
+      "body": {
+        "_type": "Block",
+        "statements": [
+          {
+            "_type": "Assign",
+            "target": {
+              "_type": "Identifier",
+              "name": "result",
+              "line": 27,
+              "col": 360
+            },
+            "op": "=",
+            "value": {
+              "_type": "BinaryExpr",
+              "left": {
+                "_type": "Identifier",
+                "name": "x",
+                "line": 27,
+                "col": 369
+              },
+              "op": "*",
+              "right": {
+                "_type": "LiteralExpr",
+                "value": 2,
+                "line": 27,
+                "col": 373
+              },
+              "line": 0,
+              "col": 0
+            },
+            "line": 0,
+            "col": 0
+          },
+          {
+            "_type": "Pass"
+          }
+        ],
+        "line": 0,
+        "col": 0
+      },
+      "elifs": [
+        [
+          {
+            "_type": "ComparisonExpr",
+            "left": {
+              "_type": "Identifier",
+              "name": "x",
+              "line": 29,
+              "col": 389
+            },
+            "op": "==",
+            "right": {
+              "_type": "LiteralExpr",
+              "value": 3,
+              "line": 29,
+              "col": 394
+            },
+            "line": 0,
+            "col": 0
+          },
+          {
+            "_type": "Block",
+            "statements": [
+              {
+                "_type": "Assign",
+                "target": {
+                  "_type": "Identifier",
+                  "name": "result",
+                  "line": 30,
+                  "col": 401
+                },
+                "op": "=",
+                "value": {
+                  "_type": "BinaryExpr",
+                  "left": {
+                    "_type": "Identifier",
+                    "name": "x",
+                    "line": 30,
+                    "col": 410
+                  },
+                  "op": "/",
+                  "right": {
+                    "_type": "LiteralExpr",
+                    "value": 2,
+                    "line": 30,
+                    "col": 414
+                  },
+                  "line": 0,
+                  "col": 0
+                },
+                "line": 0,
+                "col": 0
+              }
+            ],
+            "line": 0,
+            "col": 0
+          }
+        ]
+      ],
+      "orelse": {
+        "_type": "Block",
+        "statements": [
+          {
+            "_type": "Assign",
+            "target": {
+              "_type": "Identifier",
+              "name": "result",
+              "line": 32,
+              "col": 426
+            },
+            "op": "=",
+            "value": {
+              "_type": "LiteralExpr",
+              "value": 0,
+              "line": 32,
+              "col": 435
+            },
+            "line": 0,
+            "col": 0
+          }
+        ],
+        "line": 0,
+        "col": 0
+      }
+    },
+    {
+      "_type": "Assign",
+      "target": {
+        "_type": "Identifier",
+        "name": "counter",
+        "line": 35,
+        "col": 446
+      },
+      "op": "=",
+      "value": {
+        "_type": "LiteralExpr",
+        "value": 0,
+        "line": 35,
+        "col": 456
+      },
+      "line": 0,
+      "col": 0
+    },
+    {
+      "_type": "While",
+      "cond": {
+        "_type": "ComparisonExpr",
+        "left": {
+          "_type": "Identifier",
+          "name": "counter",
+          "line": 36,
+          "col": 464
+        },
+        "op": "<",
+        "right": {
+          "_type": "LiteralExpr",
+          "value": 3,
+          "line": 36,
+          "col": 474
+        },
+        "line": 0,
+        "col": 0
+      },
+      "body": {
+        "_type": "Block",
+        "statements": [
+          {
+            "_type": "Assign",
+            "target": {
+              "_type": "Identifier",
+              "name": "counter",
+              "line": 37,
+              "col": 481
+            },
+            "op": "+=",
+            "value": {
+              "_type": "LiteralExpr",
+              "value": 1,
+              "line": 37,
+              "col": 492
+            },
+            "line": 0,
+            "col": 0
+          },
+          {
+            "_type": "If",
+            "cond": {
+              "_type": "ComparisonExpr",
+              "left": {
+                "_type": "Identifier",
+                "name": "counter",
+                "line": 38,
+                "col": 501
+              },
+              "op": "==",
+              "right": {
+                "_type": "LiteralExpr",
+                "value": 2,
+                "line": 38,
+                "col": 512
+              },
+              "line": 0,
+              "col": 0
+            },
+            "body": {
+              "_type": "Block",
+              "statements": [
+                {
+                  "_type": "Continue"
+                }
+              ]
+            },
+            "elifs": [],
+            "orelse": null
+          },
+          {
+            "_type": "If",
+            "cond": {
+              "_type": "ComparisonExpr",
+              "left": {
+                "_type": "Identifier",
+                "name": "counter",
+                "line": 40,
+                "col": 539
+              },
+              "op": "==",
+              "right": {
+                "_type": "LiteralExpr",
+                "value": 3,
+                "line": 40,
+                "col": 550
+              },
+              "line": 0,
+              "col": 0
+            },
+            "body": {
+              "_type": "Block",
+              "statements": [
+                {
+                  "_type": "Break"
+                }
+              ]
+            },
+            "elifs": [],
+            "orelse": null
+          }
+        ],
+        "line": 0,
+        "col": 0
+      }
+    },
+    {
+      "_type": "For",
+      "target": {
+        "_type": "Identifier",
+        "name": "i",
+        "line": 44,
+        "col": 583
+      },
+      "iterable": {
+        "_type": "CallExpr",
+        "callee": {
+          "_type": "Identifier",
+          "name": "range",
+          "line": 44,
+          "col": 588
+        },
+        "args": [
+          {
+            "_type": "LiteralExpr",
+            "value": 2,
+            "line": 44,
+            "col": 594
+          }
+        ],
+        "line": 44,
+        "col": 593
+      },
+      "body": {
+        "_type": "Block",
+        "statements": [
+          {
+            "_type": "ExprStmt",
+            "value": {
+              "_type": "CallExpr",
+              "callee": {
+                "_type": "Identifier",
+                "name": "print",
+                "line": 45,
+                "col": 602
+              },
+              "args": [
+                {
+                  "_type": "Identifier",
+                  "name": "i",
+                  "line": 45,
+                  "col": 608
+                }
+              ],
+              "line": 45,
+              "col": 607
+            },
+            "line": 0,
+            "col": 0
+          }
+        ],
+        "line": 0,
+        "col": 0
+      }
+    },
+    {
+      "_type": "Assign",
+      "target": {
+        "_type": "Identifier",
+        "name": "nested_list",
+        "line": 48,
+        "col": 628
+      },
+      "op": "=",
+      "value": {
+        "_type": "ListExpr",
+        "elements": [
+          {
+            "_type": "LiteralExpr",
+            "value": 1,
+            "line": 48,
+            "col": 643
+          },
+          {
+            "_type": "ListExpr",
+            "elements": [
+              {
+                "_type": "LiteralExpr",
+                "value": 2,
+                "line": 48,
+                "col": 647
+              },
+              {
+                "_type": "ListExpr",
+                "elements": [
+                  {
+                    "_type": "LiteralExpr",
+                    "value": 3,
+                    "line": 48,
+                    "col": 651
+                  },
+                  {
+                    "_type": "ListExpr",
+                    "elements": [
+                      {
+                        "_type": "LiteralExpr",
+                        "value": 4,
+                        "line": 48,
+                        "col": 655
+                      },
+                      {
+                        "_type": "ListExpr",
+                        "elements": [
+                          {
+                            "_type": "LiteralExpr",
+                            "value": 5,
+                            "line": 48,
+                            "col": 659
+                          }
+                        ],
+                        "line": 48,
+                        "col": 658
+                      }
+                    ],
+                    "line": 48,
+                    "col": 654
+                  }
+                ],
+                "line": 48,
+                "col": 650
+              }
+            ],
+            "line": 48,
+            "col": 646
+          }
+        ],
+        "line": 48,
+        "col": 642
+      },
+      "line": 0,
+      "col": 0
+    },
+    {
+      "_type": "Assign",
+      "target": {
+        "_type": "Identifier",
+        "name": "nested_tuple",
+        "line": 51,
+        "col": 685
+      },
+      "op": "=",
+      "value": {
+        "_type": "TupleExpr",
+        "elements": [
+          {
+            "_type": "LiteralExpr",
+            "value": 1,
+            "line": 51,
+            "col": 701
+          },
+          {
+            "_type": "TupleExpr",
+            "elements": [
+              {
+                "_type": "LiteralExpr",
+                "value": 2,
+                "line": 51,
+                "col": 705
+              },
+              {
+                "_type": "TupleExpr",
+                "elements": [
+                  {
+                    "_type": "LiteralExpr",
+                    "value": 3,
+                    "line": 51,
+                    "col": 709
+                  },
+                  {
+                    "_type": "TupleExpr",
+                    "elements": [
+                      {
+                        "_type": "LiteralExpr",
+                        "value": 4,
+                        "line": 51,
+                        "col": 713
+                      },
+                      {
+                        "_type": "LiteralExpr",
+                        "value": 5,
+                        "line": 51,
+                        "col": 716
+                      }
+                    ],
+                    "line": 51,
+                    "col": 712
+                  }
+                ],
+                "line": 51,
+                "col": 708
+              }
+            ],
+            "line": 51,
+            "col": 704
+          }
+        ],
+        "line": 51,
+        "col": 700
+      },
+      "line": 0,
+      "col": 0
+    },
+    {
+      "_type": "Assign",
+      "target": {
+        "_type": "Identifier",
+        "name": "nested_dict",
+        "line": 54,
+        "col": 747
+      },
+      "op": "=",
+      "value": {
+        "_type": "DictExpr",
+        "pairs": [
+          [
+            {
+              "_type": "LiteralExpr",
+              "value": "level1",
+              "line": 55,
+              "col": 767
+            },
+            {
+              "_type": "DictExpr",
+              "pairs": [
+                [
+                  {
+                    "_type": "LiteralExpr",
+                    "value": "level2",
+                    "line": 56,
+                    "col": 787
+                  },
+                  {
+                    "_type": "DictExpr",
+                    "pairs": [
+                      [
+                        {
+                          "_type": "LiteralExpr",
+                          "value": "level3",
+                          "line": 57,
+                          "col": 811
+                        },
+                        {
+                          "_type": "DictExpr",
+                          "pairs": [
+                            [
+                              {
+                                "_type": "LiteralExpr",
+                                "value": "numbers",
+                                "line": 58,
+                                "col": 839
+                              },
+                              {
+                                "_type": "ListExpr",
+                                "elements": [
+                                  {
+                                    "_type": "LiteralExpr",
+                                    "value": 1,
+                                    "line": 58,
+                                    "col": 851
+                                  },
+                                  {
+                                    "_type": "LiteralExpr",
+                                    "value": 2,
+                                    "line": 58,
+                                    "col": 854
+                                  },
+                                  {
+                                    "_type": "LiteralExpr",
+                                    "value": 3,
+                                    "line": 58,
+                                    "col": 857
+                                  }
+                                ],
+                                "line": 58,
+                                "col": 850
+                              }
+                            ],
+                            [
+                              {
+                                "_type": "LiteralExpr",
+                                "value": "letters",
+                                "line": 59,
+                                "col": 877
+                              },
+                              {
+                                "_type": "TupleExpr",
+                                "elements": [
+                                  {
+                                    "_type": "LiteralExpr",
+                                    "value": "a",
+                                    "line": 59,
+                                    "col": 889
+                                  },
+                                  {
+                                    "_type": "LiteralExpr",
+                                    "value": "b",
+                                    "line": 59,
+                                    "col": 894
+                                  },
+                                  {
+                                    "_type": "LiteralExpr",
+                                    "value": "c",
+                                    "line": 59,
+                                    "col": 899
+                                  }
+                                ],
+                                "line": 59,
+                                "col": 888
+                              }
+                            ],
+                            [
+                              {
+                                "_type": "LiteralExpr",
+                                "value": "flag",
+                                "line": 60,
+                                "col": 921
+                              },
+                              {
+                                "_type": "LiteralExpr",
+                                "value": true,
+                                "line": 60,
+                                "col": 929
+                              }
+                            ]
+                          ],
+                          "line": 57,
+                          "col": 821
+                        }
+                      ]
+                    ],
+                    "line": 56,
+                    "col": 797
+                  }
+                ]
+              ],
+              "line": 55,
+              "col": 777
+            }
+          ]
+        ],
+        "line": 54,
+        "col": 761
+      },
+      "line": 0,
+      "col": 0
+    },
+    {
+      "_type": "If",
+      "cond": {
+        "_type": "ComparisonExpr",
+        "left": {
+          "_type": "Identifier",
+          "name": "a",
+          "line": 66,
+          "col": 970
+        },
+        "op": "<",
+        "right": {
+          "_type": "LiteralExpr",
+          "value": 5,
+          "line": 66,
+          "col": 974
+        },
+        "line": 0,
+        "col": 0
+      },
+      "body": {
+        "_type": "Block",
+        "statements": [
+          {
+            "_type": "For",
+            "target": {
+              "_type": "Identifier",
+              "name": "i",
+              "line": 67,
+              "col": 985
+            },
+            "iterable": {
+              "_type": "CallExpr",
+              "callee": {
+                "_type": "Identifier",
+                "name": "range",
+                "line": 67,
+                "col": 990
+              },
+              "args": [
+                {
+                  "_type": "LiteralExpr",
+                  "value": 2,
+                  "line": 67,
+                  "col": 996
+                }
+              ],
+              "line": 67,
+              "col": 995
+            },
+            "body": {
+              "_type": "Block",
+              "statements": [
+                {
+                  "_type": "While",
+                  "cond": {
+                    "_type": "ComparisonExpr",
+                    "left": {
+                      "_type": "Identifier",
+                      "name": "b",
+                      "line": 68,
+                      "col": 1014
+                    },
+                    "op": "<",
+                    "right": {
+                      "_type": "LiteralExpr",
+                      "value": 4,
+                      "line": 68,
+                      "col": 1018
+                    },
+                    "line": 0,
+                    "col": 0
+                  },
+                  "body": {
+                    "_type": "Block",
+                    "statements": [
+                      {
+                        "_type": "Assign",
+                        "target": {
+                          "_type": "Identifier",
+                          "name": "c",
+                          "line": 69,
+                          "col": 1033
+                        },
+                        "op": "=",
+                        "value": {
+                          "_type": "BinaryExpr",
+                          "left": {
+                            "_type": "Identifier",
+                            "name": "c",
+                            "line": 69,
+                            "col": 1037
+                          },
+                          "op": "+",
+                          "right": {
+                            "_type": "LiteralExpr",
+                            "value": 1,
+                            "line": 69,
+                            "col": 1041
+                          },
+                          "line": 0,
+                          "col": 0
+                        },
+                        "line": 0,
+                        "col": 0
+                      },
+                      {
+                        "_type": "If",
+                        "cond": {
+                          "_type": "ComparisonExpr",
+                          "left": {
+                            "_type": "Identifier",
+                            "name": "c",
+                            "line": 70,
+                            "col": 1058
+                          },
+                          "op": "==",
+                          "right": {
+                            "_type": "LiteralExpr",
+                            "value": 5,
+                            "line": 70,
+                            "col": 1063
+                          },
+                          "line": 0,
+                          "col": 0
+                        },
+                        "body": {
+                          "_type": "Block",
+                          "statements": [
+                            {
+                              "_type": "ExprStmt",
+                              "value": {
+                                "_type": "CallExpr",
+                                "callee": {
+                                  "_type": "Attribute",
+                                  "value": {
+                                    "_type": "Identifier",
+                                    "name": "nested_list",
+                                    "line": 71,
+                                    "col": 1082
+                                  },
+                                  "attr": "append",
+                                  "line": 71,
+                                  "col": 1093
+                                },
+                                "args": [
+                                  {
+                                    "_type": "Identifier",
+                                    "name": "c",
+                                    "line": 71,
+                                    "col": 1101
+                                  }
+                                ],
+                                "line": 71,
+                                "col": 1100
+                              },
+                              "line": 0,
+                              "col": 0
+                            }
+                          ],
+                          "line": 0,
+                          "col": 0
+                        },
+                        "elifs": [],
+                        "orelse": {
+                          "_type": "Block",
+                          "statements": [
+                            {
+                              "_type": "ExprStmt",
+                              "value": {
+                                "_type": "Identifier",
+                                "name": "nested_dict",
+                                "line": 73,
+                                "col": 1138
+                              },
+                              "line": 0,
+                              "col": 0
+                            },
+                            {
+                              "_type": "Assign",
+                              "target": {
+                                "_type": "Subscript",
+                                "value": {
+                                  "_type": "Subscript",
+                                  "value": {
+                                    "_type": "Subscript",
+                                    "value": {
+                                      "_type": "ListExpr",
+                                      "elements": [
+                                        {
+                                          "_type": "LiteralExpr",
+                                          "value": "level1",
+                                          "line": 73,
+                                          "col": 1150
+                                        }
+                                      ],
+                                      "line": 73,
+                                      "col": 1149
+                                    },
+                                    "index": {
+                                      "_type": "LiteralExpr",
+                                      "value": "level2",
+                                      "line": 73,
+                                      "col": 1160
+                                    },
+                                    "line": 0,
+                                    "col": 0
+                                  },
+                                  "index": {
+                                    "_type": "LiteralExpr",
+                                    "value": "level3",
+                                    "line": 73,
+                                    "col": 1170
+                                  },
+                                  "line": 0,
+                                  "col": 0
+                                },
+                                "index": {
+                                  "_type": "LiteralExpr",
+                                  "value": "extra",
+                                  "line": 73,
+                                  "col": 1180
+                                },
+                                "line": 0,
+                                "col": 0
+                              },
+                              "op": "=",
+                              "value": {
+                                "_type": "Identifier",
+                                "name": "c",
+                                "line": 73,
+                                "col": 1191
+                              },
+                              "line": 0,
+                              "col": 0
+                            }
+                          ],
+                          "line": 0,
+                          "col": 0
+                        }
+                      },
+                      {
+                        "_type": "Assign",
+                        "target": {
+                          "_type": "Identifier",
+                          "name": "b",
+                          "line": 74,
+                          "col": 1205
+                        },
+                        "op": "+=",
+                        "value": {
+                          "_type": "LiteralExpr",
+                          "value": 1,
+                          "line": 74,
+                          "col": 1210
+                        },
+                        "line": 0,
+                        "col": 0
+                      }
+                    ],
+                    "line": 0,
+                    "col": 0
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "elifs": [],
+      "orelse": {
+        "_type": "Block",
+        "statements": [
+          {
+            "_type": "Assign",
+            "target": {
+              "_type": "Identifier",
+              "name": "nested_list",
+              "line": 76,
+              "col": 1222
+            },
+            "op": "=",
+            "value": {
+              "_type": "ListExpr",
+              "elements": [],
+              "line": 76,
+              "col": 1236
+            },
+            "line": 0,
+            "col": 0
+          }
+        ],
+        "line": 0,
+        "col": 0
+      }
+    },
+    {
+      "_type": "Assign",
+      "target": {
+        "_type": "Identifier",
+        "name": "final_structure",
+        "line": 78,
+        "col": 1240
+      },
+      "op": "=",
+      "value": {
+        "_type": "ListExpr",
+        "elements": [
+          {
+            "_type": "Identifier",
+            "name": "nested_list",
+            "line": 79,
+            "col": 1264
+          },
+          {
+            "_type": "Identifier",
+            "name": "nested_tuple",
+            "line": 80,
+            "col": 1281
+          },
+          {
+            "_type": "Identifier",
+            "name": "nested_dict",
+            "line": 81,
+            "col": 1299
+          },
+          {
+            "_type": "ListExpr",
+            "elements": [
+              {
+                "_type": "DictExpr",
+                "pairs": [
+                  [
+                    {
+                      "_type": "LiteralExpr",
+                      "value": "inner_list",
+                      "line": 82,
+                      "col": 1318
+                    },
+                    {
+                      "_type": "ListExpr",
+                      "elements": [
+                        {
+                          "_type": "LiteralExpr",
+                          "value": 0,
+                          "line": 82,
+                          "col": 1333
+                        },
+                        {
+                          "_type": "LiteralExpr",
+                          "value": 1,
+                          "line": 82,
+                          "col": 1336
+                        },
+                        {
+                          "_type": "DictExpr",
+                          "pairs": [
+                            [
+                              {
+                                "_type": "LiteralExpr",
+                                "value": "deep",
+                                "line": 82,
+                                "col": 1340
+                              },
+                              {
+                                "_type": "ListExpr",
+                                "elements": [
+                                  {
+                                    "_type": "LiteralExpr",
+                                    "value": 10,
+                                    "line": 82,
+                                    "col": 1349
+                                  },
+                                  {
+                                    "_type": "LiteralExpr",
+                                    "value": 20,
+                                    "line": 82,
+                                    "col": 1353
+                                  }
+                                ],
+                                "line": 82,
+                                "col": 1348
+                              }
+                            ]
+                          ],
+                          "line": 82,
+                          "col": 1339
+                        }
+                      ],
+                      "line": 82,
+                      "col": 1332
+                    }
+                  ]
+                ],
+                "line": 82,
+                "col": 1317
+              }
+            ],
+            "line": 82,
+            "col": 1316
+          }
+        ],
+        "line": 78,
+        "col": 1258
+      },
+      "line": 0,
+      "col": 0
+    }
+  ],
+  "line": 1,
+  "col": 0
+}

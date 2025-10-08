@@ -7,20 +7,21 @@ from ..lexer.tokens import TOKENS
 # print(TOKENS)
 from ..lexer.lexer import Lexer
 
+# Parser Modules
+
+from .parser_expressions import ExpressionRules
+from .parser_statements import StatementRules
+from .parser_loops import LoopRules
+from .parser_conditionals import ConditionalRules
+from .parser_definitions import DefinitionRules
+from .parser_blocks import BlockRules
+
 tokens = TOKENS  # tuple of tokens defined in the lexer
 
 # AST NODES
 from ..core.ast import (
     AstNode,
-    LiteralExpr,
-    Identifier,
-    UnaryExpr,
-    BinaryExpr,
-    ComparisonExpr,
-    CallExpr,
     Module,
-    FunctionDef,
-    ClassDef,
 )
 
 from ..core.utils import Error
@@ -45,12 +46,9 @@ precedence = (
 )
 
 
-def _pos(p, i) -> tuple[int, int]:
-    """Returns approximate (line, col) for the i-th symbol of the production."""
-    return p.lineno(i), p.lexpos(i)
 
 
-class Parser:
+class Parser (ExpressionRules, StatementRules, LoopRules, ConditionalRules, DefinitionRules, BlockRules):
     """
     Implementation of the parser.
     It takes the source code tokenized by the lexer and converts it into an
@@ -89,6 +87,25 @@ class Parser:
         # PLY takes tokens from self.lexer.lex
         return self._parser.parse(lexer=self.lexer.lex, debug=self.debug)
 
+    # ---------------------- MODULE ----------------------
+    # Parse a module: top-level container of statements
+    def p_module(self, p):
+        """module : statement_list"""
+        p[0] = Module(body=p[1], line=1, col=0)
+        
+
+
+    # ---------------------- STATEMENT LIST ----------------------
+    # Parse a list of statements recursively
+    # Can be a single statement or multiple statements
+    def p_statement_list(self, p):
+        """statement_list : statement
+                        | statement_list statement"""
+        if len(p) == 2:
+            p[0] = [p[1]]
+        else:
+            p[0] = p[1] + [p[2]]
+
     # ERRORS
     def p_error(self, t):
         if t is None:
@@ -108,208 +125,4 @@ class Parser:
                 self.data,
             )
         )
-        # Skip tokens until we find a safe point
-        closing_tokens = {"DEDENT", "COLON", "RPAREN", "RBRACKET", "RBRACE", "NEWLINE"}
-
-        while True:
-            tok = self._parser.token()
-            if not tok:
-                break  # EOF reached or safe token found
-            if tok.type in closing_tokens:
-                self._parser.errok()  # Clear the error state
-                return tok
-
-        return None  # No more tokens
-
-    def p_module(self, p):
-        """module : statement_list"""
-        p[0] = Module(body=p[1], line=1, col=0)
-
-    def p_module_empty(self, p):
-        """module :"""
-        p[0] = Module(body=[], line=1, col=0)
-
-    # ********************************************** Rules for expressions *******************************
-
-    # It handles the basic components of an expression (such as numbers, strings), atoms.
-    def p_expr_atom(self, p):
-        "expr : atom"
-        p[0] = p[1]
-
-    # This rule handles expressions grouped in parentheses. Parentheses do not appear in the AST,
-    # pruning is performed.
-    def p_expr_group(self, p):
-        "expr : LPAREN expr RPAREN"
-        p[0] = p[2]
-
-    # ----------------------literals------------------------------------
-    # These rules define how to construct nodes for literals in the AST,
-    # such as numbers, strings, True, False, and None.
-    def p_atom_number(self, p):
-        "atom : NUMBER"
-        line, col = _pos(p, 1)
-        p[0] = LiteralExpr(value=p[1], line=line, col=col)
-
-    def p_atom_string(self, p):
-        "atom : STRING"
-        line, col = _pos(p, 1)
-        p[0] = LiteralExpr(value=p[1], line=line, col=col)
-
-    def p_atom_true(self, p):
-        "atom : TRUE"
-        line, col = _pos(p, 1)
-        p[0] = LiteralExpr(value=True, line=line, col=col)
-
-    def p_atom_false(self, p):
-        "atom : FALSE"
-        line, col = _pos(p, 1)
-        p[0] = LiteralExpr(value=False, line=line, col=col)
-
-    def p_atom_none(self, p):
-        "atom : NONE"
-        line, col = _pos(p, 1)
-        p[0] = LiteralExpr(value=None, line=line, col=col)
-
-    # Recognizes an isolated identifier as an atom (the simplest element in a expression).
-    def p_atom_identifier(self, p):
-        "atom : ID"
-        line, col = _pos(p, 1)
-        p[0] = Identifier(name=p[1], line=line, col=col)
-
-    # ----------------------Unary------------------------------------
-    # These rules define how nodes are constructed for unary operators such as +x, -x, not x.
-    def p_expr_unary_plus(self, p):
-        "expr : PLUS expr %prec UPLUS"
-        line, col = _pos(p, 1)
-        # Usamos el tipo de token como op; si prefieres, puedes mapear a "+"
-        p[0] = UnaryExpr(op="PLUS", operand=p[2], line=line, col=col)
-
-    def p_expr_unary_minus(self, p):
-        "expr : MINUS expr %prec UMINUS"
-        line, col = _pos(p, 1)
-        p[0] = UnaryExpr(op="MINUS", operand=p[2], line=line, col=col)
-
-    def p_expr_unary_not(self, p):
-        "expr : NOT expr"
-        line, col = _pos(p, 1)
-        p[0] = UnaryExpr(op="NOT", operand=p[2], line=line, col=col)
-
-    # ----------------------Binary------------------------------------
-    # These rules handle binary operators for exponentiation, multiplication, and addition.
-    def p_expr_power(self, p):
-        "expr : expr POWER expr %prec POWER"
-        line, col = _pos(p, 1)
-        p[0] = BinaryExpr(left=p[1], op="**", right=p[3], line=line, col=col)
-
-    # expr * expr, expr / expr, expr // expr, expr % expr
-    def p_expr_multiplicative(self, p):
-        """expr : expr TIMES expr
-        | expr DIVIDE expr
-        | expr FLOOR_DIVIDE expr
-        | expr MOD expr"""
-        line, col = _pos(p, 1)
-        p[0] = BinaryExpr(left=p[1], op=p[2], right=p[3], line=line, col=col)
-
-    # expr + expr, expr - expr
-    def p_expr_additive(self, p):
-        """expr : expr PLUS expr
-        | expr MINUS expr"""
-        line, col = _pos(p, 1)
-        p[0] = BinaryExpr(left=p[1], op=p[2], right=p[3], line=line, col=col)
-
-    # ----------------------comparisons------------------------------------
-    # This rule handles comparisons between expressions.
-    # expr == expr, expr != expr, expr < expr, expr <= expr, expr > expr, expr >= expr ----
-    def p_expr_comparison(self, p):
-        """expr : expr EQUALS expr
-        | expr NOT_EQUALS expr
-        | expr LESS_THAN expr
-        | expr LESS_THAN_EQUALS expr
-        | expr GREATER_THAN expr
-        | expr GREATER_THAN_EQUALS expr"""
-        line, col = _pos(p, 1)
-        p[0] = ComparisonExpr(left=p[1], op=p[2], right=p[3], line=line, col=col)
-
-    # ----------------------logical------------------------------------
-    # This rule handles logical operators.
-    # expr and expr, expr or expr ----
-    def p_expr_logical(self, p):
-        """expr : expr AND expr
-        | expr OR expr"""
-        line, col = _pos(p, 1)
-        p[0] = BinaryExpr(left=p[1], op=p[2], right=p[3], line=line, col=col)
-
-    # ----------------------Function calls------------------------------------
-    # This rule handles function calls
-    # Function: f(a, b, c) ----
-    def p_expr_call(self, p):
-        "expr : ID LPAREN arg_list_opt RPAREN"
-        line, col = _pos(p, 1)
-        p[0] = CallExpr(
-            callee=Identifier(name=p[1], line=line, col=col),
-            args=p[3],
-            line=line,
-            col=col,
-        )
-
-    # ----------------------recursive list arg------------------------------------
-    # Define one or more expressions separated by commas: a, a, b, a, b, c,...
-    # Use right recursion.
-    def p_arg_list_opt(self, p):
-        """arg_list_opt : expr COMMA arg_list_opt
-        | expr"""
-        if len(p) == 2:
-            p[0] = [p[1]]
-        else:
-            p[0] = [p[1]] + p[3]
-
-    def p_arg_list_opt_empty(self, p):
-        "arg_list_opt :"
-        p[0] = []
-
-    # ********************************************** Rules for Statements *******************************
-    # TODO (Randy): Implement statement parsing rules to complete the parser integration.
-    # statement_list (CRITICAL - needed by funcdef/classdef/module): Accumulates multiple statements into a list
-    # statement: Dispatches to appropriate statement type | funcdef and classdef are already implemented, just reference them
-    # simple_stmt (assignment, return, pass, break, continue): Single line statements
-    # suite or declaration block: Indented block of statements (used in funcdef, classdef, if, while, for)
-    # * These are just suggestions, you can design your own grammar rules. Take into consideration Persons C work which uses and gets used here.
-
-    # ********************************************** Rules for Definitions *******************************
-
-    def p_funcdef(self, p):
-        "funcdef : DEF ID LPAREN param_list_opt RPAREN COLON statement_list"
-        line, col = _pos(p, 1)
-        p[0] = FunctionDef(
-            name=p[2],  # ID
-            params=p[4],  # param_list_opt
-            body=p[7],  # statements
-            line=line,
-            col=col,
-        )
-
-    def p_param_list_opt(self, p):
-        """param_list_opt : param COMMA param_list_opt
-        | param
-        |"""
-        if len(p) == 1:  # empty
-            p[0] = []
-        elif len(p) == 2:  # single param
-            p[0] = [p[1]]
-        else:  # param COMMA param_list_opt
-            p[0] = [p[1]] + p[3]
-
-    def p_param(self, p):
-        """param : ID"""
-        line, col = _pos(p, 1)
-        p[0] = Identifier(name=p[1], line=line, col=col)
-
-    def p_classdef(self, p):
-        "classdef : CLASS ID COLON statement_list"
-        line, col = _pos(p, 1)
-        p[0] = ClassDef(
-            name=p[2],  # ID
-            body=p[4],  # statements
-            line=line,
-            col=col,
-        )
+        raise SyntaxError(self.errors[-1].exact())

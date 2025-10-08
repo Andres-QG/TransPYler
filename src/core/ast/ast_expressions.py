@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Any, List
+from typing import Any, List, Tuple
 from .ast_base import AstNode
 
 
@@ -41,3 +41,33 @@ class ComparisonExpr(AstNode):
 class CallExpr(AstNode):
     callee: AstNode = None  # Identifier, but could be more complex (e.g., obj.method)
     args: List[AstNode] = field(default_factory=list)  # positional arguments
+
+
+# ---------- Collections ----------
+@dataclass
+class TupleExpr(AstNode):
+    """
+    Represents a tuple literal, e.g. (1, 2, 3)
+    Empty tuple: ()
+    """
+    elements: List[AstNode] = field(default_factory=list)
+
+
+@dataclass
+class ListExpr(AstNode):
+    """
+    Represents a list literal, e.g. [1, 2, 3]
+    """
+    elements: List[AstNode] = field(default_factory=list)
+
+
+@dataclass
+class DictExpr(AstNode):
+    """
+    Represents a dictionary literal, e.g. {"a": 1, "b": 2}
+    Each pair is (key, value)
+    """
+    pairs: List[Tuple[AstNode, AstNode]] = field(default_factory=list)
+
+
+
