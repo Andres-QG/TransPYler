@@ -399,56 +399,49 @@ def main():
         src_label = str(path)
 
     # 2) Default JSON path: always repo_root/ast.json (overwrite if exists)
-    #    .../src/testers/ast_printer.py -> repo root is parents[2]
     repo_root = Path(__file__).resolve().parents[2]
     default_out = repo_root / "ast.json"
     out_path = Path(args.out) if args.out else default_out
 
-    # 3) Parse
+    # 3) Parse - CORREGIDO: Manejo simple sin duplicados
     parser = Parser(debug=False)
-    try:
-        ast_root = parser.parse(source)
-    except Exception as e:
+    
+    ast_root = parser.parse(source)
+
+    if parser.errors:
         if RICH_OK:
             console.print("\n[bold red][PARSE ERROR][/bold red]")
             for err in parser.errors:
                 console.print(err.exact())
-            console.print(str(e))
         else:
             print("\n[PARSE ERROR]")
             for err in parser.errors:
                 print(err.exact())
-            print(str(e))
+        # Salir si hay errores de parsing
         sys.exit(1)
 
     if ast_root is None:
-        print("<< empty AST >>")
+        if RICH_OK:
+            console.print("[bold red]No AST generated[/bold red]")
+        else:
+            print("No AST generated")
         sys.exit(0)
 
     # 4) Save JSON (overwrite)
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    #print("DEBUG: ast_root.to_dict() output:")
-    #import pprint
-   # pprint.pprint(ast_root.to_dict())
     out_path.write_text(to_json(ast_root), encoding="utf-8")
 
-   # 5) Print according to the selected view
+    # 5) Print according to the selected view
     if args.view == "diagram":
-        # Simple header + ASCII diagram
         print(f"[TransPyler] AST generated\nSource: {src_label}\nJSON:   {out_path}\n")
         print(render_expression_diagram(ast_root))
     elif args.view == "mermaid":
-
         mermaid_code = render_mermaid(ast_root)
-
-        mermaid_out_path = out_path.with_suffix(".mmd")  # si JSON es ast.json -> ast.mmd
+        mermaid_out_path = out_path.with_suffix(".mmd")
         mermaid_out_path.parent.mkdir(parents=True, exist_ok=True)
         mermaid_out_path.write_text(mermaid_code, encoding="utf-8")
-
         print(f"[TransPyler] AST Mermaid diagram saved to {mermaid_out_path}")
-
     else:
-        # Rich
         if not RICH_OK:
             print(f"[TransPyler] AST generated\nSource: {src_label}\nJSON:   {out_path}\n")
             print("(Rich is not installed) Use --view diagram for the ASCII diagram.")
@@ -462,6 +455,7 @@ def main():
         console.print(header)
         tree = build_expr_tree(ast_root) if args.view == "expr" else build_rich_tree_generic(ast_root)
         console.print(tree)
+
 
 
 

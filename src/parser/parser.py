@@ -85,11 +85,16 @@ class Parser(
         AstNode
     ):  # This function receives text and passes it to the lexer for tokenization.
         self.data = text
-        if not text.endswith("\n"):
-            text += "\n"
         self.lexer.input(text)
         # PLY takes tokens from self.lexer.lex
-        return self._parser.parse(lexer=self.lexer.lex, debug=self.debug)
+        try:
+            result = self._parser.parse(lexer=self.lexer.lex, debug=self.debug)
+            return result
+        except SyntaxError as e:
+            raise
+        except Exception as e:
+            self.errors.append(Error(f"Parser system error: {str(e)}", 0, 0, "parser", self.data))
+            raise
 
     # ---------------------- MODULE ----------------------
     # Parse a module: top-level container of statements
@@ -111,20 +116,20 @@ class Parser(
     # ERRORS
     def p_error(self, t):
         if t is None:
-            self.errors.append(
-                Error(
-                    "Unexpected end of input while parsing", 0, 0, "parser", self.data
-                )
-            )
+            self.errors.append(Error("Unexpected end of input", 0, 0, "parser", self.data))
             return
-        # Record the error
+
+        line_start = self.data.rfind("\n", 0, t.lexpos) + 1
+        column = t.lexpos - line_start
+
         self.errors.append(
             Error(
                 f"Syntax error near '{t.value}'",
                 t.lineno,
-                t.lexpos,
+                column,
                 "parser",
-                self.data,
+                self.data
             )
         )
-        raise SyntaxError(self.errors[-1].exact())
+
+        self._parser.errok()
