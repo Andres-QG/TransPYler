@@ -1,8 +1,12 @@
 from src.parser.parser import Parser
+from src.core.ast import Module, ExprStmt
 from src.core.ast import LiteralExpr, UnaryExpr, BinaryExpr, ComparisonExpr, CallExpr, Identifier
 
 def parse(s: str):
-    return Parser().parse(s)
+    tree = Parser(debug=False).parse(s)
+    if isinstance(tree, Module) and len(tree.body) == 1 and isinstance(tree.body[0], ExprStmt):
+        return tree.body[0].value
+    return tree
 
 # ============================ NUMEROS Y LITERALS ============================
 
