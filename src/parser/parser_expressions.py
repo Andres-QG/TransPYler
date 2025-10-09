@@ -9,7 +9,7 @@ from ..core.ast import (
     ListExpr,
     DictExpr,
     Attribute,
-    Subscript
+    Subscript,
 )
 from .parser_utils import _pos
 
@@ -89,11 +89,13 @@ class ExpressionRules:
         p[0] = DictExpr(pairs=p[2], line=line, col=col)
 
     # ---------------------- UNARY OPERATORS ----------------------
+    # TODO(Any): UPLUS is not a Token on our lexer, should we change it?
     def p_expr_unary_plus(self, p):
         "expr : PLUS expr %prec UPLUS"
         line, col = _pos(p, 1)
         p[0] = UnaryExpr(op="PLUS", operand=p[2], line=line, col=col)
 
+    # TODO(Any): UMINUS is not a Token on our lexer, should we change it?
     def p_expr_unary_minus(self, p):
         "expr : MINUS expr %prec UMINUS"
         line, col = _pos(p, 1)

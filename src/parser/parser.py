@@ -40,7 +40,12 @@ precedence = (
     ),
     ("left", "PLUS", "MINUS"),
     ("left", "TIMES", "DIVIDE", "FLOOR_DIVIDE", "MOD"),
-    ("right", "UPLUS", "UMINUS", "NOT"),
+    (
+        "right",
+        "UPLUS",
+        "UMINUS",
+        "NOT",
+    ),  # TODO(David): UPLUS and UMINUS are not implemented by lexer at least
     ("right", "POWER"),  # highest
 )
 
@@ -73,28 +78,40 @@ class Parser(
         self.errors: List[Error] = []
         self.data: Optional[str] = None
 
-        # Lexer
+        # Lexer shares the same error list, so both lexer and parser
+        # can accumulate errors in one pass
         self.lexer = Lexer(errors=self.errors, debug=self.debug)
         self.lexer.build()
 
         self._parser = yacc.yacc(module=self, start="module", debug=self.debug)
 
-    def parse(
-        self, text: str
-    ) -> (
-        AstNode
-    ):  # This function receives text and passes it to the lexer for tokenization.
+    def parse(self, text: str) -> AstNode:
+        """
+        Parse source text and return an Abstract Syntax Tree.
+
+        This function receives text and passes it to the lexer for tokenization,
+        then uses PLY's parser to build the AST according to the grammar rules.
+
+        Args:
+            text: Source code string to parse
+
+        Returns:
+            AstNode: Root of the Abstract Syntax Tree (Module node)
+
+        Note:
+            Errors (both lexical and syntactic) are accumulated in self.errors
+            rather than raising exceptions, allowing multiple errors to be
+            reported in a single pass.
+        """
         self.data = text
         self.lexer.input(text)
+
         # PLY takes tokens from self.lexer.lex
-        try:
-            result = self._parser.parse(lexer=self.lexer.lex, debug=self.debug)
-            return result
-        except SyntaxError as e:
-            raise
-        except Exception as e:
-            self.errors.append(Error(f"Parser system error: {str(e)}", 0, 0, "parser", self.data))
-            raise
+        # Note: We don't catch exceptions here because p_error handles syntax errors
+        # without raising. Any exception that escapes is a serious bug.
+        result = self._parser.parse(lexer=self.lexer.lex, debug=self.debug)
+
+        return result
 
     # ---------------------- MODULE ----------------------
     # Parse a module: top-level container of statements
@@ -113,23 +130,56 @@ class Parser(
         else:
             p[0] = p[1] + [p[2]]
 
-    # ERRORS
+    # ERRORS catching
+    # This function is called by PLY when a syntax error is encountered
     def p_error(self, t):
+        """Error rule for syntax errors."""
         if t is None:
-            self.errors.append(Error("Unexpected end of input", 0, 0, "parser", self.data))
+            self.errors.append(
+                Error(
+                    "Unexpected end of input while parsing", 0, 0, "parser", self.data
+                )
+            )
             return
 
-        line_start = self.data.rfind("\n", 0, t.lexpos) + 1
-        column = t.lexpos - line_start
+        error_msg = f"Syntax error near '{t.value}'"
 
-        self.errors.append(
-            Error(
-                f"Syntax error near '{t.value}'",
-                t.lineno,
-                column,
-                "parser",
-                self.data
+        if t.type == "INDENT":
+            error_msg = "Unexpected indentation"
+        elif t.type == "DEDENT":
+            error_msg = "Unexpected dedentation (unindent does not match)"
+        elif t.type in ("RPAREN", "RBRACKET", "RBRACE"):
+            error_msg = f"Unexpected closing delimiter '{t.value}' - missing opening or extra closing"
+        elif t.type == "COLON":
+            error_msg = (
+                "Unexpected ':' - check if/while/for/def/class syntax is correct"
             )
-        )
+        elif t.type == "COMMA":
+            error_msg = "Unexpected ',' - check list/tuple/function argument syntax"
+        elif t.type in ("ASSIGN", "PLUS_ASSIGN", "MINUS_ASSIGN"):
+            error_msg = f"Unexpected assignment operator '{t.value}' - missing target"
+        elif t.type == "NEWLINE":
+            error_msg = "Unexpected newline - statement may be incomplete"
+        elif t.type in ("PLUS", "MINUS", "TIMES", "DIVIDE", "MOD", "POWER"):
+            error_msg = f"Unexpected operator '{t.value}' - missing operand"
+
+        self.errors.append(Error(error_msg, t.lineno, t.lexpos, "parser", self.data))
+
+        while True:
+            tok = self._parser.token()
+            if not tok:
+                break
+            if tok.type in (
+                "NEWLINE",
+                "DEDENT",
+                "IF",
+                "WHILE",
+                "FOR",
+                "DEF",
+                "CLASS",
+                "RETURN",
+            ):
+                self._parser.errok()
+                return tok
 
         self._parser.errok()
