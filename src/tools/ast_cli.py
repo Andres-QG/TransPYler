@@ -35,6 +35,9 @@ def main():
     ap.add_argument("--view", choices=["expr","generic","diagram","mermaid"], default="expr")
     ap.add_argument("--unwrap-expr", action="store_true",
                     help="Return bare expr when input is a single expression")
+    # --- NUEVO ---
+    ap.add_argument("--verbose", action="store_true",
+                    help="Show internal fields (line/col) in the printed tree")
     args = ap.parse_args()
 
     # 1) Source
@@ -72,7 +75,7 @@ def main():
     # 5) Print selected view
     if args.view == "diagram":
         print(f"[TransPyler] AST generated\nSource: {src_label}\nJSON:   {out_path}\n")
-        print(render_ascii(ast_root))
+        print(render_ascii(ast_root))  # ascii no usa verbose
     elif args.view == "mermaid":
         mmd = out_path.with_suffix(".mmd")
         mmd.write_text(render_mermaid(ast_root), encoding="utf-8")
@@ -89,7 +92,11 @@ def main():
             title="[white]TransPyler[/white]",
         )
         console.print(header)
-        tree = build_expr_tree(ast_root) if args.view == "expr" else build_rich_tree_generic(ast_root)
+        # --- PASAMOS verbose ---
+        if args.view == "expr":
+            tree = build_expr_tree(ast_root, verbose=args.verbose)
+        else:
+            tree = build_rich_tree_generic(ast_root, verbose=args.verbose)
         console.print(tree)
 
 if __name__ == "__main__":

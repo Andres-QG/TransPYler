@@ -1,7 +1,6 @@
-# src/tools/ast_viewer.py
 from __future__ import annotations
 import json
-from typing import List, Tuple
+from typing import List
 from src.core.ast.ast_base import AstNode
 from src.core.ast import (
     Module, ExprStmt, If, While, For, Assign, Block, Pass, Continue, Break,
@@ -20,33 +19,136 @@ except Exception:
     RICH_OK = False
     Tree = None  # type: ignore
 
-def build_rich_tree_generic(node: AstNode, *, label: str | None = None):
+# ---------- helpers (Rich) ------------
+
+_HIDE_FIELDS = {"line", "col"}
+
+def _fields_for_print(node: AstNode, verbose: bool) -> dict:
+    """Copia de campos del nodo; oculta metadatos si verbose=False."""
+    d = dict(getattr(node, "__dict__", {}))
+    if not verbose:
+        for k in _HIDE_FIELDS:
+            d.pop(k, None)
+    return d
+
+def _label(node: AstNode, title: str, verbose: bool) -> str:
+    if not verbose:
+        return f"[bold]{title}[/bold]"
+    line = getattr(node, "line", None)
+    col = getattr(node, "col", None)
+    if line is not None and col is not None:
+        return f"[bold]{title}[/bold] [dim](line={line}, col={col})[/dim]"
+    return f"[bold]{title}[/bold]"
+
+def _add_list(branch: Tree, label: str, items: List[AstNode], render_fn, verbose: bool):
+    lst = branch.add(f"[italic]{label}[/italic] [dim][{len(items)}][/dim]")
+    for it in items:
+        render_fn(it, lst, verbose)
+
+# ---------- RENDER (Rich, genérico) ----
+
+def build_rich_tree_generic(node: AstNode, *, label: str | None = None, verbose: bool = False):
+    """
+    Árbol genérico (para --view generic) con impresión limpia:
+    - listas como 'elements [N]' (sin índices)
+    - DictExpr como pares key/value
+    - If con cond/body/elifs/orelse estructurados
+    - ExprStmt colapsado a su 'value'
+    """
     if not RICH_OK:
         raise RuntimeError("Rich is not available.")
     if node is None:
         return Tree("[dim]∅[/dim]")
 
-    cls = node.__class__.__name__
-    title = f"[bold]{cls}[/bold]" if label is None else f"[bold]{cls}[/bold] [dim]({label})[/dim]"
-    tree = Tree(title)
+    title = node.__class__.__name__ if label is None else f"{node.__class__.__name__} ({label})"
+    root = Tree(_label(node, title, verbose))
+    _render_node(node, root, verbose, is_root=True)
+    return root
 
-    for k, v in node.__dict__.items():
-        if k in ("line", "col"):
-            continue
-        if isinstance(v, AstNode):
-            tree.add(build_rich_tree_generic(v, label=k))
-        elif isinstance(v, list):
-            lst = tree.add(f"[italic]{k}[/italic] [dim](list, {len(v)})[/dim]")
-            for i, it in enumerate(v):
-                if isinstance(it, AstNode):
-                    lst.add(build_rich_tree_generic(it, label=f"{k}[{i}]"))
-                else:
-                    lst.add(f"{k}[{i}] = {repr(it)}")
+def _render_node(node: AstNode, parent: Tree, verbose: bool, is_root: bool = False):
+    # Tipos con render específico (más limpio)
+    if isinstance(node, Block):
+        b = parent if is_root else parent.add(_label(node, "Block", verbose))
+        _add_list(b, "statements", node.statements or [], _render_node, verbose)
+        return
+
+    if isinstance(node, ListExpr):
+        b = parent if is_root else parent.add(_label(node, "ListExpr", verbose))
+        _add_list(b, "elements", node.elements or [], _render_node, verbose)
+        return
+
+    if isinstance(node, TupleExpr):
+        b = parent if is_root else parent.add(_label(node, "TupleExpr", verbose))
+        _add_list(b, "elements", node.elements or [], _render_node, verbose)
+        return
+
+    if isinstance(node, DictExpr):
+        b = parent if is_root else parent.add(_label(node, "DictExpr", verbose))
+        pairs = b.add("pairs")
+        for (k, v) in (node.pairs or []):
+            kv = pairs.add("pair")
+            kk = kv.add("key")
+            _render_node(k, kk, verbose)
+            vv = kv.add("value")
+            _render_node(v, vv, verbose)
+        return
+
+    if isinstance(node, If):
+        b = parent if is_root else parent.add(_label(node, "If", verbose))
+        cond = b.add("cond")
+        _render_node(node.cond, cond, verbose)
+
+        body = b.add("body")
+        _render_node(node.body, body, verbose)
+
+        el = b.add("elifs")
+        for (c, blk) in (node.elifs or []):
+            e = el.add("elif")
+            ec = e.add("cond")
+            _render_node(c, ec, verbose)
+            eb = e.add("body")
+            _render_node(blk, eb, verbose)
+
+        o = b.add("orelse")
+        if node.orelse:
+            _render_node(node.orelse, o, verbose)
         else:
-            tree.add(f"[italic]{k}[/italic] = {repr(v)}")
-    return tree
+            o.add("None")
+        return
 
-def build_expr_tree(node: AstNode):
+    if isinstance(node, ExprStmt):
+        # Colapsamos el envoltorio: mostramos directamente el valor
+        _render_node(node.value, parent, verbose, is_root=is_root)
+        return
+
+    # Fallback genérico: nodos no cubiertos arriba
+    title = node.__class__.__name__
+    b = parent if is_root else parent.add(_label(node, title, verbose))
+    data = _fields_for_print(node, verbose)
+    for k, v in list(data.items()):
+        if isinstance(v, AstNode):
+            br = b.add(f"[italic]{k}[/italic]")
+            _render_node(v, br, verbose)
+        elif isinstance(v, list):
+            # Si es una lista de nodos, imprímela como bloque de hijos
+            only_nodes = [x for x in v if isinstance(x, AstNode)]
+            if only_nodes:
+                _add_list(b, k, only_nodes, _render_node, verbose)
+            # Si hay elementos no-AstNode (raro), muéstralos planos
+            for x in v:
+                if not isinstance(x, AstNode):
+                    b.add(f"{k} = {repr(x)}")
+        else:
+            if k not in ("statements", "elements", "pairs"):  # ya renderizados arriba
+                b.add(f"[italic]{k}[/italic] = {repr(v)}")
+
+# ======= EXPRESSION-ONLY VIEW (Rich) =======
+def build_expr_tree(node: AstNode, *, verbose: bool = False):
+    """
+    Árbol compacto especializado para una sola expresión (vista --view expr),
+    compatible con la versión anterior. El parámetro 'verbose' se acepta pero
+    no altera la salida (esta vista es minimalista por diseño).
+    """
     if not RICH_OK:
         raise RuntimeError("Rich is not available.")
     if node is None:
@@ -57,7 +159,7 @@ def build_expr_tree(node: AstNode):
 
     def _branch(name: str, child: AstNode):
         t = Tree(f"[dim]{name}[/dim]")
-        t.add(build_expr_tree(child))
+        t.add(build_expr_tree(child, verbose=verbose))
         return t
 
     # Binary: left op right
@@ -87,7 +189,7 @@ def build_expr_tree(node: AstNode):
         root.add(_branch("callee", node.callee))
         args_t = Tree("[dim]args[/dim]")
         for a in node.args:
-            args_t.add(build_expr_tree(a))
+            args_t.add(build_expr_tree(a, verbose=verbose))
         root.add(args_t)
         return root
 
@@ -107,20 +209,20 @@ def build_expr_tree(node: AstNode):
     if isinstance(node, TupleExpr) or isinstance(node, ListExpr):
         root = Tree(_label("()" if isinstance(node, TupleExpr) else "[]"))
         for e in node.elements:
-            root.add(build_expr_tree(e))
+            root.add(build_expr_tree(e, verbose=verbose))
         return root
 
     if isinstance(node, DictExpr):
         root = Tree(_label("{}"))
         for k, v in node.pairs:
             pair = Tree(":")
-            pair.add(build_expr_tree(k))
-            pair.add(build_expr_tree(v))
+            pair.add(build_expr_tree(k, verbose=verbose))
+            pair.add(build_expr_tree(v, verbose=verbose))
             root.add(pair)
         return root
 
-    # Fallback
-    return build_rich_tree_generic(node)
+    # Fallback: usa el generador genérico
+    return build_rich_tree_generic(node, verbose=verbose)
 
 # --------------- ASCII ----------------
 def _expr_label(node: AstNode) -> str:
@@ -261,3 +363,5 @@ def render_mermaid(ast_root: AstNode) -> str:
     lines = ["graph TD"]
     lines.extend(ast_to_mermaid_lines(ast_root))
     return "\n".join(lines)
+
+
