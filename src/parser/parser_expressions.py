@@ -8,7 +8,6 @@ from ..core.ast import (
     TupleExpr,
     ListExpr,
     DictExpr,
-    SetExpr,
     Attribute,
     Subscript,
 )
@@ -82,91 +81,18 @@ class ExpressionRules:
         "atom : atom LBRACKET expr RBRACKET"
         line, col = _pos(p, 2)
         p[0] = Subscript(value=p[1], index=p[3], line=line, col=col)
-        # Situation like x = a[b] is handled in assignment rules
 
     def p_atom_dict(self, p):
         """atom : LBRACE key_value_list_opt RBRACE"""
         line, col = _pos(p, 1)
         p[0] = DictExpr(pairs=p[2], line=line, col=col)
 
-    # ------------------------slicing ------------------------------  
-    # atom [ subscript_item ]
-    def p_atom_subscript_slice(self, p):
-        "atom : atom LBRACKET subscript_item RBRACKET"
-        line, col = _pos(p, 2)
-        p[0] = Subscript(value=p[1], index=p[3], line=line, col=col)
-
-    def p_subscript_item_index(self, p):
-        "subscript_item : expr"
-        p[0] = p[1]
-
-    def p_subscript_item_slice_2(self, p):
-        "subscript_item : opt_expr COLON opt_expr"
-        # (lower, upper, None)
-        line, col = _pos(p, 2)
-        p[0] = TupleExpr(elements=[p[1], p[3], None], line=line, col=col)
-
-    def p_subscript_item_slice_3(self, p):
-        "subscript_item : opt_expr COLON opt_expr COLON opt_expr"
-        # (lower, upper, step)
-        line, col = _pos(p, 2)
-        p[0] = TupleExpr(elements=[p[1], p[3], p[5]], line=line, col=col)
-
-    def p_subscript_item_slice_head(self, p):
-        "subscript_item : COLON opt_expr"
-        line, col = _pos(p, 1)
-        p[0] = TupleExpr(elements=[None, p[2], None], line=line, col=col)
-
-    def p_subscript_item_slice_tail(self, p):
-        "subscript_item : opt_expr COLON"
-        line, col = _pos(p, 2)
-        p[0] = TupleExpr(elements=[p[1], None, None], line=line, col=col)
-
-    def p_subscript_item_slice_all(self, p):
-        "subscript_item : COLON"
-        line, col = _pos(p, 1)
-        p[0] = TupleExpr(elements=[None, None, None], line=line, col=col)
-
-    def p_subscript_item_slice_step_only(self, p):
-        "subscript_item : COLON COLON opt_expr"
-        line, col = _pos(p, 1)
-        p[0] = TupleExpr(elements=[None, None, p[3]], line=line, col=col)
-
-    def p_opt_expr_empty(self, p):
-        "opt_expr :"
-        p[0] = None
-
-    def p_opt_expr_expr(self, p):
-        "opt_expr : expr"
-        p[0] = p[1]
-
-    # ------------ set literal ---------------------
-    def p_atom_set(self, p):
-        "atom : LBRACE set_elements RBRACE"
-        line, col = _pos(p, 1)
-        p[0] = SetExpr(elements=p[2], line=line, col=col)
-
-    def p_set_elements_single(self, p):
-        "set_elements : expr"
-        p[0] = [p[1]]
-
-    def p_set_elements_multi(self, p):
-        "set_elements : set_elements COMMA expr"
-        p[1].append(p[3])
-        p[0] = p[1]
-
-    def p_set_elements_trailing(self, p):
-        "set_elements : set_elements COMMA"
-        p[0] = p[1]
-
     # ---------------------- UNARY OPERATORS ----------------------
-    # TODO(Any): UPLUS is not a Token on our lexer, should we change it?
     def p_expr_unary_plus(self, p):
         "expr : PLUS expr %prec UPLUS"
         line, col = _pos(p, 1)
         p[0] = UnaryExpr(op="PLUS", operand=p[2], line=line, col=col)
 
-    # TODO(Any): UMINUS is not a Token on our lexer, should we change it?
     def p_expr_unary_minus(self, p):
         "expr : MINUS expr %prec UMINUS"
         line, col = _pos(p, 1)
@@ -204,8 +130,7 @@ class ExpressionRules:
         | expr LESS_THAN expr
         | expr LESS_THAN_EQUALS expr
         | expr GREATER_THAN expr
-        | expr GREATER_THAN_EQUALS expr
-        | expr IN expr"""
+        | expr GREATER_THAN_EQUALS expr"""
         line, col = _pos(p, 1)
         p[0] = ComparisonExpr(left=p[1], op=p[2], right=p[3], line=line, col=col)
 

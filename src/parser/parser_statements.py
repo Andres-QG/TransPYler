@@ -21,8 +21,7 @@ class StatementRules:
         """statement : simple_statement
         | compound_statement"""
         p[0] = p[1]
-    # TODO(Randy): Simple and small statements are currently the same.
-    # Consider merging them or differentiating them more clearly.
+
     def p_simple_statement(self, p):
         """simple_statement : small_stmt"""
         p[0] = p[1]
@@ -75,8 +74,8 @@ class StatementRules:
         """target : ID
         | LPAREN elements_opt RPAREN
         | LBRACKET elements_opt RBRACKET
-        | target LBRACKET expr RBRACKET
-        | target DOT ID"""
+        | atom LBRACKET expr RBRACKET 
+        | atom DOT ID"""
         line, col = _pos(p, 1)
         if len(p) == 2:
             # Single Id

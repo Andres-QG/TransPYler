@@ -2,676 +2,371 @@
   "_type": "Module",
   "body": [
     {
-      "_type": "FunctionDef",
-      "name": "random_operation",
-      "params": [
-        {
+      "_type": "Assign",
+      "target": {
+        "_type": "Identifier",
+        "name": "a",
+        "line": 3,
+        "col": 15
+      },
+      "op": "=",
+      "value": {
+        "_type": "LiteralExpr",
+        "value": 1,
+        "line": 3,
+        "col": 19
+      },
+      "line": 0,
+      "col": 0
+    },
+    {
+      "_type": "Assign",
+      "target": {
+        "_type": "Identifier",
+        "name": "b",
+        "line": 4,
+        "col": 21
+      },
+      "op": "=",
+      "value": {
+        "_type": "LiteralExpr",
+        "value": 2,
+        "line": 4,
+        "col": 25
+      },
+      "line": 0,
+      "col": 0
+    },
+    {
+      "_type": "Assign",
+      "target": {
+        "_type": "Identifier",
+        "name": "c",
+        "line": 5,
+        "col": 27
+      },
+      "op": "=",
+      "value": {
+        "_type": "LiteralExpr",
+        "value": 3,
+        "line": 5,
+        "col": 31
+      },
+      "line": 0,
+      "col": 0
+    },
+    {
+      "_type": "Assign",
+      "target": {
+        "_type": "Identifier",
+        "name": "x",
+        "line": 6,
+        "col": 33
+      },
+      "op": "=",
+      "value": {
+        "_type": "BinaryExpr",
+        "left": {
           "_type": "Identifier",
           "name": "a",
-          "line": 4,
-          "col": 35
+          "line": 6,
+          "col": 37
         },
-        {
+        "op": "+",
+        "right": {
           "_type": "Identifier",
           "name": "b",
-          "line": 4,
-          "col": 38
-        }
-      ],
-      "body": {
-        "_type": "Block",
-        "statements": [
+          "line": 6,
+          "col": 41
+        },
+        "line": 0,
+        "col": 0
+      },
+      "line": 0,
+      "col": 0
+    },
+    {
+      "_type": "Assign",
+      "target": {
+        "_type": "Identifier",
+        "name": "nums",
+        "line": 9,
+        "col": 51
+      },
+      "op": "=",
+      "value": {
+        "_type": "ListExpr",
+        "elements": [
           {
-            "_type": "Assign",
-            "target": {
-              "_type": "Identifier",
-              "name": "c",
-              "line": 5,
-              "col": 71
-            },
-            "op": "=",
-            "value": {
-              "_type": "BinaryExpr",
-              "left": {
-                "_type": "Identifier",
-                "name": "a",
-                "line": 5,
-                "col": 75
-              },
-              "op": "+",
-              "right": {
-                "_type": "Identifier",
-                "name": "b",
-                "line": 5,
-                "col": 79
-              },
-              "line": 0,
-              "col": 0
-            },
-            "line": 0,
-            "col": 0
+            "_type": "LiteralExpr",
+            "value": 1,
+            "line": 9,
+            "col": 59
           },
           {
-            "_type": "Return",
-            "value": {
+            "_type": "LiteralExpr",
+            "value": 2,
+            "line": 9,
+            "col": 62
+          },
+          {
+            "_type": "LiteralExpr",
+            "value": 3,
+            "line": 9,
+            "col": 65
+          },
+          {
+            "_type": "LiteralExpr",
+            "value": 4,
+            "line": 9,
+            "col": 68
+          }
+        ],
+        "line": 9,
+        "col": 58
+      },
+      "line": 0,
+      "col": 0
+    },
+    {
+      "_type": "Assign",
+      "target": {
+        "_type": "Identifier",
+        "name": "empty_list",
+        "line": 10,
+        "col": 71
+      },
+      "op": "=",
+      "value": {
+        "_type": "ListExpr",
+        "elements": [],
+        "line": 10,
+        "col": 84
+      },
+      "line": 0,
+      "col": 0
+    },
+    {
+      "_type": "Assign",
+      "target": {
+        "_type": "Identifier",
+        "name": "coords",
+        "line": 13,
+        "col": 96
+      },
+      "op": "=",
+      "value": {
+        "_type": "TupleExpr",
+        "elements": [
+          {
+            "_type": "LiteralExpr",
+            "value": 10,
+            "line": 13,
+            "col": 106
+          },
+          {
+            "_type": "LiteralExpr",
+            "value": 20,
+            "line": 13,
+            "col": 109
+          }
+        ],
+        "line": 13,
+        "col": 105
+      },
+      "line": 0,
+      "col": 0
+    },
+    {
+      "_type": "Assign",
+      "target": {
+        "_type": "Identifier",
+        "name": "nested_tuple",
+        "line": 14,
+        "col": 113
+      },
+      "op": "=",
+      "value": {
+        "_type": "TupleExpr",
+        "elements": [
+          {
+            "_type": "TupleExpr",
+            "elements": [
+              {
+                "_type": "LiteralExpr",
+                "value": 1,
+                "line": 14,
+                "col": 130
+              },
+              {
+                "_type": "LiteralExpr",
+                "value": 2,
+                "line": 14,
+                "col": 133
+              }
+            ],
+            "line": 14,
+            "col": 129
+          },
+          {
+            "_type": "TupleExpr",
+            "elements": [
+              {
+                "_type": "LiteralExpr",
+                "value": 3,
+                "line": 14,
+                "col": 138
+              },
+              {
+                "_type": "LiteralExpr",
+                "value": 4,
+                "line": 14,
+                "col": 141
+              }
+            ],
+            "line": 14,
+            "col": 137
+          }
+        ],
+        "line": 14,
+        "col": 128
+      },
+      "line": 0,
+      "col": 0
+    },
+    {
+      "_type": "Assign",
+      "target": {
+        "_type": "Identifier",
+        "name": "person",
+        "line": 17,
+        "col": 161
+      },
+      "op": "=",
+      "value": {
+        "_type": "DictExpr",
+        "pairs": [
+          [
+            {
+              "_type": "LiteralExpr",
+              "value": "name",
+              "line": 17,
+              "col": 171
+            },
+            {
+              "_type": "LiteralExpr",
+              "value": "Alice",
+              "line": 17,
+              "col": 179
+            }
+          ],
+          [
+            {
+              "_type": "LiteralExpr",
+              "value": "age",
+              "line": 17,
+              "col": 188
+            },
+            {
+              "_type": "LiteralExpr",
+              "value": 30,
+              "line": 17,
+              "col": 195
+            }
+          ]
+        ],
+        "line": 17,
+        "col": 170
+      },
+      "line": 0,
+      "col": 0
+    },
+    {
+      "_type": "Assign",
+      "target": {
+        "_type": "Identifier",
+        "name": "empty_dict",
+        "line": 19,
+        "col": 200
+      },
+      "op": "=",
+      "value": {
+        "_type": "DictExpr",
+        "pairs": [],
+        "line": 19,
+        "col": 213
+      },
+      "line": 0,
+      "col": 0
+    },
+    {
+      "_type": "Assign",
+      "target": {
+        "_type": "Identifier",
+        "name": "data",
+        "line": 21,
+        "col": 217
+      },
+      "op": "=",
+      "value": {
+        "_type": "DictExpr",
+        "pairs": [
+          [
+            {
+              "_type": "LiteralExpr",
+              "value": "sum",
+              "line": 21,
+              "col": 225
+            },
+            {
               "_type": "BinaryExpr",
               "left": {
-                "_type": "BinaryExpr",
-                "left": {
-                  "_type": "Identifier",
-                  "name": "c",
-                  "line": 8,
-                  "col": 117
-                },
-                "op": "+",
-                "right": {
-                  "_type": "BinaryExpr",
-                  "left": {
-                    "_type": "Identifier",
-                    "name": "a",
-                    "line": 8,
-                    "col": 121
-                  },
-                  "op": "*",
-                  "right": {
-                    "_type": "Identifier",
-                    "name": "b",
-                    "line": 8,
-                    "col": 125
-                  },
-                  "line": 0,
-                  "col": 0
-                },
-                "line": 0,
-                "col": 0
+                "_type": "LiteralExpr",
+                "value": 1,
+                "line": 21,
+                "col": 232
               },
               "op": "+",
               "right": {
                 "_type": "LiteralExpr",
-                "value": 2.6548,
-                "line": 8,
-                "col": 129
+                "value": 2,
+                "line": 21,
+                "col": 236
               },
               "line": 0,
               "col": 0
             }
-          }
-        ],
-        "line": 0,
-        "col": 0
-      },
-      "line": 4,
-      "col": 14
-    },
-    {
-      "_type": "FunctionDef",
-      "name": "fibonacci",
-      "params": [
-        {
-          "_type": "Identifier",
-          "name": "n",
-          "line": 10,
-          "col": 151
-        }
-      ],
-      "body": {
-        "_type": "Block",
-        "statements": [
-          {
-            "_type": "If",
-            "cond": {
-              "_type": "BinaryExpr",
-              "left": {
-                "_type": "ComparisonExpr",
-                "left": {
-                  "_type": "Identifier",
-                  "name": "n",
-                  "line": 11,
-                  "col": 197
-                },
-                "op": "==",
-                "right": {
-                  "_type": "LiteralExpr",
-                  "value": 1,
-                  "line": 11,
-                  "col": 202
-                },
-                "line": 0,
-                "col": 0
-              },
-              "op": "or",
-              "right": {
-                "_type": "ComparisonExpr",
-                "left": {
-                  "_type": "Identifier",
-                  "name": "n",
-                  "line": 11,
-                  "col": 207
-                },
-                "op": "==",
-                "right": {
-                  "_type": "LiteralExpr",
-                  "value": 2,
-                  "line": 11,
-                  "col": 212
-                },
-                "line": 0,
-                "col": 0
-              },
-              "line": 0,
-              "col": 0
-            },
-            "body": {
-              "_type": "Block",
-              "statements": [
-                {
-                  "_type": "Return",
-                  "value": {
-                    "_type": "LiteralExpr",
-                    "value": 1,
-                    "line": 12,
-                    "col": 230
-                  }
-                }
-              ]
-            },
-            "elifs": [
-              [
-                {
-                  "_type": "ComparisonExpr",
-                  "left": {
-                    "_type": "Identifier",
-                    "name": "n",
-                    "line": 13,
-                    "col": 241
-                  },
-                  "op": "==",
-                  "right": {
-                    "_type": "LiteralExpr",
-                    "value": 0,
-                    "line": 13,
-                    "col": 246
-                  },
-                  "line": 0,
-                  "col": 0
-                },
-                {
-                  "_type": "Block",
-                  "statements": [
-                    {
-                      "_type": "Return",
-                      "value": {
-                        "_type": "BinaryExpr",
-                        "left": {
-                          "_type": "Identifier",
-                          "name": "n",
-                          "line": 14,
-                          "col": 264
-                        },
-                        "op": "/",
-                        "right": {
-                          "_type": "LiteralExpr",
-                          "value": 0,
-                          "line": 14,
-                          "col": 268
-                        },
-                        "line": 0,
-                        "col": 0
-                      }
-                    }
-                  ]
-                }
-              ]
-            ],
-            "orelse": {
-              "_type": "Block",
-              "statements": [
-                {
-                  "_type": "Return",
-                  "value": {
-                    "_type": "BinaryExpr",
-                    "left": {
-                      "_type": "CallExpr",
-                      "callee": {
-                        "_type": "Identifier",
-                        "name": "fibonacci",
-                        "line": 16,
-                        "col": 295
-                      },
-                      "args": [
-                        {
-                          "_type": "BinaryExpr",
-                          "left": {
-                            "_type": "Identifier",
-                            "name": "n",
-                            "line": 16,
-                            "col": 305
-                          },
-                          "op": "-",
-                          "right": {
-                            "_type": "LiteralExpr",
-                            "value": 1,
-                            "line": 16,
-                            "col": 309
-                          },
-                          "line": 0,
-                          "col": 0
-                        }
-                      ],
-                      "line": 16,
-                      "col": 304
-                    },
-                    "op": "+",
-                    "right": {
-                      "_type": "CallExpr",
-                      "callee": {
-                        "_type": "Identifier",
-                        "name": "fibonacci",
-                        "line": 16,
-                        "col": 314
-                      },
-                      "args": [
-                        {
-                          "_type": "BinaryExpr",
-                          "left": {
-                            "_type": "Identifier",
-                            "name": "n",
-                            "line": 16,
-                            "col": 324
-                          },
-                          "op": "-",
-                          "right": {
-                            "_type": "LiteralExpr",
-                            "value": 2,
-                            "line": 16,
-                            "col": 328
-                          },
-                          "line": 0,
-                          "col": 0
-                        }
-                      ],
-                      "line": 16,
-                      "col": 323
-                    },
-                    "line": 0,
-                    "col": 0
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      },
-      "line": 10,
-      "col": 137
-    },
-    {
-      "_type": "FunctionDef",
-      "name": "fibonacci_d",
-      "params": [
-        {
-          "_type": "Identifier",
-          "name": "n",
-          "line": 18,
-          "col": 348
-        }
-      ],
-      "body": {
-        "_type": "Block",
-        "statements": [
-          {
-            "_type": "Assign",
-            "target": {
-              "_type": "Identifier",
-              "name": "n_1",
-              "line": 19,
-              "col": 389
-            },
-            "op": "=",
-            "value": {
+          ],
+          [
+            {
               "_type": "LiteralExpr",
-              "value": 1,
-              "line": 19,
-              "col": 395
+              "value": "nested",
+              "line": 21,
+              "col": 239
             },
-            "line": 0,
-            "col": 0
-          },
-          {
-            "_type": "Assign",
-            "target": {
-              "_type": "Identifier",
-              "name": "n_2",
-              "line": 20,
-              "col": 401
-            },
-            "op": "=",
-            "value": {
-              "_type": "LiteralExpr",
-              "value": 1,
-              "line": 20,
-              "col": 407
-            },
-            "line": 0,
-            "col": 0
-          },
-          {
-            "_type": "While",
-            "cond": {
-              "_type": "ComparisonExpr",
-              "left": {
-                "_type": "Identifier",
-                "name": "n_1",
-                "line": 22,
-                "col": 421
-              },
-              "op": "<",
-              "right": {
-                "_type": "Identifier",
-                "name": "n",
-                "line": 22,
-                "col": 427
-              },
-              "line": 0,
-              "col": 0
-            },
-            "body": {
-              "_type": "Block",
-              "statements": [
-                {
-                  "_type": "Assign",
-                  "target": {
-                    "_type": "Identifier",
-                    "name": "new",
-                    "line": 23,
-                    "col": 439
-                  },
-                  "op": "=",
-                  "value": {
-                    "_type": "BinaryExpr",
-                    "left": {
-                      "_type": "Identifier",
-                      "name": "n_1",
-                      "line": 23,
-                      "col": 445
-                    },
-                    "op": "+",
-                    "right": {
-                      "_type": "Identifier",
-                      "name": "n_2",
-                      "line": 23,
-                      "col": 451
-                    },
-                    "line": 0,
-                    "col": 0
-                  },
-                  "line": 0,
-                  "col": 0
-                },
-                {
-                  "_type": "Assign",
-                  "target": {
-                    "_type": "Identifier",
-                    "name": "n_2",
-                    "line": 24,
-                    "col": 463
-                  },
-                  "op": "=",
-                  "value": {
-                    "_type": "Identifier",
-                    "name": "n_1",
-                    "line": 24,
-                    "col": 469
-                  },
-                  "line": 0,
-                  "col": 0
-                },
-                {
-                  "_type": "Assign",
-                  "target": {
-                    "_type": "Identifier",
-                    "name": "n_1",
-                    "line": 25,
-                    "col": 481
-                  },
-                  "op": "=",
-                  "value": {
-                    "_type": "Identifier",
-                    "name": "new",
-                    "line": 25,
-                    "col": 487
-                  },
-                  "line": 0,
-                  "col": 0
-                }
-              ],
-              "line": 0,
-              "col": 0
-            }
-          },
-          {
-            "_type": "Return",
-            "value": {
-              "_type": "Identifier",
-              "name": "n_1",
-              "line": 27,
-              "col": 503
-            }
-          }
-        ],
-        "line": 0,
-        "col": 0
-      },
-      "line": 18,
-      "col": 332
-    },
-    {
-      "_type": "FunctionDef",
-      "name": "iter_example",
-      "params": [],
-      "body": {
-        "_type": "Block",
-        "statements": [
-          {
-            "_type": "Assign",
-            "target": {
-              "_type": "Identifier",
-              "name": "l",
-              "line": 30,
-              "col": 577
-            },
-            "op": "=",
-            "value": {
-              "_type": "ListExpr",
-              "elements": [
-                {
-                  "_type": "LiteralExpr",
-                  "value": 1,
-                  "line": 30,
-                  "col": 582
-                },
-                {
-                  "_type": "LiteralExpr",
-                  "value": 2.5,
-                  "line": 30,
-                  "col": 585
-                },
-                {
-                  "_type": "LiteralExpr",
-                  "value": 3,
-                  "line": 30,
-                  "col": 590
-                },
-                {
-                  "_type": "LiteralExpr",
-                  "value": "hola",
-                  "line": 30,
-                  "col": 593
-                },
-                {
-                  "_type": "LiteralExpr",
-                  "value": 5,
-                  "line": 30,
-                  "col": 601
-                },
-                {
-                  "_type": "LiteralExpr",
-                  "value": "mundo",
-                  "line": 30,
-                  "col": 604
-                }
-              ],
-              "line": 30,
-              "col": 581
-            },
-            "line": 0,
-            "col": 0
-          },
-          {
-            "_type": "Assign",
-            "target": {
-              "_type": "Identifier",
-              "name": "it",
-              "line": 31,
-              "col": 617
-            },
-            "op": "=",
-            "value": {
-              "_type": "CallExpr",
-              "callee": {
-                "_type": "Identifier",
-                "name": "iter",
-                "line": 31,
-                "col": 622
-              },
-              "args": [
-                {
-                  "_type": "Identifier",
-                  "name": "l",
-                  "line": 31,
-                  "col": 627
-                }
-              ],
-              "line": 31,
-              "col": 626
-            },
-            "line": 0,
-            "col": 0
-          },
-          {
-            "_type": "For",
-            "target": {
-              "_type": "Identifier",
-              "name": "i",
-              "line": 32,
-              "col": 638
-            },
-            "iterable": {
-              "_type": "Identifier",
-              "name": "l",
-              "line": 32,
-              "col": 643
-            },
-            "body": {
-              "_type": "Block",
-              "statements": [
-                {
-                  "_type": "ExprStmt",
-                  "value": {
-                    "_type": "CallExpr",
-                    "callee": {
-                      "_type": "Identifier",
-                      "name": "print",
-                      "line": 33,
-                      "col": 654
-                    },
-                    "args": [
-                      {
-                        "_type": "CallExpr",
-                        "callee": {
-                          "_type": "Identifier",
-                          "name": "next",
-                          "line": 33,
-                          "col": 660
-                        },
-                        "args": [
-                          {
-                            "_type": "Identifier",
-                            "name": "it",
-                            "line": 33,
-                            "col": 665
-                          }
-                        ],
-                        "line": 33,
-                        "col": 664
-                      }
-                    ],
-                    "line": 33,
-                    "col": 659
-                  },
-                  "line": 0,
-                  "col": 0
-                }
-              ],
-              "line": 0,
-              "col": 0
-            }
-          },
-          {
-            "_type": "Return",
-            "value": {
-              "_type": "LiteralExpr",
-              "value": true,
-              "line": 34,
-              "col": 681
-            }
-          }
-        ],
-        "line": 0,
-        "col": 0
-      },
-      "line": 29,
-      "col": 508
-    },
-    {
-      "_type": "FunctionDef",
-      "name": "map_ex",
-      "params": [],
-      "body": {
-        "_type": "Block",
-        "statements": [
-          {
-            "_type": "Assign",
-            "target": {
-              "_type": "Identifier",
-              "name": "d",
-              "line": 37,
-              "col": 756
-            },
-            "op": "=",
-            "value": {
+            {
               "_type": "DictExpr",
               "pairs": [
                 [
                   {
                     "_type": "LiteralExpr",
-                    "value": "hola",
-                    "line": 38,
-                    "col": 770
+                    "value": "ok",
+                    "line": 21,
+                    "col": 250
                   },
                   {
                     "_type": "LiteralExpr",
-                    "value": "mundo",
-                    "line": 38,
-                    "col": 778
+                    "value": true,
+                    "line": 21,
+                    "col": 256
                   }
                 ],
                 [
                   {
                     "_type": "LiteralExpr",
-                    "value": 1,
-                    "line": 39,
-                    "col": 795
+                    "value": "list",
+                    "line": 21,
+                    "col": 262
                   },
                   {
                     "_type": "ListExpr",
@@ -679,44 +374,635 @@
                       {
                         "_type": "LiteralExpr",
                         "value": 1,
-                        "line": 39,
-                        "col": 799
+                        "line": 21,
+                        "col": 271
                       },
                       {
                         "_type": "LiteralExpr",
                         "value": 2,
-                        "line": 39,
-                        "col": 802
+                        "line": 21,
+                        "col": 274
                       },
                       {
                         "_type": "LiteralExpr",
                         "value": 3,
-                        "line": 39,
-                        "col": 805
-                      },
+                        "line": 21,
+                        "col": 277
+                      }
+                    ],
+                    "line": 21,
+                    "col": 270
+                  }
+                ]
+              ],
+              "line": 21,
+              "col": 249
+            }
+          ]
+        ],
+        "line": 21,
+        "col": 224
+      },
+      "line": 0,
+      "col": 0
+    },
+    {
+      "_type": "Assign",
+      "target": {
+        "_type": "Identifier",
+        "name": "mixed",
+        "line": 23,
+        "col": 283
+      },
+      "op": "=",
+      "value": {
+        "_type": "ListExpr",
+        "elements": [
+          {
+            "_type": "LiteralExpr",
+            "value": 1,
+            "line": 23,
+            "col": 292
+          },
+          {
+            "_type": "TupleExpr",
+            "elements": [
+              {
+                "_type": "LiteralExpr",
+                "value": 2,
+                "line": 23,
+                "col": 296
+              },
+              {
+                "_type": "LiteralExpr",
+                "value": 3,
+                "line": 23,
+                "col": 299
+              }
+            ],
+            "line": 23,
+            "col": 295
+          },
+          {
+            "_type": "DictExpr",
+            "pairs": [
+              [
+                {
+                  "_type": "LiteralExpr",
+                  "value": "a",
+                  "line": 23,
+                  "col": 304
+                },
+                {
+                  "_type": "LiteralExpr",
+                  "value": 4,
+                  "line": 23,
+                  "col": 309
+                }
+              ],
+              [
+                {
+                  "_type": "LiteralExpr",
+                  "value": "b",
+                  "line": 23,
+                  "col": 312
+                },
+                {
+                  "_type": "ListExpr",
+                  "elements": [
+                    {
+                      "_type": "LiteralExpr",
+                      "value": 5,
+                      "line": 23,
+                      "col": 318
+                    },
+                    {
+                      "_type": "LiteralExpr",
+                      "value": 6,
+                      "line": 23,
+                      "col": 321
+                    }
+                  ],
+                  "line": 23,
+                  "col": 317
+                }
+              ]
+            ],
+            "line": 23,
+            "col": 303
+          }
+        ],
+        "line": 23,
+        "col": 291
+      },
+      "line": 0,
+      "col": 0
+    },
+    {
+      "_type": "If",
+      "cond": {
+        "_type": "ComparisonExpr",
+        "left": {
+          "_type": "Identifier",
+          "name": "x",
+          "line": 26,
+          "col": 349
+        },
+        "op": ">",
+        "right": {
+          "_type": "LiteralExpr",
+          "value": 5,
+          "line": 26,
+          "col": 353
+        },
+        "line": 0,
+        "col": 0
+      },
+      "body": {
+        "_type": "Block",
+        "statements": [
+          {
+            "_type": "Assign",
+            "target": {
+              "_type": "Identifier",
+              "name": "result",
+              "line": 27,
+              "col": 360
+            },
+            "op": "=",
+            "value": {
+              "_type": "BinaryExpr",
+              "left": {
+                "_type": "Identifier",
+                "name": "x",
+                "line": 27,
+                "col": 369
+              },
+              "op": "*",
+              "right": {
+                "_type": "LiteralExpr",
+                "value": 2,
+                "line": 27,
+                "col": 373
+              },
+              "line": 0,
+              "col": 0
+            },
+            "line": 0,
+            "col": 0
+          },
+          {
+            "_type": "Pass"
+          }
+        ],
+        "line": 0,
+        "col": 0
+      },
+      "elifs": [
+        [
+          {
+            "_type": "ComparisonExpr",
+            "left": {
+              "_type": "Identifier",
+              "name": "x",
+              "line": 29,
+              "col": 389
+            },
+            "op": "==",
+            "right": {
+              "_type": "LiteralExpr",
+              "value": 3,
+              "line": 29,
+              "col": 394
+            },
+            "line": 0,
+            "col": 0
+          },
+          {
+            "_type": "Block",
+            "statements": [
+              {
+                "_type": "Assign",
+                "target": {
+                  "_type": "Identifier",
+                  "name": "result",
+                  "line": 30,
+                  "col": 401
+                },
+                "op": "=",
+                "value": {
+                  "_type": "BinaryExpr",
+                  "left": {
+                    "_type": "Identifier",
+                    "name": "x",
+                    "line": 30,
+                    "col": 410
+                  },
+                  "op": "/",
+                  "right": {
+                    "_type": "LiteralExpr",
+                    "value": 2,
+                    "line": 30,
+                    "col": 414
+                  },
+                  "line": 0,
+                  "col": 0
+                },
+                "line": 0,
+                "col": 0
+              }
+            ],
+            "line": 0,
+            "col": 0
+          }
+        ]
+      ],
+      "orelse": {
+        "_type": "Block",
+        "statements": [
+          {
+            "_type": "Assign",
+            "target": {
+              "_type": "Identifier",
+              "name": "result",
+              "line": 32,
+              "col": 426
+            },
+            "op": "=",
+            "value": {
+              "_type": "LiteralExpr",
+              "value": 0,
+              "line": 32,
+              "col": 435
+            },
+            "line": 0,
+            "col": 0
+          }
+        ],
+        "line": 0,
+        "col": 0
+      }
+    },
+    {
+      "_type": "Assign",
+      "target": {
+        "_type": "Identifier",
+        "name": "counter",
+        "line": 35,
+        "col": 446
+      },
+      "op": "=",
+      "value": {
+        "_type": "LiteralExpr",
+        "value": 0,
+        "line": 35,
+        "col": 456
+      },
+      "line": 0,
+      "col": 0
+    },
+    {
+      "_type": "While",
+      "cond": {
+        "_type": "ComparisonExpr",
+        "left": {
+          "_type": "Identifier",
+          "name": "counter",
+          "line": 36,
+          "col": 464
+        },
+        "op": "<",
+        "right": {
+          "_type": "LiteralExpr",
+          "value": 3,
+          "line": 36,
+          "col": 474
+        },
+        "line": 0,
+        "col": 0
+      },
+      "body": {
+        "_type": "Block",
+        "statements": [
+          {
+            "_type": "Assign",
+            "target": {
+              "_type": "Identifier",
+              "name": "counter",
+              "line": 37,
+              "col": 481
+            },
+            "op": "+=",
+            "value": {
+              "_type": "LiteralExpr",
+              "value": 1,
+              "line": 37,
+              "col": 492
+            },
+            "line": 0,
+            "col": 0
+          },
+          {
+            "_type": "If",
+            "cond": {
+              "_type": "ComparisonExpr",
+              "left": {
+                "_type": "Identifier",
+                "name": "counter",
+                "line": 38,
+                "col": 501
+              },
+              "op": "==",
+              "right": {
+                "_type": "LiteralExpr",
+                "value": 2,
+                "line": 38,
+                "col": 512
+              },
+              "line": 0,
+              "col": 0
+            },
+            "body": {
+              "_type": "Block",
+              "statements": [
+                {
+                  "_type": "Continue"
+                }
+              ]
+            },
+            "elifs": [],
+            "orelse": null
+          },
+          {
+            "_type": "If",
+            "cond": {
+              "_type": "ComparisonExpr",
+              "left": {
+                "_type": "Identifier",
+                "name": "counter",
+                "line": 40,
+                "col": 539
+              },
+              "op": "==",
+              "right": {
+                "_type": "LiteralExpr",
+                "value": 3,
+                "line": 40,
+                "col": 550
+              },
+              "line": 0,
+              "col": 0
+            },
+            "body": {
+              "_type": "Block",
+              "statements": [
+                {
+                  "_type": "Break"
+                }
+              ]
+            },
+            "elifs": [],
+            "orelse": null
+          }
+        ],
+        "line": 0,
+        "col": 0
+      }
+    },
+    {
+      "_type": "For",
+      "target": {
+        "_type": "Identifier",
+        "name": "i",
+        "line": 44,
+        "col": 583
+      },
+      "iterable": {
+        "_type": "CallExpr",
+        "callee": {
+          "_type": "Identifier",
+          "name": "range",
+          "line": 44,
+          "col": 588
+        },
+        "args": [
+          {
+            "_type": "LiteralExpr",
+            "value": 2,
+            "line": 44,
+            "col": 594
+          }
+        ],
+        "line": 44,
+        "col": 593
+      },
+      "body": {
+        "_type": "Block",
+        "statements": [
+          {
+            "_type": "ExprStmt",
+            "value": {
+              "_type": "CallExpr",
+              "callee": {
+                "_type": "Identifier",
+                "name": "print",
+                "line": 45,
+                "col": 602
+              },
+              "args": [
+                {
+                  "_type": "Identifier",
+                  "name": "i",
+                  "line": 45,
+                  "col": 608
+                }
+              ],
+              "line": 45,
+              "col": 607
+            },
+            "line": 0,
+            "col": 0
+          }
+        ],
+        "line": 0,
+        "col": 0
+      }
+    },
+    {
+      "_type": "Assign",
+      "target": {
+        "_type": "Identifier",
+        "name": "nested_list",
+        "line": 47,
+        "col": 612
+      },
+      "op": "=",
+      "value": {
+        "_type": "ListExpr",
+        "elements": [
+          {
+            "_type": "LiteralExpr",
+            "value": 1,
+            "line": 47,
+            "col": 627
+          },
+          {
+            "_type": "ListExpr",
+            "elements": [
+              {
+                "_type": "LiteralExpr",
+                "value": 2,
+                "line": 47,
+                "col": 631
+              },
+              {
+                "_type": "ListExpr",
+                "elements": [
+                  {
+                    "_type": "LiteralExpr",
+                    "value": 3,
+                    "line": 47,
+                    "col": 635
+                  },
+                  {
+                    "_type": "ListExpr",
+                    "elements": [
                       {
                         "_type": "LiteralExpr",
                         "value": 4,
-                        "line": 39,
-                        "col": 808
+                        "line": 47,
+                        "col": 639
+                      },
+                      {
+                        "_type": "ListExpr",
+                        "elements": [
+                          {
+                            "_type": "LiteralExpr",
+                            "value": 5,
+                            "line": 47,
+                            "col": 643
+                          }
+                        ],
+                        "line": 47,
+                        "col": 642
+                      }
+                    ],
+                    "line": 47,
+                    "col": 638
+                  }
+                ],
+                "line": 47,
+                "col": 634
+              }
+            ],
+            "line": 47,
+            "col": 630
+          }
+        ],
+        "line": 47,
+        "col": 626
+      },
+      "line": 0,
+      "col": 0
+    },
+    {
+      "_type": "Assign",
+      "target": {
+        "_type": "Identifier",
+        "name": "nested_tuple",
+        "line": 49,
+        "col": 651
+      },
+      "op": "=",
+      "value": {
+        "_type": "TupleExpr",
+        "elements": [
+          {
+            "_type": "LiteralExpr",
+            "value": 1,
+            "line": 49,
+            "col": 667
+          },
+          {
+            "_type": "TupleExpr",
+            "elements": [
+              {
+                "_type": "LiteralExpr",
+                "value": 2,
+                "line": 49,
+                "col": 671
+              },
+              {
+                "_type": "TupleExpr",
+                "elements": [
+                  {
+                    "_type": "LiteralExpr",
+                    "value": 3,
+                    "line": 49,
+                    "col": 675
+                  },
+                  {
+                    "_type": "TupleExpr",
+                    "elements": [
+                      {
+                        "_type": "LiteralExpr",
+                        "value": 4,
+                        "line": 49,
+                        "col": 679
                       },
                       {
                         "_type": "LiteralExpr",
                         "value": 5,
-                        "line": 39,
-                        "col": 811
+                        "line": 49,
+                        "col": 682
                       }
                     ],
-                    "line": 39,
-                    "col": 798
+                    "line": 49,
+                    "col": 678
                   }
                 ],
+                "line": 49,
+                "col": 674
+              }
+            ],
+            "line": 49,
+            "col": 670
+          }
+        ],
+        "line": 49,
+        "col": 666
+      },
+      "line": 0,
+      "col": 0
+    },
+    {
+      "_type": "Assign",
+      "target": {
+        "_type": "Identifier",
+        "name": "nested_dict",
+        "line": 51,
+        "col": 689
+      },
+      "op": "=",
+      "value": {
+        "_type": "DictExpr",
+        "pairs": [
+          [
+            {
+              "_type": "LiteralExpr",
+              "value": "level1",
+              "line": 52,
+              "col": 709
+            },
+            {
+              "_type": "DictExpr",
+              "pairs": [
                 [
                   {
                     "_type": "LiteralExpr",
-                    "value": "dict",
-                    "line": 40,
-                    "col": 823
+                    "value": "level2",
+                    "line": 53,
+                    "col": 729
                   },
                   {
                     "_type": "DictExpr",
@@ -724,804 +1010,395 @@
                       [
                         {
                           "_type": "LiteralExpr",
-                          "value": "adios",
-                          "line": 40,
-                          "col": 832
+                          "value": "level3",
+                          "line": 54,
+                          "col": 753
                         },
                         {
-                          "_type": "LiteralExpr",
-                          "value": ":D",
-                          "line": 40,
-                          "col": 841
+                          "_type": "DictExpr",
+                          "pairs": [
+                            [
+                              {
+                                "_type": "LiteralExpr",
+                                "value": "numbers",
+                                "line": 55,
+                                "col": 781
+                              },
+                              {
+                                "_type": "ListExpr",
+                                "elements": [
+                                  {
+                                    "_type": "LiteralExpr",
+                                    "value": 1,
+                                    "line": 55,
+                                    "col": 793
+                                  },
+                                  {
+                                    "_type": "LiteralExpr",
+                                    "value": 2,
+                                    "line": 55,
+                                    "col": 796
+                                  },
+                                  {
+                                    "_type": "LiteralExpr",
+                                    "value": 3,
+                                    "line": 55,
+                                    "col": 799
+                                  }
+                                ],
+                                "line": 55,
+                                "col": 792
+                              }
+                            ],
+                            [
+                              {
+                                "_type": "LiteralExpr",
+                                "value": "letters",
+                                "line": 56,
+                                "col": 819
+                              },
+                              {
+                                "_type": "TupleExpr",
+                                "elements": [
+                                  {
+                                    "_type": "LiteralExpr",
+                                    "value": "a",
+                                    "line": 56,
+                                    "col": 831
+                                  },
+                                  {
+                                    "_type": "LiteralExpr",
+                                    "value": "b",
+                                    "line": 56,
+                                    "col": 836
+                                  },
+                                  {
+                                    "_type": "LiteralExpr",
+                                    "value": "c",
+                                    "line": 56,
+                                    "col": 841
+                                  }
+                                ],
+                                "line": 56,
+                                "col": 830
+                              }
+                            ],
+                            [
+                              {
+                                "_type": "LiteralExpr",
+                                "value": "flag",
+                                "line": 57,
+                                "col": 863
+                              },
+                              {
+                                "_type": "LiteralExpr",
+                                "value": true,
+                                "line": 57,
+                                "col": 871
+                              }
+                            ]
+                          ],
+                          "line": 54,
+                          "col": 763
                         }
                       ]
                     ],
-                    "line": 40,
-                    "col": 831
+                    "line": 53,
+                    "col": 739
                   }
                 ]
               ],
-              "line": 37,
-              "col": 760
-            },
-            "line": 0,
-            "col": 0
-          },
+              "line": 52,
+              "col": 719
+            }
+          ]
+        ],
+        "line": 51,
+        "col": 703
+      },
+      "line": 0,
+      "col": 0
+    },
+    {
+      "_type": "If",
+      "cond": {
+        "_type": "ComparisonExpr",
+        "left": {
+          "_type": "Identifier",
+          "name": "a",
+          "line": 63,
+          "col": 912
+        },
+        "op": "<",
+        "right": {
+          "_type": "LiteralExpr",
+          "value": 5,
+          "line": 63,
+          "col": 916
+        },
+        "line": 0,
+        "col": 0
+      },
+      "body": {
+        "_type": "Block",
+        "statements": [
           {
             "_type": "For",
             "target": {
               "_type": "Identifier",
-              "name": "k",
-              "line": 42,
-              "col": 861
+              "name": "i",
+              "line": 64,
+              "col": 927
             },
             "iterable": {
               "_type": "CallExpr",
               "callee": {
-                "_type": "Attribute",
-                "value": {
-                  "_type": "Identifier",
-                  "name": "d",
-                  "line": 42,
-                  "col": 866
-                },
-                "attr": "keys",
-                "line": 42,
-                "col": 867
+                "_type": "Identifier",
+                "name": "range",
+                "line": 64,
+                "col": 932
               },
-              "args": [],
-              "line": 42,
-              "col": 872
+              "args": [
+                {
+                  "_type": "LiteralExpr",
+                  "value": 2,
+                  "line": 64,
+                  "col": 938
+                }
+              ],
+              "line": 64,
+              "col": 937
             },
             "body": {
               "_type": "Block",
               "statements": [
                 {
-                  "_type": "ExprStmt",
-                  "value": {
-                    "_type": "CallExpr",
-                    "callee": {
-                      "_type": "Identifier",
-                      "name": "print",
-                      "line": 43,
-                      "col": 884
-                    },
-                    "args": [
-                      {
-                        "_type": "Subscript",
-                        "value": {
-                          "_type": "Identifier",
-                          "name": "d",
-                          "line": 43,
-                          "col": 890
-                        },
-                        "index": {
-                          "_type": "Identifier",
-                          "name": "k",
-                          "line": 43,
-                          "col": 892
-                        },
-                        "line": 43,
-                        "col": 891
-                      }
-                    ],
-                    "line": 43,
-                    "col": 889
-                  },
-                  "line": 0,
-                  "col": 0
-                }
-              ],
-              "line": 0,
-              "col": 0
-            }
-          },
-          {
-            "_type": "Return",
-            "value": {
-              "_type": "BinaryExpr",
-              "left": {
-                "_type": "LiteralExpr",
-                "value": "hola",
-                "line": 45,
-                "col": 908
-              },
-              "op": "+",
-              "right": {
-                "_type": "LiteralExpr",
-                "value": "mundo",
-                "line": 45,
-                "col": 917
-              },
-              "line": 0,
-              "col": 0
-            }
-          }
-        ],
-        "line": 0,
-        "col": 0
-      },
-      "line": 36,
-      "col": 687
-    },
-    {
-      "_type": "FunctionDef",
-      "name": "default_ex",
-      "params": [
-        {
-          "_type": "Identifier",
-          "name": "a",
-          "line": 47,
-          "col": 941
-        }
-      ],
-      "body": {
-        "_type": "Block",
-        "statements": [
-          {
-            "_type": "Return",
-            "value": {
-              "_type": "Identifier",
-              "name": "a",
-              "line": 48,
-              "col": 999
-            }
-          }
-        ]
-      },
-      "line": 47,
-      "col": 926
-    },
-    {
-      "_type": "FunctionDef",
-      "name": "set_ex",
-      "params": [],
-      "body": {
-        "_type": "Block",
-        "statements": [
-          {
-            "_type": "Assign",
-            "target": {
-              "_type": "Identifier",
-              "name": "a",
-              "line": 51,
-              "col": 1068
-            },
-            "op": "=",
-            "value": {
-              "_type": "SetExpr",
-              "elements": [
-                {
-                  "_type": "LiteralExpr",
-                  "value": 1,
-                  "line": 51,
-                  "col": 1073
-                },
-                {
-                  "_type": "LiteralExpr",
-                  "value": 2,
-                  "line": 51,
-                  "col": 1076
-                },
-                {
-                  "_type": "LiteralExpr",
-                  "value": "hola",
-                  "line": 51,
-                  "col": 1079
-                },
-                {
-                  "_type": "LiteralExpr",
-                  "value": 4,
-                  "line": 51,
-                  "col": 1087
-                },
-                {
-                  "_type": "LiteralExpr",
-                  "value": 5,
-                  "line": 51,
-                  "col": 1090
-                }
-              ],
-              "line": 51,
-              "col": 1072
-            },
-            "line": 0,
-            "col": 0
-          },
-          {
-            "_type": "Return",
-            "value": {
-              "_type": "ComparisonExpr",
-              "left": {
-                "_type": "LiteralExpr",
-                "value": 2,
-                "line": 52,
-                "col": 1104
-              },
-              "op": "in",
-              "right": {
-                "_type": "Identifier",
-                "name": "a",
-                "line": 52,
-                "col": 1109
-              },
-              "line": 0,
-              "col": 0
-            }
-          }
-        ],
-        "line": 0,
-        "col": 0
-      },
-      "line": 50,
-      "col": 1003
-    },
-    {
-      "_type": "FunctionDef",
-      "name": "tuple_ex",
-      "params": [],
-      "body": {
-        "_type": "Block",
-        "statements": [
-          {
-            "_type": "Assign",
-            "target": {
-              "_type": "Identifier",
-              "name": "a",
-              "line": 55,
-              "col": 1173
-            },
-            "op": "=",
-            "value": {
-              "_type": "TupleExpr",
-              "elements": [
-                {
-                  "_type": "LiteralExpr",
-                  "value": 5,
-                  "line": 55,
-                  "col": 1178
-                },
-                {
-                  "_type": "LiteralExpr",
-                  "value": 6,
-                  "line": 55,
-                  "col": 1181
-                },
-                {
-                  "_type": "LiteralExpr",
-                  "value": "joseph",
-                  "line": 55,
-                  "col": 1184
-                }
-              ],
-              "line": 55,
-              "col": 1177
-            },
-            "line": 0,
-            "col": 0
-          },
-          {
-            "_type": "Assign",
-            "target": {
-              "_type": "Identifier",
-              "name": "b",
-              "line": 56,
-              "col": 1198
-            },
-            "op": "=",
-            "value": {
-              "_type": "TupleExpr",
-              "elements": [
-                {
-                  "_type": "LiteralExpr",
-                  "value": 1,
-                  "line": 56,
-                  "col": 1203
-                },
-                {
-                  "_type": "LiteralExpr",
-                  "value": 2,
-                  "line": 56,
-                  "col": 1206
-                },
-                {
-                  "_type": "LiteralExpr",
-                  "value": "valverde",
-                  "line": 56,
-                  "col": 1209
-                }
-              ],
-              "line": 56,
-              "col": 1202
-            },
-            "line": 0,
-            "col": 0
-          },
-          {
-            "_type": "Return",
-            "value": {
-              "_type": "BinaryExpr",
-              "left": {
-                "_type": "Identifier",
-                "name": "a",
-                "line": 57,
-                "col": 1232
-              },
-              "op": "+",
-              "right": {
-                "_type": "Identifier",
-                "name": "b",
-                "line": 57,
-                "col": 1236
-              },
-              "line": 0,
-              "col": 0
-            }
-          }
-        ],
-        "line": 0,
-        "col": 0
-      },
-      "line": 54,
-      "col": 1112
-    },
-    {
-      "_type": "FunctionDef",
-      "name": "slices_ex",
-      "params": [],
-      "body": {
-        "_type": "Block",
-        "statements": [
-          {
-            "_type": "Assign",
-            "target": {
-              "_type": "Identifier",
-              "name": "l",
-              "line": 60,
-              "col": 1300
-            },
-            "op": "=",
-            "value": {
-              "_type": "ListExpr",
-              "elements": [
-                {
-                  "_type": "LiteralExpr",
-                  "value": 1,
-                  "line": 60,
-                  "col": 1305
-                },
-                {
-                  "_type": "LiteralExpr",
-                  "value": 2,
-                  "line": 60,
-                  "col": 1308
-                },
-                {
-                  "_type": "LiteralExpr",
-                  "value": 3,
-                  "line": 60,
-                  "col": 1311
-                },
-                {
-                  "_type": "LiteralExpr",
-                  "value": 4,
-                  "line": 60,
-                  "col": 1314
-                },
-                {
-                  "_type": "LiteralExpr",
-                  "value": 5,
-                  "line": 60,
-                  "col": 1317
-                },
-                {
-                  "_type": "LiteralExpr",
-                  "value": 6,
-                  "line": 60,
-                  "col": 1320
-                },
-                {
-                  "_type": "LiteralExpr",
-                  "value": 7,
-                  "line": 60,
-                  "col": 1323
-                },
-                {
-                  "_type": "LiteralExpr",
-                  "value": 7,
-                  "line": 60,
-                  "col": 1326
-                },
-                {
-                  "_type": "LiteralExpr",
-                  "value": 8,
-                  "line": 60,
-                  "col": 1329
-                },
-                {
-                  "_type": "LiteralExpr",
-                  "value": 9,
-                  "line": 60,
-                  "col": 1332
-                }
-              ],
-              "line": 60,
-              "col": 1304
-            },
-            "line": 0,
-            "col": 0
-          },
-          {
-            "_type": "ExprStmt",
-            "value": {
-              "_type": "CallExpr",
-              "callee": {
-                "_type": "Identifier",
-                "name": "print",
-                "line": 61,
-                "col": 1339
-              },
-              "args": [
-                {
-                  "_type": "Subscript",
-                  "value": {
-                    "_type": "Identifier",
-                    "name": "l",
-                    "line": 61,
-                    "col": 1345
-                  },
-                  "index": {
-                    "_type": "UnaryExpr",
-                    "op": "MINUS",
-                    "operand": {
-                      "_type": "LiteralExpr",
-                      "value": 2,
-                      "line": 61,
-                      "col": 1348
-                    },
-                    "line": 61,
-                    "col": 1347
-                  },
-                  "line": 61,
-                  "col": 1346
-                }
-              ],
-              "line": 61,
-              "col": 1344
-            },
-            "line": 0,
-            "col": 0
-          },
-          {
-            "_type": "ExprStmt",
-            "value": {
-              "_type": "CallExpr",
-              "callee": {
-                "_type": "Identifier",
-                "name": "print",
-                "line": 62,
-                "col": 1356
-              },
-              "args": [
-                {
-                  "_type": "Subscript",
-                  "value": {
-                    "_type": "Identifier",
-                    "name": "l",
-                    "line": 62,
-                    "col": 1362
-                  },
-                  "index": {
-                    "_type": "TupleExpr",
-                    "elements": [
-                      {
-                        "_type": "LiteralExpr",
-                        "value": 1,
-                        "line": 62,
-                        "col": 1364
-                      },
-                      {
-                        "_type": "UnaryExpr",
-                        "op": "MINUS",
-                        "operand": {
-                          "_type": "LiteralExpr",
-                          "value": 2,
-                          "line": 62,
-                          "col": 1367
-                        },
-                        "line": 62,
-                        "col": 1366
-                      },
-                      null
-                    ],
-                    "line": 62,
-                    "col": 1365
-                  },
-                  "line": 62,
-                  "col": 1363
-                }
-              ],
-              "line": 62,
-              "col": 1361
-            },
-            "line": 0,
-            "col": 0
-          },
-          {
-            "_type": "Assign",
-            "target": {
-              "_type": "Identifier",
-              "name": "k",
-              "line": 63,
-              "col": 1375
-            },
-            "op": "=",
-            "value": {
-              "_type": "BinaryExpr",
-              "left": {
-                "_type": "Subscript",
-                "value": {
-                  "_type": "Identifier",
-                  "name": "l",
-                  "line": 63,
-                  "col": 1379
-                },
-                "index": {
-                  "_type": "TupleExpr",
-                  "elements": [
-                    {
-                      "_type": "LiteralExpr",
-                      "value": 1,
-                      "line": 63,
-                      "col": 1381
-                    },
-                    {
-                      "_type": "LiteralExpr",
-                      "value": 2,
-                      "line": 63,
-                      "col": 1383
-                    },
-                    null
-                  ],
-                  "line": 63,
-                  "col": 1382
-                },
-                "line": 63,
-                "col": 1380
-              },
-              "op": "+",
-              "right": {
-                "_type": "Subscript",
-                "value": {
-                  "_type": "Identifier",
-                  "name": "l",
-                  "line": 63,
-                  "col": 1388
-                },
-                "index": {
-                  "_type": "TupleExpr",
-                  "elements": [
-                    {
-                      "_type": "UnaryExpr",
-                      "op": "MINUS",
-                      "operand": {
-                        "_type": "LiteralExpr",
-                        "value": 3,
-                        "line": 63,
-                        "col": 1391
-                      },
-                      "line": 63,
-                      "col": 1390
-                    },
-                    {
-                      "_type": "UnaryExpr",
-                      "op": "MINUS",
-                      "operand": {
-                        "_type": "LiteralExpr",
-                        "value": 4,
-                        "line": 63,
-                        "col": 1394
-                      },
-                      "line": 63,
-                      "col": 1393
-                    },
-                    null
-                  ],
-                  "line": 63,
-                  "col": 1392
-                },
-                "line": 63,
-                "col": 1389
-              },
-              "line": 0,
-              "col": 0
-            },
-            "line": 0,
-            "col": 0
-          },
-          {
-            "_type": "Return",
-            "value": {
-              "_type": "Identifier",
-              "name": "k",
-              "line": 64,
-              "col": 1409
-            }
-          }
-        ],
-        "line": 0,
-        "col": 0
-      },
-      "line": 59,
-      "col": 1239
-    },
-    {
-      "_type": "FunctionDef",
-      "name": "string_ex",
-      "params": [],
-      "body": {
-        "_type": "Block",
-        "statements": [
-          {
-            "_type": "ExprStmt",
-            "value": {
-              "_type": "CallExpr",
-              "callee": {
-                "_type": "Identifier",
-                "name": "print",
-                "line": 67,
-                "col": 1475
-              },
-              "args": [
-                {
-                  "_type": "Subscript",
-                  "value": {
-                    "_type": "LiteralExpr",
-                    "value": "profe",
-                    "line": 67,
-                    "col": 1481
-                  },
-                  "index": {
-                    "_type": "TupleExpr",
-                    "elements": [
-                      {
-                        "_type": "LiteralExpr",
-                        "value": 2,
-                        "line": 67,
-                        "col": 1489
-                      },
-                      {
-                        "_type": "LiteralExpr",
-                        "value": 4,
-                        "line": 67,
-                        "col": 1491
-                      },
-                      null
-                    ],
-                    "line": 67,
-                    "col": 1490
-                  },
-                  "line": 67,
-                  "col": 1488
-                }
-              ],
-              "line": 67,
-              "col": 1480
-            },
-            "line": 0,
-            "col": 0
-          },
-          {
-            "_type": "ExprStmt",
-            "value": {
-              "_type": "CallExpr",
-              "callee": {
-                "_type": "Identifier",
-                "name": "print",
-                "line": 68,
-                "col": 1499
-              },
-              "args": [
-                {
-                  "_type": "BinaryExpr",
-                  "left": {
-                    "_type": "BinaryExpr",
+                  "_type": "While",
+                  "cond": {
+                    "_type": "ComparisonExpr",
                     "left": {
-                      "_type": "Subscript",
-                      "value": {
-                        "_type": "LiteralExpr",
-                        "value": "profe",
-                        "line": 68,
-                        "col": 1505
-                      },
-                      "index": {
-                        "_type": "TupleExpr",
-                        "elements": [
-                          {
-                            "_type": "LiteralExpr",
-                            "value": 2,
-                            "line": 68,
-                            "col": 1513
-                          },
-                          {
-                            "_type": "LiteralExpr",
-                            "value": 4,
-                            "line": 68,
-                            "col": 1515
-                          },
-                          null
-                        ],
-                        "line": 68,
-                        "col": 1514
-                      },
-                      "line": 68,
-                      "col": 1512
+                      "_type": "Identifier",
+                      "name": "b",
+                      "line": 65,
+                      "col": 956
                     },
-                    "op": "+",
+                    "op": "<",
                     "right": {
-                      "_type": "Subscript",
-                      "value": {
-                        "_type": "LiteralExpr",
-                        "value": "profe",
-                        "line": 68,
-                        "col": 1520
-                      },
-                      "index": {
-                        "_type": "TupleExpr",
-                        "elements": [
-                          {
-                            "_type": "LiteralExpr",
-                            "value": 0,
-                            "line": 68,
-                            "col": 1528
-                          },
-                          {
-                            "_type": "LiteralExpr",
-                            "value": 2,
-                            "line": 68,
-                            "col": 1530
-                          },
-                          null
-                        ],
-                        "line": 68,
-                        "col": 1529
-                      },
-                      "line": 68,
-                      "col": 1527
+                      "_type": "LiteralExpr",
+                      "value": 4,
+                      "line": 65,
+                      "col": 960
                     },
                     "line": 0,
                     "col": 0
                   },
-                  "op": "+",
-                  "right": {
-                    "_type": "Subscript",
-                    "value": {
-                      "_type": "LiteralExpr",
-                      "value": "profe",
-                      "line": 68,
-                      "col": 1535
-                    },
-                    "index": {
-                      "_type": "UnaryExpr",
-                      "op": "MINUS",
-                      "operand": {
-                        "_type": "LiteralExpr",
-                        "value": 1,
-                        "line": 68,
-                        "col": 1544
+                  "body": {
+                    "_type": "Block",
+                    "statements": [
+                      {
+                        "_type": "Assign",
+                        "target": {
+                          "_type": "Identifier",
+                          "name": "c",
+                          "line": 66,
+                          "col": 975
+                        },
+                        "op": "=",
+                        "value": {
+                          "_type": "BinaryExpr",
+                          "left": {
+                            "_type": "Identifier",
+                            "name": "c",
+                            "line": 66,
+                            "col": 979
+                          },
+                          "op": "+",
+                          "right": {
+                            "_type": "LiteralExpr",
+                            "value": 1,
+                            "line": 66,
+                            "col": 983
+                          },
+                          "line": 0,
+                          "col": 0
+                        },
+                        "line": 0,
+                        "col": 0
                       },
-                      "line": 68,
-                      "col": 1543
-                    },
-                    "line": 68,
-                    "col": 1542
-                  },
-                  "line": 0,
-                  "col": 0
+                      {
+                        "_type": "If",
+                        "cond": {
+                          "_type": "ComparisonExpr",
+                          "left": {
+                            "_type": "Identifier",
+                            "name": "c",
+                            "line": 67,
+                            "col": 1000
+                          },
+                          "op": "==",
+                          "right": {
+                            "_type": "LiteralExpr",
+                            "value": 5,
+                            "line": 67,
+                            "col": 1005
+                          },
+                          "line": 0,
+                          "col": 0
+                        },
+                        "body": {
+                          "_type": "Block",
+                          "statements": [
+                            {
+                              "_type": "ExprStmt",
+                              "value": {
+                                "_type": "CallExpr",
+                                "callee": {
+                                  "_type": "Attribute",
+                                  "value": {
+                                    "_type": "Identifier",
+                                    "name": "nested_list",
+                                    "line": 68,
+                                    "col": 1024
+                                  },
+                                  "attr": "append",
+                                  "line": 68,
+                                  "col": 1035
+                                },
+                                "args": [
+                                  {
+                                    "_type": "Identifier",
+                                    "name": "c",
+                                    "line": 68,
+                                    "col": 1043
+                                  }
+                                ],
+                                "line": 68,
+                                "col": 1042
+                              },
+                              "line": 0,
+                              "col": 0
+                            }
+                          ],
+                          "line": 0,
+                          "col": 0
+                        },
+                        "elifs": [],
+                        "orelse": {
+                          "_type": "Block",
+                          "statements": [
+                            {
+                              "_type": "Assign",
+                              "target": {
+                                "_type": "Subscript",
+                                "value": {
+                                  "_type": "Subscript",
+                                  "value": {
+                                    "_type": "Subscript",
+                                    "value": {
+                                      "_type": "Subscript",
+                                      "value": {
+                                        "_type": "Identifier",
+                                        "name": "nested_dict",
+                                        "line": 70,
+                                        "col": 1080
+                                      },
+                                      "index": {
+                                        "_type": "LiteralExpr",
+                                        "value": "level1",
+                                        "line": 70,
+                                        "col": 1092
+                                      },
+                                      "line": 70,
+                                      "col": 1091
+                                    },
+                                    "index": {
+                                      "_type": "LiteralExpr",
+                                      "value": "level2",
+                                      "line": 70,
+                                      "col": 1102
+                                    },
+                                    "line": 70,
+                                    "col": 1101
+                                  },
+                                  "index": {
+                                    "_type": "LiteralExpr",
+                                    "value": "level3",
+                                    "line": 70,
+                                    "col": 1112
+                                  },
+                                  "line": 70,
+                                  "col": 1111
+                                },
+                                "index": {
+                                  "_type": "LiteralExpr",
+                                  "value": "extra",
+                                  "line": 70,
+                                  "col": 1122
+                                },
+                                "line": 0,
+                                "col": 0
+                              },
+                              "op": "=",
+                              "value": {
+                                "_type": "Identifier",
+                                "name": "c",
+                                "line": 70,
+                                "col": 1133
+                              },
+                              "line": 0,
+                              "col": 0
+                            }
+                          ],
+                          "line": 0,
+                          "col": 0
+                        }
+                      },
+                      {
+                        "_type": "Assign",
+                        "target": {
+                          "_type": "Identifier",
+                          "name": "b",
+                          "line": 71,
+                          "col": 1147
+                        },
+                        "op": "+=",
+                        "value": {
+                          "_type": "LiteralExpr",
+                          "value": 1,
+                          "line": 71,
+                          "col": 1152
+                        },
+                        "line": 0,
+                        "col": 0
+                      }
+                    ],
+                    "line": 0,
+                    "col": 0
+                  }
                 }
-              ],
-              "line": 68,
-              "col": 1504
+              ]
+            }
+          }
+        ]
+      },
+      "elifs": [],
+      "orelse": {
+        "_type": "Block",
+        "statements": [
+          {
+            "_type": "Assign",
+            "target": {
+              "_type": "Identifier",
+              "name": "nested_list",
+              "line": 73,
+              "col": 1164
+            },
+            "op": "=",
+            "value": {
+              "_type": "ListExpr",
+              "elements": [],
+              "line": 73,
+              "col": 1178
             },
             "line": 0,
             "col": 0
@@ -1529,320 +1406,116 @@
         ],
         "line": 0,
         "col": 0
-      },
-      "line": 66,
-      "col": 1413
+      }
     },
     {
-      "_type": "ExprStmt",
+      "_type": "Assign",
+      "target": {
+        "_type": "Identifier",
+        "name": "final_structure",
+        "line": 75,
+        "col": 1182
+      },
+      "op": "=",
       "value": {
-        "_type": "CallExpr",
-        "callee": {
-          "_type": "Identifier",
-          "name": "print",
-          "line": 71,
-          "col": 1550
-        },
-        "args": [
+        "_type": "ListExpr",
+        "elements": [
           {
-            "_type": "CallExpr",
-            "callee": {
-              "_type": "Identifier",
-              "name": "random_operation",
-              "line": 71,
-              "col": 1556
-            },
-            "args": [
+            "_type": "Identifier",
+            "name": "nested_list",
+            "line": 76,
+            "col": 1206
+          },
+          {
+            "_type": "Identifier",
+            "name": "nested_tuple",
+            "line": 77,
+            "col": 1223
+          },
+          {
+            "_type": "Identifier",
+            "name": "nested_dict",
+            "line": 78,
+            "col": 1241
+          },
+          {
+            "_type": "ListExpr",
+            "elements": [
               {
-                "_type": "LiteralExpr",
-                "value": 5,
-                "line": 71,
-                "col": 1573
-              },
-              {
-                "_type": "LiteralExpr",
-                "value": 6,
-                "line": 71,
-                "col": 1576
+                "_type": "DictExpr",
+                "pairs": [
+                  [
+                    {
+                      "_type": "LiteralExpr",
+                      "value": "inner_list",
+                      "line": 79,
+                      "col": 1260
+                    },
+                    {
+                      "_type": "ListExpr",
+                      "elements": [
+                        {
+                          "_type": "LiteralExpr",
+                          "value": 0,
+                          "line": 79,
+                          "col": 1275
+                        },
+                        {
+                          "_type": "LiteralExpr",
+                          "value": 1,
+                          "line": 79,
+                          "col": 1278
+                        },
+                        {
+                          "_type": "DictExpr",
+                          "pairs": [
+                            [
+                              {
+                                "_type": "LiteralExpr",
+                                "value": "deep",
+                                "line": 79,
+                                "col": 1282
+                              },
+                              {
+                                "_type": "ListExpr",
+                                "elements": [
+                                  {
+                                    "_type": "LiteralExpr",
+                                    "value": 10,
+                                    "line": 79,
+                                    "col": 1291
+                                  },
+                                  {
+                                    "_type": "LiteralExpr",
+                                    "value": 20,
+                                    "line": 79,
+                                    "col": 1295
+                                  }
+                                ],
+                                "line": 79,
+                                "col": 1290
+                              }
+                            ]
+                          ],
+                          "line": 79,
+                          "col": 1281
+                        }
+                      ],
+                      "line": 79,
+                      "col": 1274
+                    }
+                  ]
+                ],
+                "line": 79,
+                "col": 1259
               }
             ],
-            "line": 71,
-            "col": 1572
-          }
-        ],
-        "line": 71,
-        "col": 1555
-      },
-      "line": 0,
-      "col": 0
-    },
-    {
-      "_type": "ExprStmt",
-      "value": {
-        "_type": "CallExpr",
-        "callee": {
-          "_type": "Identifier",
-          "name": "print",
-          "line": 72,
-          "col": 1580
-        },
-        "args": [
-          {
-            "_type": "CallExpr",
-            "callee": {
-              "_type": "Identifier",
-              "name": "fibonacci",
-              "line": 72,
-              "col": 1586
-            },
-            "args": [
-              {
-                "_type": "LiteralExpr",
-                "value": 4,
-                "line": 72,
-                "col": 1596
-              }
-            ],
-            "line": 72,
-            "col": 1595
-          }
-        ],
-        "line": 72,
-        "col": 1585
-      },
-      "line": 0,
-      "col": 0
-    },
-    {
-      "_type": "ExprStmt",
-      "value": {
-        "_type": "CallExpr",
-        "callee": {
-          "_type": "Identifier",
-          "name": "print",
-          "line": 73,
-          "col": 1600
-        },
-        "args": [
-          {
-            "_type": "CallExpr",
-            "callee": {
-              "_type": "Identifier",
-              "name": "fibonacci_d",
-              "line": 73,
-              "col": 1606
-            },
-            "args": [
-              {
-                "_type": "LiteralExpr",
-                "value": 4,
-                "line": 73,
-                "col": 1618
-              }
-            ],
-            "line": 73,
-            "col": 1617
-          }
-        ],
-        "line": 73,
-        "col": 1605
-      },
-      "line": 0,
-      "col": 0
-    },
-    {
-      "_type": "ExprStmt",
-      "value": {
-        "_type": "CallExpr",
-        "callee": {
-          "_type": "Identifier",
-          "name": "print",
-          "line": 74,
-          "col": 1622
-        },
-        "args": [
-          {
-            "_type": "CallExpr",
-            "callee": {
-              "_type": "Identifier",
-              "name": "iter_example",
-              "line": 74,
-              "col": 1628
-            },
-            "args": [],
-            "line": 74,
-            "col": 1640
-          }
-        ],
-        "line": 74,
-        "col": 1627
-      },
-      "line": 0,
-      "col": 0
-    },
-    {
-      "_type": "ExprStmt",
-      "value": {
-        "_type": "CallExpr",
-        "callee": {
-          "_type": "Identifier",
-          "name": "print",
-          "line": 75,
-          "col": 1644
-        },
-        "args": [
-          {
-            "_type": "CallExpr",
-            "callee": {
-              "_type": "Identifier",
-              "name": "map_ex",
-              "line": 75,
-              "col": 1650
-            },
-            "args": [],
-            "line": 75,
-            "col": 1656
+            "line": 79,
+            "col": 1258
           }
         ],
         "line": 75,
-        "col": 1649
-      },
-      "line": 0,
-      "col": 0
-    },
-    {
-      "_type": "ExprStmt",
-      "value": {
-        "_type": "CallExpr",
-        "callee": {
-          "_type": "Identifier",
-          "name": "print",
-          "line": 76,
-          "col": 1660
-        },
-        "args": [
-          {
-            "_type": "CallExpr",
-            "callee": {
-              "_type": "Identifier",
-              "name": "default_ex",
-              "line": 76,
-              "col": 1666
-            },
-            "args": [],
-            "line": 76,
-            "col": 1676
-          }
-        ],
-        "line": 76,
-        "col": 1665
-      },
-      "line": 0,
-      "col": 0
-    },
-    {
-      "_type": "ExprStmt",
-      "value": {
-        "_type": "CallExpr",
-        "callee": {
-          "_type": "Identifier",
-          "name": "print",
-          "line": 77,
-          "col": 1680
-        },
-        "args": [
-          {
-            "_type": "CallExpr",
-            "callee": {
-              "_type": "Identifier",
-              "name": "tuple_ex",
-              "line": 77,
-              "col": 1686
-            },
-            "args": [],
-            "line": 77,
-            "col": 1694
-          }
-        ],
-        "line": 77,
-        "col": 1685
-      },
-      "line": 0,
-      "col": 0
-    },
-    {
-      "_type": "ExprStmt",
-      "value": {
-        "_type": "CallExpr",
-        "callee": {
-          "_type": "Identifier",
-          "name": "print",
-          "line": 78,
-          "col": 1698
-        },
-        "args": [
-          {
-            "_type": "CallExpr",
-            "callee": {
-              "_type": "Identifier",
-              "name": "set_ex",
-              "line": 78,
-              "col": 1704
-            },
-            "args": [],
-            "line": 78,
-            "col": 1710
-          }
-        ],
-        "line": 78,
-        "col": 1703
-      },
-      "line": 0,
-      "col": 0
-    },
-    {
-      "_type": "ExprStmt",
-      "value": {
-        "_type": "CallExpr",
-        "callee": {
-          "_type": "Identifier",
-          "name": "print",
-          "line": 79,
-          "col": 1714
-        },
-        "args": [
-          {
-            "_type": "CallExpr",
-            "callee": {
-              "_type": "Identifier",
-              "name": "slices_ex",
-              "line": 79,
-              "col": 1720
-            },
-            "args": [],
-            "line": 79,
-            "col": 1729
-          }
-        ],
-        "line": 79,
-        "col": 1719
-      },
-      "line": 0,
-      "col": 0
-    },
-    {
-      "_type": "ExprStmt",
-      "value": {
-        "_type": "CallExpr",
-        "callee": {
-          "_type": "Identifier",
-          "name": "string_ex",
-          "line": 80,
-          "col": 1733
-        },
-        "args": [],
-        "line": 80,
-        "col": 1742
+        "col": 1200
       },
       "line": 0,
       "col": 0
