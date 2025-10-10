@@ -28,6 +28,9 @@ class AstNode:
     col: Optional[int] = None
 
     def to_dict(self) -> Dict[str, Any]:
+        """
+        Convert the AST node and its children to a dictionary representation.
+        """
         dictionary = {"_type": self.__class__.__name__}
         for key, value in self.__dict__.items():
             if key in ("line", "col"):

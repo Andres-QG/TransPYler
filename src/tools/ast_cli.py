@@ -1,4 +1,3 @@
-# src/tools/ast_cli.py
 from __future__ import annotations
 import argparse
 import sys
@@ -27,7 +26,11 @@ except Exception:
 
 
 def _maybe_unwrap_expr(tree):
-    if isinstance(tree, Module) and len(tree.body) == 1 and isinstance(tree.body[0], ExprStmt):
+    if (
+        isinstance(tree, Module)
+        and len(tree.body) == 1
+        and isinstance(tree.body[0], ExprStmt)
+    ):
         return tree.body[0].value
     return tree
 
@@ -40,7 +43,9 @@ def _parse_args() -> argparse.Namespace:
     g.add_argument("--expr", help="Inline expression to parse")
     g.add_argument("--file", help="Path to a source file (.py/.flpy)")
     ap.add_argument("--out", help="JSON output path (default: repo_root/ast.json)")
-    ap.add_argument("--view", choices=["expr", "generic", "diagram", "mermaid"], default="expr")
+    ap.add_argument(
+        "--view", choices=["expr", "generic", "diagram", "mermaid"], default="expr"
+    )
     ap.add_argument(
         "--unwrap-expr",
         action="store_true",
@@ -83,6 +88,7 @@ def _print_header(src_label: str, out_path: Path):
     )
     console.print(header)
 
+
 def main():
     args = _parse_args()
 
@@ -115,7 +121,7 @@ def main():
     # 6) Print selected view
     if args.view == "diagram":
         _print_header(src_label, out_path)
-        print(render_ascii(ast_root)) 
+        print(render_ascii(ast_root))
         return
 
     if args.view == "mermaid":
@@ -141,4 +147,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

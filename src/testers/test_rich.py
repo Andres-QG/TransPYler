@@ -1,4 +1,3 @@
-# test_rich.py
 try:
     from rich.console import Console
     from rich.tree import Tree

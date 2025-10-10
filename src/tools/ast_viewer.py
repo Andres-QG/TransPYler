@@ -1,34 +1,43 @@
-# src/tools/ast_viewer.py
 from __future__ import annotations
 import json
-from typing import Iterable, List, Tuple
+from typing import Iterable, List, TYPE_CHECKING, Any
+
 from src.core.ast.ast_base import AstNode
 from src.core.ast import (
-    Module, ExprStmt, If, While, For, Assign, Block, Pass, Continue, Break,
-    TupleExpr, ListExpr, DictExpr, Attribute, Subscript
+    ExprStmt,
+    If,
+    While,
+    For,
+    Block,
+    TupleExpr,
+    ListExpr,
+    DictExpr,
+    Attribute,
+    Subscript,
 )
 
-from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from rich.tree import Tree as RichTree
 else:
     RichTree = Any
 
-NODE_STYLE    = "bold cyan"
-FIELD_STYLE   = "italic yellow"
+NODE_STYLE = "bold cyan"
+FIELD_STYLE = "italic yellow"
 SECTION_STYLE = "dim green"
-VALUE_STYLE   = "magenta"
-PLAIN_DIM     = "dim"
+VALUE_STYLE = "magenta"
+PLAIN_DIM = "dim"
 
 
 # ---------------- JSON ----------------
 def ast_to_json(node: AstNode) -> str:
     return json.dumps(node.to_dict(), indent=2, ensure_ascii=False)
 
+
 # --------------- Rich -----------------
 try:
     from rich.tree import Tree
+
     RICH_OK = True
 except Exception:
     RICH_OK = False
@@ -38,6 +47,7 @@ except Exception:
 
 _HIDE_FIELDS = {"line", "col"}
 
+
 def _fields_for_print(node: AstNode, verbose: bool) -> dict:
     data = dict(getattr(node, "__dict__", {}))
     if not verbose:
@@ -45,36 +55,61 @@ def _fields_for_print(node: AstNode, verbose: bool) -> dict:
             data.pop(k, None)
     return data
 
+
 def _label(node: AstNode, title: str, verbose: bool) -> str:
     if not verbose:
         return f"[{NODE_STYLE}]{title}[/]"
     line = getattr(node, "line", None)
     col = getattr(node, "col", None)
-    meta = f" [dim](line={line}, col={col})[/dim]" if line is not None and col is not None else ""
+    meta = (
+        f" [dim](line={line}, col={col})[/dim]"
+        if line is not None and col is not None
+        else ""
+    )
     return f"[{NODE_STYLE}]{title}[/]{meta}"
 
-def _add_list(branch: RichTree, label: str, items: Iterable[AstNode], render_fn, verbose: bool):
+
+def _add_list(
+    branch: RichTree, label: str, items: Iterable[AstNode], render_fn, verbose: bool
+):
     items = list(items)
     lst = branch.add(f"[{SECTION_STYLE}]{label}[/] [dim][{len(items)}][/dim]")
     for it in items:
         render_fn(it, lst, verbose)
 
-def _render_elements_node(node: AstNode, parent: RichTree, verbose: bool, name: str, elements: List[AstNode], is_root: bool):
+
+def _render_elements_node(
+    node: AstNode,
+    parent: RichTree,
+    verbose: bool,
+    name: str,
+    elements: List[AstNode],
+    is_root: bool,
+):
     b = parent if is_root else parent.add(_label(node, name, verbose))
     _add_list(b, "elements", elements or [], _render_node, verbose)
 
+
 # ---------- RENDER (Rich, genérico) ----
 
-def build_rich_tree_generic(node: AstNode, *, label: str | None = None, verbose: bool = False):
+
+def build_rich_tree_generic(
+    node: AstNode, *, label: str | None = None, verbose: bool = False
+):
     if not RICH_OK:
         raise RuntimeError("Rich is not available.")
     if node is None:
         return Tree("[dim]∅[/dim]")
 
-    title = node.__class__.__name__ if label is None else f"{node.__class__.__name__} ({label})"
+    title = (
+        node.__class__.__name__
+        if label is None
+        else f"{node.__class__.__name__} ({label})"
+    )
     root = Tree(_label(node, title, verbose))
     _render_node(node, root, verbose, is_root=True)
     return root
+
 
 def _render_node(node: AstNode, parent: RichTree, verbose: bool, is_root: bool = False):
     if isinstance(node, ExprStmt):
@@ -99,7 +134,7 @@ def _render_node(node: AstNode, parent: RichTree, verbose: bool, is_root: bool =
     if isinstance(node, DictExpr):
         b = parent if is_root else parent.add(_label(node, "DictExpr", verbose))
         pairs = b.add(f"[{SECTION_STYLE}]pairs[/]")
-        for (k, v) in (node.pairs or []):
+        for k, v in node.pairs or []:
             kv = pairs.add(f"[{SECTION_STYLE}]pair[/]")
             _render_node(k, kv.add(f"[{FIELD_STYLE}]key[/]"), verbose)
             _render_node(v, kv.add(f"[{FIELD_STYLE}]value[/]"), verbose)
@@ -111,7 +146,7 @@ def _render_node(node: AstNode, parent: RichTree, verbose: bool, is_root: bool =
         _render_node(node.body, b.add("body"), verbose)
 
         el = b.add("elifs")
-        for (c, blk) in (node.elifs or []):
+        for c, blk in node.elifs or []:
             e = el.add("elif")
             _render_node(c, e.add("cond"), verbose)
             _render_node(blk, e.add("body"), verbose)
@@ -120,7 +155,11 @@ def _render_node(node: AstNode, parent: RichTree, verbose: bool, is_root: bool =
         _render_node(node.orelse, o, verbose) if node.orelse else o.add("None")
         return
 
-    b = parent if is_root else parent.add(_label(node, node.__class__.__name__, verbose))
+    b = (
+        parent
+        if is_root
+        else parent.add(_label(node, node.__class__.__name__, verbose))
+    )
     data = _fields_for_print(node, verbose)
 
     for k, v in data.items():
@@ -210,13 +249,25 @@ def build_expr_tree(node: AstNode, *, verbose: bool = False):
             pair.add(build_expr_tree(v, verbose=verbose))
             root.add(pair)
         return root
-    
+
     return build_rich_tree_generic(node, verbose=verbose)
+
 
 # --------------- ASCII ----------------
 def _expr_label(node: AstNode) -> str:
     cls = node.__class__.__name__
-    if cls in {"Module", "Block", "If", "While", "For", "Assign", "Pass", "Continue", "Break", "ExprStmt"}:
+    if cls in {
+        "Module",
+        "Block",
+        "If",
+        "While",
+        "For",
+        "Assign",
+        "Pass",
+        "Continue",
+        "Break",
+        "ExprStmt",
+    }:
         return cls
     if hasattr(node, "op"):
         return str(node.op)
@@ -227,6 +278,7 @@ def _expr_label(node: AstNode) -> str:
     if hasattr(node, "callee"):
         return "call"
     return cls
+
 
 def _expr_children(node: AstNode):
     # Bloques
@@ -239,7 +291,7 @@ def _expr_children(node: AstNode):
 
     if isinstance(node, If):
         out = [node.cond, node.body]
-        for cond, blk in (node.elifs or []):
+        for cond, blk in node.elifs or []:
             out.extend([cond, blk])
         if node.orelse:
             out.append(node.orelse)
@@ -267,6 +319,7 @@ def _expr_children(node: AstNode):
             out.extend([k, v])
         return out
     return []
+
 
 def _merge_ascii(children_lines, gap=4):
 
@@ -300,6 +353,7 @@ def _merge_ascii(children_lines, gap=4):
 
     block_mid = sum(child_mids) // len(child_mids)
     return merged, total_w, block_mid, child_mids
+
 
 def _render_ascii(node: AstNode):
 
@@ -338,6 +392,7 @@ def _render_ascii(node: AstNode):
     lines = [first_line, connector_vert, connector_h] + merged
     return lines, block_w, block_mid
 
+
 def render_ascii(ast_root: AstNode) -> str:
     if ast_root is None:
         return "<< empty AST >>"
@@ -347,15 +402,20 @@ def render_ascii(ast_root: AstNode) -> str:
     arrow = " " * (len(lines[0]) // 2) + "↓"
     return "\n".join([top, arrow] + lines)
 
+
 # ------------- Mermaid ---------------
 def _sanitize(label: str) -> str:
-    return label.replace('"', "'").replace("{", "(").replace("}", ")").replace("\n", " ")
+    return (
+        label.replace('"', "'").replace("{", "(").replace("}", ")").replace("\n", " ")
+    )
+
 
 def ast_to_mermaid_lines(node: AstNode, node_id=None, counter=None):
     if counter is None:
         counter = {"n": 0}
     if node_id is None:
-        node_id = f"N{counter['n']}"; counter["n"] += 1
+        node_id = f"N{counter['n']}"
+        counter["n"] += 1
 
     label = node.__class__.__name__
     if hasattr(node, "name"):
@@ -365,10 +425,12 @@ def ast_to_mermaid_lines(node: AstNode, node_id=None, counter=None):
     lines = [f'{node_id}["{_sanitize(label)}"]']
 
     for child in _expr_children(node):
-        cid = f"N{counter['n']}"; counter["n"] += 1
+        cid = f"N{counter['n']}"
+        counter["n"] += 1
         lines.append(f"{node_id} --> {cid}")
         lines.extend(ast_to_mermaid_lines(child, cid, counter))
     return lines
+
 
 def render_mermaid(ast_root: AstNode) -> str:
     if ast_root is None:

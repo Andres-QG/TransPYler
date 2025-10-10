@@ -32,6 +32,6 @@ class DefinitionRules:
 
     def p_param(self, p):
         """param : ID
-             | ID ASSIGN expr"""
+        | ID ASSIGN expr"""
         line, col = _pos(p, 1)
         p[0] = Identifier(name=p[1], line=line, col=col)
