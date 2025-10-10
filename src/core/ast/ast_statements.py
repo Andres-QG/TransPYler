@@ -2,8 +2,6 @@
 AST nodes for statements and blocks.
 """
 
-# TODO(Andres): Review the Optional[AstNode] = None
-
 from dataclasses import dataclass, field
 from typing import List, Optional, Tuple
 from .ast_base import AstNode

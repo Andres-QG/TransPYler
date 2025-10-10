@@ -8,7 +8,7 @@ def parse(s: str):
         return tree.body[0].value
     return tree
 
-# ============================ NUMEROS Y LITERALS ============================
+# ============================ Numbers and Literals ============================
 
 def test_expr_number():
     ast = parse("42")
@@ -40,7 +40,7 @@ def test_expr_identifier():
     assert isinstance(ast, Identifier)
     assert ast.name == "x"
 
-# ============================ UNARIOS ============================
+# ============================ UNARY ============================
 
 def test_expr_unary_plus():
     ast = parse("+42")
@@ -63,7 +63,7 @@ def test_expr_unary_not():
     assert isinstance(ast.operand, LiteralExpr)
     assert ast.operand.value is True
 
-# ============================ BINARIOS ============================
+# ============================ BINARY ============================
 
 def test_expr_power():
     ast = parse("2 ** 3")
@@ -100,7 +100,7 @@ def test_expr_logical():
     assert ast.left.value is True
     assert ast.right.value is False
 
-# ============================ LLAMADAS A FUNCIONES ============================
+# ============================ FUNCTION CALLS ============================
 
 def test_expr_call():
     ast = parse("func(1, 2, 3)")

@@ -80,6 +80,9 @@ class Parser(
 
         # Lexer shares the same error list, so both lexer and parser
         # can accumulate errors in one pass
+        self._error_count = 0
+        self._max_errors = 50  # Stop parsing after this many errors
+        self._last_error_line = -1
         self.lexer = Lexer(errors=self.errors, debug=self.debug)
         self.lexer.build()
 
@@ -104,12 +107,18 @@ class Parser(
             reported in a single pass.
         """
         self.data = text
+        self.errors.clear()
+        self._error_count = 0
+        self._last_error_line = -1
         self.lexer.input(text)
 
         # PLY takes tokens from self.lexer.lex
         # Note: We don't catch exceptions here because p_error handles syntax errors
         # without raising. Any exception that escapes is a serious bug.
         result = self._parser.parse(lexer=self.lexer.lex, debug=self.debug)
+
+        if result is None and self.errors:
+            result = Module(body=[], line=1, col=0)
 
         return result
 
@@ -130,56 +139,232 @@ class Parser(
         else:
             p[0] = p[1] + [p[2]]
 
-    # ERRORS catching
+    # ---------------------- ERRORS catching and recovery ----------------------
+
+    def _get_context_info(self, t) -> tuple[str, str]:
+        """
+        Gets the tokens context for an specific error message.
+        Returns: (context_type, message)
+        """
+        if t is None:
+            return "EOF", "Unexpected end of file"
+
+        token_type = t.type
+        token_value = t.value
+
+        # Define specific contexts and messages for common syntax errors
+        contexts = {
+            "INDENT": (
+                "indentation",
+                "Unexpected indentation. Ensure a preceding line ends with ':' to start a block",
+            ),
+            "DEDENT": (
+                "indentation",
+                "Invalid dedentation. Check that your indentation is consistent",
+            ),
+            "COLON": (
+                "syntax",
+                "Unexpected colon ':'. Check syntax for if/while/for/def/class statements",
+            ),
+            "COMMA": (
+                "syntax",
+                "Unexpected comma ','. Check lists, tuples, and function arguments",
+            ),
+            "RPAREN": (
+                "delimiters",
+                "Closing parenthesis ')' without matching opening or misplaced",
+            ),
+            "RBRACKET": (
+                "delimiters",
+                "Closing bracket ']' without matching opening or misplaced",
+            ),
+            "RBRACE": (
+                "delimiters",
+                "Closing brace '}' without matching opening or misplaced",
+            ),
+            "ASSIGN": (
+                "Assignment",
+                "Operator '=' is misplaced. There's no variable to assign to",
+            ),
+            "PLUS_ASSIGN": (
+                "Assignment",
+                "Operator '+=' is misplaced. There's no variable to assign to",
+            ),
+            "MINUS_ASSIGN": (
+                "Assignment",
+                "Operator '-=' is misplaced. There's no variable to assign to",
+            ),
+            "TIMES_ASSIGN": (
+                "Assignment",
+                "Operator '*=' is misplaced. There's no variable to assign to",
+            ),
+            "DIVIDE_ASSIGN": (
+                "Assignment",
+                "Operator '/=' is misplaced. There's no variable to assign to",
+            ),
+            "PLUS": ("operator", "Operator '+' has no left or right operand"),
+            "MINUS": ("operator", "Operator '-' has no left or right operand"),
+            "TIMES": ("operator", "Operator '*' has no left or right operand"),
+            "DIVIDE": ("operator", "Operator '/' has no left or right operand"),
+            "MOD": ("operator", "Operator '%' has no left or right operand"),
+            "POWER": ("operator", "Operator '**' has no left or right operand"),
+            "IF": ("control", "Declaration 'if' is incomplete. Format: if condition:"),
+            "WHILE": (
+                "control",
+                "Declaration 'while' is incomplete. Format: while condition:",
+            ),
+            "FOR": (
+                "control",
+                "Declaration 'for' is incomplete. Format: for variable in iterable:",
+            ),
+            "DEF": (
+                "definition",
+                "Declaration 'def' is incomplete. Format: def name(params):",
+            ),
+            "CLASS": (
+                "definition",
+                "Declaration 'class' is incomplete. Format: class Name:",
+            ),
+            "RETURN": (
+                "control",
+                "Declaration 'return' may be misplaced outside a function",
+            ),
+            "BREAK": ("control", "Declaration 'break' may be misplaced outside a loop"),
+            "CONTINUE": (
+                "control",
+                "Declaración 'continue' may be misplaced outside a loop",
+            ),
+        }
+
+        if token_type in contexts:
+            return contexts[token_type]
+
+        return "syntax", f"Unexpected token '{token_value}' (type: {token_type})"
+
+    def _should_record_error(self, t) -> bool:
+        """
+        Selects whether to record an error based on current state.
+        Prevents flooding the error list with too many errors or
+        multiple errors on the same line.
+        """
+        if self._error_count >= self._max_errors:
+            return False
+
+        if t is None:
+            return True
+        # Avoid multiple errors on the same line
+        if t.lineno == self._last_error_line:
+            return False
+
+        return True
+
+    def _find_recovery_point(self, parser) -> Optional[any]:
+        """
+        Attempts to find a recovery point in the token stream after an error.
+        Looks for tokens that likely indicate the start of a new statement or block.
+        """
+        recovery_tokens = {
+            "DEDENT",
+            "IF",
+            "ELIF",
+            "ELSE",
+            "WHILE",
+            "FOR",
+            "DEF",
+            "CLASS",
+            "RETURN",
+            "BREAK",
+            "CONTINUE",
+        }
+
+        for _ in range(10):
+            tok = parser.token()
+            if not tok:
+                return None
+
+            if tok.type in recovery_tokens:
+                return tok
+
+        return None
+
     # This function is called by PLY when a syntax error is encountered
     def p_error(self, t):
-        """Error rule for syntax errors."""
+        if not self._should_record_error(t):
+            if self._error_count >= self._max_errors:
+                self.errors.append(
+                    Error(
+                        f"Too many syntax errors (>{self._max_errors}). Analysis aborted.",
+                        0,
+                        0,
+                        "parser",
+                        self.data,
+                    )
+                )
+            return
+
+        self._error_count += 1
+
         if t is None:
             self.errors.append(
                 Error(
-                    "Unexpected end of input while parsing", 0, 0, "parser", self.data
+                    "Unexpected EOF found. Possibles reasons:\n"
+                    "  - Missing block closure (parentheses, brackets, braces)\n"
+                    "  - Incomplete statement (if/while/for/def without body)\n"
+                    "  - Missing indentation in blocks",
+                    0,
+                    0,
+                    "parser",
+                    self.data,
                 )
             )
             return
 
-        error_msg = f"Syntax error near '{t.value}'"
+        context_type, specific_msg = self._get_context_info(t)
 
-        if t.type == "INDENT":
-            error_msg = "Unexpected indentation"
-        elif t.type == "DEDENT":
-            error_msg = "Unexpected dedentation (unindent does not match)"
-        elif t.type in ("RPAREN", "RBRACKET", "RBRACE"):
-            error_msg = f"Unexpected closing delimiter '{t.value}' - missing opening or extra closing"
-        elif t.type == "COLON":
-            error_msg = (
-                "Unexpected ':' - check if/while/for/def/class syntax is correct"
-            )
-        elif t.type == "COMMA":
-            error_msg = "Unexpected ',' - check list/tuple/function argument syntax"
-        elif t.type in ("ASSIGN", "PLUS_ASSIGN", "MINUS_ASSIGN"):
-            error_msg = f"Unexpected assignment operator '{t.value}' - missing target"
-        elif t.type == "NEWLINE":
-            error_msg = "Unexpected newline - statement may be incomplete"
-        elif t.type in ("PLUS", "MINUS", "TIMES", "DIVIDE", "MOD", "POWER"):
-            error_msg = f"Unexpected operator '{t.value}' - missing operand"
+        error_msg = f"[{context_type.upper()}] {specific_msg}"
+
+        suggestions = self._get_suggestions(t)
+        if suggestions:
+            error_msg += f"\n  Suggestion: {suggestions}"
 
         self.errors.append(Error(error_msg, t.lineno, t.lexpos, "parser", self.data))
 
-        while True:
-            tok = self._parser.token()
-            if not tok:
-                break
-            if tok.type in (
-                "NEWLINE",
-                "DEDENT",
-                "IF",
-                "WHILE",
-                "FOR",
-                "DEF",
-                "CLASS",
-                "RETURN",
-            ):
-                self._parser.errok()
-                return tok
+        self._last_error_line = t.lineno
 
+        # Try recovery by looking ahead for a likely statement start
+        recovery_tok = self._find_recovery_point(self._parser)
+
+        if recovery_tok:
+            # Move the parser to the recovery token
+            self._parser.errok()
+            return recovery_tok
+        # If no recovery point found, just discard the current token
         self._parser.errok()
+
+
+    def _get_suggestions(self, t) -> str:
+        """
+        Generates specific suggestions based on the error.
+        """
+        if t is None:
+            return "Check that all code blocks are properly closed"
+
+        suggestions = {
+            "INDENT": "Make sure there's a line ending with ':' before indenting",
+            "DEDENT": "Ensure your indentation is consistent (always 4 spaces)",
+            "COLON": "Check the syntax of your statement (if/while/for/def/class)",
+            "RPAREN": "Count your parentheses: every '(' must have a matching ')'",
+            "RBRACKET": "Count your brackets: every '[' must have a matching ']'",
+            "RBRACE": "Count your braces: every '{' must have a matching '}'",
+            "COMMA": "Commas separate elements in lists, tuples, or arguments",
+            "ASSIGN": "Assignments must follow the format: variable = value",
+            "PLUS": "Ensure there are values before and after the '+' operator",
+            "MINUS": "Ensure there are values before and after the '-' operator",
+            "IF": "Correct format: if condition: (don't forget the colon)",
+            "WHILE": "Correct format: while condition: (don't forget the colon)",
+            "FOR": "Correct format: for var in iterable: (don't forget the colon)",
+            "DEF": "Correct format: def name(params): (include parentheses and a colon)",
+            "CLASS": "Correct format: class Name: (don't forget the colon)",
+        }
+
+        return suggestions.get(t.type, "Check the syntax near this point")
