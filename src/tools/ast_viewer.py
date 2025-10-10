@@ -8,7 +8,13 @@ from src.core.ast import (
     TupleExpr, ListExpr, DictExpr, Attribute, Subscript
 )
 
-# Paleta de estilos para Rich
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from rich.tree import Tree as RichTree
+else:
+    RichTree = Any
+
 NODE_STYLE    = "bold cyan"
 FIELD_STYLE   = "italic yellow"
 SECTION_STYLE = "dim green"
@@ -47,13 +53,13 @@ def _label(node: AstNode, title: str, verbose: bool) -> str:
     meta = f" [dim](line={line}, col={col})[/dim]" if line is not None and col is not None else ""
     return f"[{NODE_STYLE}]{title}[/]{meta}"
 
-def _add_list(branch: Tree, label: str, items: Iterable[AstNode], render_fn, verbose: bool):
+def _add_list(branch: RichTree, label: str, items: Iterable[AstNode], render_fn, verbose: bool):
     items = list(items)
     lst = branch.add(f"[{SECTION_STYLE}]{label}[/] [dim][{len(items)}][/dim]")
     for it in items:
         render_fn(it, lst, verbose)
 
-def _render_elements_node(node: AstNode, parent: Tree, verbose: bool, name: str, elements: List[AstNode], is_root: bool):
+def _render_elements_node(node: AstNode, parent: RichTree, verbose: bool, name: str, elements: List[AstNode], is_root: bool):
     b = parent if is_root else parent.add(_label(node, name, verbose))
     _add_list(b, "elements", elements or [], _render_node, verbose)
 
@@ -70,7 +76,7 @@ def build_rich_tree_generic(node: AstNode, *, label: str | None = None, verbose:
     _render_node(node, root, verbose, is_root=True)
     return root
 
-def _render_node(node: AstNode, parent: Tree, verbose: bool, is_root: bool = False):
+def _render_node(node: AstNode, parent: RichTree, verbose: bool, is_root: bool = False):
     if isinstance(node, ExprStmt):
         _render_node(node.value, parent, verbose, is_root=is_root)
         return
