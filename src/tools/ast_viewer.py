@@ -1,11 +1,20 @@
+# src/tools/ast_viewer.py
 from __future__ import annotations
 import json
-from typing import List
+from typing import Iterable, List, Tuple
 from src.core.ast.ast_base import AstNode
 from src.core.ast import (
     Module, ExprStmt, If, While, For, Assign, Block, Pass, Continue, Break,
     TupleExpr, ListExpr, DictExpr, Attribute, Subscript
 )
+
+# Paleta de estilos para Rich
+NODE_STYLE    = "bold cyan"
+FIELD_STYLE   = "italic yellow"
+SECTION_STYLE = "dim green"
+VALUE_STYLE   = "magenta"
+PLAIN_DIM     = "dim"
+
 
 # ---------------- JSON ----------------
 def ast_to_json(node: AstNode) -> str:
@@ -24,37 +33,33 @@ except Exception:
 _HIDE_FIELDS = {"line", "col"}
 
 def _fields_for_print(node: AstNode, verbose: bool) -> dict:
-    """Copia de campos del nodo; oculta metadatos si verbose=False."""
-    d = dict(getattr(node, "__dict__", {}))
+    data = dict(getattr(node, "__dict__", {}))
     if not verbose:
         for k in _HIDE_FIELDS:
-            d.pop(k, None)
-    return d
+            data.pop(k, None)
+    return data
 
 def _label(node: AstNode, title: str, verbose: bool) -> str:
     if not verbose:
-        return f"[bold]{title}[/bold]"
+        return f"[{NODE_STYLE}]{title}[/]"
     line = getattr(node, "line", None)
     col = getattr(node, "col", None)
-    if line is not None and col is not None:
-        return f"[bold]{title}[/bold] [dim](line={line}, col={col})[/dim]"
-    return f"[bold]{title}[/bold]"
+    meta = f" [dim](line={line}, col={col})[/dim]" if line is not None and col is not None else ""
+    return f"[{NODE_STYLE}]{title}[/]{meta}"
 
-def _add_list(branch: Tree, label: str, items: List[AstNode], render_fn, verbose: bool):
-    lst = branch.add(f"[italic]{label}[/italic] [dim][{len(items)}][/dim]")
+def _add_list(branch: Tree, label: str, items: Iterable[AstNode], render_fn, verbose: bool):
+    items = list(items)
+    lst = branch.add(f"[{SECTION_STYLE}]{label}[/] [dim][{len(items)}][/dim]")
     for it in items:
         render_fn(it, lst, verbose)
+
+def _render_elements_node(node: AstNode, parent: Tree, verbose: bool, name: str, elements: List[AstNode], is_root: bool):
+    b = parent if is_root else parent.add(_label(node, name, verbose))
+    _add_list(b, "elements", elements or [], _render_node, verbose)
 
 # ---------- RENDER (Rich, genérico) ----
 
 def build_rich_tree_generic(node: AstNode, *, label: str | None = None, verbose: bool = False):
-    """
-    Árbol genérico (para --view generic) con impresión limpia:
-    - listas como 'elements [N]' (sin índices)
-    - DictExpr como pares key/value
-    - If con cond/body/elifs/orelse estructurados
-    - ExprStmt colapsado a su 'value'
-    """
     if not RICH_OK:
         raise RuntimeError("Rich is not available.")
     if node is None:
@@ -66,7 +71,10 @@ def build_rich_tree_generic(node: AstNode, *, label: str | None = None, verbose:
     return root
 
 def _render_node(node: AstNode, parent: Tree, verbose: bool, is_root: bool = False):
-    # Tipos con render específico (más limpio)
+    if isinstance(node, ExprStmt):
+        _render_node(node.value, parent, verbose, is_root=is_root)
+        return
+
     if isinstance(node, Block):
         b = parent if is_root else parent.add(_label(node, "Block", verbose))
         _add_list(b, "statements", node.statements or [], _render_node, verbose)
@@ -84,77 +92,55 @@ def _render_node(node: AstNode, parent: Tree, verbose: bool, is_root: bool = Fal
 
     if isinstance(node, DictExpr):
         b = parent if is_root else parent.add(_label(node, "DictExpr", verbose))
-        pairs = b.add("pairs")
+        pairs = b.add(f"[{SECTION_STYLE}]pairs[/]")
         for (k, v) in (node.pairs or []):
-            kv = pairs.add("pair")
-            kk = kv.add("key")
-            _render_node(k, kk, verbose)
-            vv = kv.add("value")
-            _render_node(v, vv, verbose)
+            kv = pairs.add(f"[{SECTION_STYLE}]pair[/]")
+            _render_node(k, kv.add(f"[{FIELD_STYLE}]key[/]"), verbose)
+            _render_node(v, kv.add(f"[{FIELD_STYLE}]value[/]"), verbose)
         return
 
     if isinstance(node, If):
         b = parent if is_root else parent.add(_label(node, "If", verbose))
-        cond = b.add("cond")
-        _render_node(node.cond, cond, verbose)
-
-        body = b.add("body")
-        _render_node(node.body, body, verbose)
+        _render_node(node.cond, b.add("cond"), verbose)
+        _render_node(node.body, b.add("body"), verbose)
 
         el = b.add("elifs")
         for (c, blk) in (node.elifs or []):
             e = el.add("elif")
-            ec = e.add("cond")
-            _render_node(c, ec, verbose)
-            eb = e.add("body")
-            _render_node(blk, eb, verbose)
+            _render_node(c, e.add("cond"), verbose)
+            _render_node(blk, e.add("body"), verbose)
 
         o = b.add("orelse")
-        if node.orelse:
-            _render_node(node.orelse, o, verbose)
-        else:
-            o.add("None")
+        _render_node(node.orelse, o, verbose) if node.orelse else o.add("None")
         return
 
-    if isinstance(node, ExprStmt):
-        # Colapsamos el envoltorio: mostramos directamente el valor
-        _render_node(node.value, parent, verbose, is_root=is_root)
-        return
-
-    # Fallback genérico: nodos no cubiertos arriba
-    title = node.__class__.__name__
-    b = parent if is_root else parent.add(_label(node, title, verbose))
+    b = parent if is_root else parent.add(_label(node, node.__class__.__name__, verbose))
     data = _fields_for_print(node, verbose)
-    for k, v in list(data.items()):
+
+    for k, v in data.items():
         if isinstance(v, AstNode):
-            br = b.add(f"[italic]{k}[/italic]")
-            _render_node(v, br, verbose)
+            _render_node(v, b.add(f"[{FIELD_STYLE}]{k}[/]"), verbose)
+
         elif isinstance(v, list):
-            # Si es una lista de nodos, imprímela como bloque de hijos
             only_nodes = [x for x in v if isinstance(x, AstNode)]
             if only_nodes:
                 _add_list(b, k, only_nodes, _render_node, verbose)
-            # Si hay elementos no-AstNode (raro), muéstralos planos
-            for x in v:
-                if not isinstance(x, AstNode):
-                    b.add(f"{k} = {repr(x)}")
+            else:
+                b.add(f"[{FIELD_STYLE}]{k}[/] = {repr(v)}")
+
         else:
-            if k not in ("statements", "elements", "pairs"):  # ya renderizados arriba
-                b.add(f"[italic]{k}[/italic] = {repr(v)}")
+            if k not in ("statements", "elements", "pairs"):
+                b.add(f"[{FIELD_STYLE}]{k}[/] = [{VALUE_STYLE}]{repr(v)}[/]")
+
 
 # ======= EXPRESSION-ONLY VIEW (Rich) =======
 def build_expr_tree(node: AstNode, *, verbose: bool = False):
-    """
-    Árbol compacto especializado para una sola expresión (vista --view expr),
-    compatible con la versión anterior. El parámetro 'verbose' se acepta pero
-    no altera la salida (esta vista es minimalista por diseño).
-    """
     if not RICH_OK:
         raise RuntimeError("Rich is not available.")
     if node is None:
         return Tree("[dim]∅[/dim]")
 
-    def _label(text: str) -> str:
+    def _lbl(text: str) -> str:
         return f"[bold]{text}[/bold]"
 
     def _branch(name: str, child: AstNode):
@@ -162,30 +148,28 @@ def build_expr_tree(node: AstNode, *, verbose: bool = False):
         t.add(build_expr_tree(child, verbose=verbose))
         return t
 
-    # Binary: left op right
+    # Binary
     if all(hasattr(node, a) for a in ("left", "right", "op")):
-        root = Tree(_label(str(getattr(node, "op"))))
+        root = Tree(_lbl(str(getattr(node, "op"))))
         root.add(_branch("left", node.left))
         root.add(_branch("right", node.right))
         return root
 
-    # Unary: op operand
+    # Unary
     if hasattr(node, "op") and hasattr(node, "operand"):
-        root = Tree(_label(str(getattr(node, "op"))))
+        root = Tree(_lbl(str(getattr(node, "op"))))
         root.add(_branch("operand", node.operand))
         return root
 
-    # Identifier
+    # Identifier / Literal
     if hasattr(node, "name"):
         return Tree(f"[cyan]{getattr(node, 'name')}[/cyan]")
-
-    # Literal
     if hasattr(node, "value"):
         return Tree(f"[magenta]{repr(getattr(node, 'value'))}[/magenta]")
 
     # Call
     if hasattr(node, "callee") and hasattr(node, "args"):
-        root = Tree(_label("call"))
+        root = Tree(_lbl("call"))
         root.add(_branch("callee", node.callee))
         args_t = Tree("[dim]args[/dim]")
         for a in node.args:
@@ -195,40 +179,39 @@ def build_expr_tree(node: AstNode, *, verbose: bool = False):
 
     # Subscript / Attribute / Collections
     if isinstance(node, Subscript):
-        root = Tree(_label("[]"))
+        root = Tree(_lbl("[]"))
         root.add(_branch("value", node.value))
         root.add(_branch("index", node.index))
         return root
 
     if isinstance(node, Attribute):
-        root = Tree(_label("."))  # attribute access
+        root = Tree(_lbl("."))  # attribute access
         root.add(_branch("value", node.value))
         root.add(Tree(f"[cyan]{node.attr}[/cyan]"))
         return root
 
-    if isinstance(node, TupleExpr) or isinstance(node, ListExpr):
-        root = Tree(_label("()" if isinstance(node, TupleExpr) else "[]"))
+    if isinstance(node, (TupleExpr, ListExpr)):
+        root = Tree(_lbl("()" if isinstance(node, TupleExpr) else "[]"))
         for e in node.elements:
             root.add(build_expr_tree(e, verbose=verbose))
         return root
 
     if isinstance(node, DictExpr):
-        root = Tree(_label("{}"))
+        root = Tree(_lbl("{}"))
         for k, v in node.pairs:
             pair = Tree(":")
             pair.add(build_expr_tree(k, verbose=verbose))
             pair.add(build_expr_tree(v, verbose=verbose))
             root.add(pair)
         return root
-
-    # Fallback: usa el generador genérico
+    
     return build_rich_tree_generic(node, verbose=verbose)
 
 # --------------- ASCII ----------------
 def _expr_label(node: AstNode) -> str:
-    cls_name = node.__class__.__name__
-    if cls_name in {"Module","Block","If","While","For","Assign","Pass","Continue","Break","ExprStmt"}:
-        return cls_name
+    cls = node.__class__.__name__
+    if cls in {"Module", "Block", "If", "While", "For", "Assign", "Pass", "Continue", "Break", "ExprStmt"}:
+        return cls
     if hasattr(node, "op"):
         return str(node.op)
     if hasattr(node, "name"):
@@ -237,93 +220,117 @@ def _expr_label(node: AstNode) -> str:
         return repr(node.value)
     if hasattr(node, "callee"):
         return "call"
-    return cls_name
+    return cls
 
 def _expr_children(node: AstNode):
+    # Bloques
+    if isinstance(node, ExprStmt):
+        return [node.value]
     if hasattr(node, "body") and isinstance(node.body, list):
         return node.body
     if hasattr(node, "statements") and isinstance(node.statements, list):
         return node.statements
 
     if isinstance(node, If):
-        children = [node.cond, node.body]
+        out = [node.cond, node.body]
         for cond, blk in (node.elifs or []):
-            children.extend([cond, blk])
+            out.extend([cond, blk])
         if node.orelse:
-            children.append(node.orelse)
-        return children
-
+            out.append(node.orelse)
+        return out
     if isinstance(node, While):
         return [node.cond, node.body]
-
     if isinstance(node, For):
         return [node.target, node.iterable, node.body]
 
-    if all(hasattr(node, a) for a in ("left","right","op")):
+    if all(hasattr(node, a) for a in ("left", "right", "op")):
         return [node.left, node.right]
     if hasattr(node, "op") and hasattr(node, "operand"):
         return [node.operand]
-
     if hasattr(node, "callee") and hasattr(node, "args"):
         return [node.callee] + list(node.args)
-
     if isinstance(node, Subscript):
         return [node.value, node.index]
     if isinstance(node, Attribute):
         return [node.value]
-
-    if isinstance(node, TupleExpr) or isinstance(node, ListExpr):
+    if isinstance(node, (TupleExpr, ListExpr)):
         return list(node.elements)
-
     if isinstance(node, DictExpr):
         out = []
         for k, v in node.pairs:
             out.extend([k, v])
         return out
-
     return []
 
 def _merge_ascii(children_lines, gap=4):
+
     if not children_lines:
-        return [], 0, 0
+        return [], 0, 0, []
+
     heights = [len(lines) for lines, _, _ in children_lines]
     max_h = max(heights)
+
     padded = []
     for lines, w, m in children_lines:
-        padded.append((lines + [" " * w] * (max_h - len(lines)), w, m))
-    merged = []
+        pad = lines + [" " * w] * (max_h - len(lines))
+        padded.append((pad, w, m))
+
+    merged: List[str] = []
     total_w = sum(w for _, w, _ in padded) + gap * (len(padded) - 1)
-    positions = []
+
+    child_mids: List[int] = []
     x = 0
     for _, w, m in padded:
-        positions.append(x + m)
+        child_mids.append(x + m)
         x += w + gap
+
     for r in range(max_h):
         line = ""
-        for i, (lines, w, m) in enumerate(padded):
+        for i, (lines, w, _) in enumerate(padded):
             line += lines[r]
             if i < len(padded) - 1:
                 line += " " * gap
         merged.append(line)
-    root_mid = sum(positions) // len(positions)
-    return merged, total_w, root_mid
+
+    block_mid = sum(child_mids) // len(child_mids)
+    return merged, total_w, block_mid, child_mids
 
 def _render_ascii(node: AstNode):
+
     label = f"({_expr_label(node)})"
     children = [c for c in _expr_children(node) if c is not None]
+
     if not children:
-        return [label], len(label), len(label)//2
+        return [label], len(label), len(label) // 2
+
     rendered = [_render_ascii(c) for c in children]
-    merged, m_w, m_mid = _merge_ascii(rendered)
-    root_w = len(label); root_mid = root_w//2
-    total_w = max(root_w, m_w)
-    left_pad = m_mid - root_mid
-    first = " " * max(0, left_pad) + label
-    second = [" "] * total_w
-    for _, _, mid in rendered:
-        if 0 <= mid < total_w:
-            second[mid] = "│"
-    return [first, "".join(second)] + merged, total_w, m_mid
+    merged, block_w, block_mid, child_mids = _merge_ascii(rendered)
+
+    root_w = len(label)
+    root_mid = root_w // 2
+    left_pad = max(0, block_mid - root_mid)
+
+    first_line = " " * left_pad + label
+    if len(first_line) < block_w:
+        first_line += " " * (block_w - len(first_line))
+
+    connector_vert = [" "] * block_w
+    if 0 <= block_mid < block_w:
+        connector_vert[block_mid] = "│"
+    connector_vert = "".join(connector_vert)
+
+    connector_h = [" "] * block_w
+    if child_mids:
+        lo, hi = min(child_mids), max(child_mids)
+        for x in range(lo, hi + 1):
+            connector_h[x] = "─"
+        for mid in child_mids:
+            connector_h[mid] = "┬"
+        connector_h[block_mid] = "┼" if lo <= block_mid <= hi else "┴"
+    connector_h = "".join(connector_h)
+
+    lines = [first_line, connector_vert, connector_h] + merged
+    return lines, block_w, block_mid
 
 def render_ascii(ast_root: AstNode) -> str:
     if ast_root is None:
@@ -336,7 +343,7 @@ def render_ascii(ast_root: AstNode) -> str:
 
 # ------------- Mermaid ---------------
 def _sanitize(label: str) -> str:
-    return label.replace('"', "'").replace("{","(").replace("}",")").replace("\n"," ")
+    return label.replace('"', "'").replace("{", "(").replace("}", ")").replace("\n", " ")
 
 def ast_to_mermaid_lines(node: AstNode, node_id=None, counter=None):
     if counter is None:
@@ -363,5 +370,3 @@ def render_mermaid(ast_root: AstNode) -> str:
     lines = ["graph TD"]
     lines.extend(ast_to_mermaid_lines(ast_root))
     return "\n".join(lines)
-
-
