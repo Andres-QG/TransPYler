@@ -66,8 +66,7 @@ if a < 5:
             if c == 5:
                 nested_list.append(c)
             else:
-                nested_dict["level1"]["level2"]["level3"]["extra"] = c
-            b += 1
+                b += 1
 else:
     nested_list = []
 
