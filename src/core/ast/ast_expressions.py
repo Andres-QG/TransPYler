@@ -82,6 +82,12 @@ class ListExpr(AstNode):
 
     elements: List[AstNode] = field(default_factory=list)
 
+@dataclass
+class SetExpr(AstNode):
+    """
+    Represents a set literal, e.g. {1, 2, 3}
+    """
+    elements: List[AstNode] = field(default_factory=list)
 
 @dataclass
 class DictExpr(AstNode):
@@ -89,5 +95,4 @@ class DictExpr(AstNode):
     Represents a dictionary literal, e.g. {"a": 1, "b": 2}
     Each pair is (key, value)
     """
-
     pairs: List[Tuple[AstNode, AstNode]] = field(default_factory=list)
