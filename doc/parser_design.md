@@ -110,10 +110,3 @@ flowchart TD
     style CallErrok fill:#e1f0ff
     style CallErrok2 fill:#e1f0ff
 ```
-
-```mermaid
-graph TD
-N0["Module"]
-N0 --> N1
-N1["FunctionDef: fibonacci"]
-```

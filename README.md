@@ -218,6 +218,34 @@ graph TD
 N0["Module"]
 N0 --> N1
 N1["FunctionDef: fun"]
+N1 --> N2
+N2["Identifier: a"]
+N1 --> N3
+N3["Identifier: b"]
+N1 --> N4
+N4["Block"]
+N4 --> N5
+N5["ExprStmt: LiteralExpr(line=4, col=29,..."]
+N5 --> N6
+N6["LiteralExpr: '\n    Docstring\n    '"]
+N4 --> N7
+N7["If"]
+N7 --> N8
+N8["ComparisonExpr (<)"]
+N8 --> N9
+N9["Identifier: a"]
+N8 --> N10
+N10["Identifier: b"]
+N7 --> N11
+N11["Block"]
+N11 --> N12
+N12["ExprStmt: CallExpr(line=6, col=82, ca..."]
+N12 --> N13
+N13["CallExpr"]
+N13 --> N14
+N14["Identifier: print"]
+N13 --> N15
+N15["LiteralExpr: 'Hello World! \n'"]
 ```
 
 ---

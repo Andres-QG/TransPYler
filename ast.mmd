@@ -1,4 +1,606 @@
 graph TD
 N0["Module"]
 N0 --> N1
-N1["FunctionDef: fibonacci"]
+N1["FunctionDef: random_operation"]
+N1 --> N2
+N2["Identifier: a"]
+N1 --> N3
+N3["Identifier: b"]
+N1 --> N4
+N4["Block"]
+N4 --> N5
+N5["Assign: BinaryExpr(line=0, col=0, l..."]
+N5 --> N6
+N6["Identifier: c"]
+N5 --> N7
+N7["BinaryExpr (+)"]
+N7 --> N8
+N8["Identifier: a"]
+N7 --> N9
+N9["Identifier: b"]
+N4 --> N10
+N10["Return: BinaryExpr(line=0, col=0, l..."]
+N10 --> N11
+N11["BinaryExpr (+)"]
+N11 --> N12
+N12["BinaryExpr (+)"]
+N12 --> N13
+N13["Identifier: c"]
+N12 --> N14
+N14["BinaryExpr (*)"]
+N14 --> N15
+N15["Identifier: a"]
+N14 --> N16
+N16["Identifier: b"]
+N11 --> N17
+N17["LiteralExpr: 2.6548"]
+N0 --> N18
+N18["FunctionDef: fibonacci"]
+N18 --> N19
+N19["Identifier: n"]
+N18 --> N20
+N20["Block"]
+N20 --> N21
+N21["If"]
+N21 --> N22
+N22["BinaryExpr (or)"]
+N22 --> N23
+N23["ComparisonExpr (==)"]
+N23 --> N24
+N24["Identifier: n"]
+N23 --> N25
+N25["LiteralExpr: 1"]
+N22 --> N26
+N26["ComparisonExpr (==)"]
+N26 --> N27
+N27["Identifier: n"]
+N26 --> N28
+N28["LiteralExpr: 2"]
+N21 --> N29
+N29["Block"]
+N29 --> N30
+N30["Return: LiteralExpr(line=12, col=23..."]
+N30 --> N31
+N31["LiteralExpr: 1"]
+N21 --> N32
+N32["ComparisonExpr (==)"]
+N32 --> N33
+N33["Identifier: n"]
+N32 --> N34
+N34["LiteralExpr: 0"]
+N21 --> N35
+N35["Block"]
+N35 --> N36
+N36["Return: BinaryExpr(line=0, col=0, l..."]
+N36 --> N37
+N37["BinaryExpr (/)"]
+N37 --> N38
+N38["Identifier: n"]
+N37 --> N39
+N39["LiteralExpr: 0"]
+N21 --> N40
+N40["Block"]
+N40 --> N41
+N41["Return: BinaryExpr(line=0, col=0, l..."]
+N41 --> N42
+N42["BinaryExpr (+)"]
+N42 --> N43
+N43["CallExpr"]
+N43 --> N44
+N44["Identifier: fibonacci"]
+N43 --> N45
+N45["BinaryExpr (-)"]
+N45 --> N46
+N46["Identifier: n"]
+N45 --> N47
+N47["LiteralExpr: 1"]
+N42 --> N48
+N48["CallExpr"]
+N48 --> N49
+N49["Identifier: fibonacci"]
+N48 --> N50
+N50["BinaryExpr (-)"]
+N50 --> N51
+N51["Identifier: n"]
+N50 --> N52
+N52["LiteralExpr: 2"]
+N0 --> N53
+N53["FunctionDef: fibonacci_d"]
+N53 --> N54
+N54["Identifier: n"]
+N53 --> N55
+N55["Block"]
+N55 --> N56
+N56["Assign: LiteralExpr(line=19, col=39..."]
+N56 --> N57
+N57["Identifier: n_1"]
+N56 --> N58
+N58["LiteralExpr: 1"]
+N55 --> N59
+N59["Assign: LiteralExpr(line=20, col=40..."]
+N59 --> N60
+N60["Identifier: n_2"]
+N59 --> N61
+N61["LiteralExpr: 1"]
+N55 --> N62
+N62["While"]
+N62 --> N63
+N63["ComparisonExpr (<)"]
+N63 --> N64
+N64["Identifier: n_1"]
+N63 --> N65
+N65["Identifier: n"]
+N62 --> N66
+N66["Block"]
+N66 --> N67
+N67["Assign: BinaryExpr(line=0, col=0, l..."]
+N67 --> N68
+N68["Identifier: new"]
+N67 --> N69
+N69["BinaryExpr (+)"]
+N69 --> N70
+N70["Identifier: n_1"]
+N69 --> N71
+N71["Identifier: n_2"]
+N66 --> N72
+N72["Assign: Identifier(line=24, col=469..."]
+N72 --> N73
+N73["Identifier: n_2"]
+N72 --> N74
+N74["Identifier: n_1"]
+N66 --> N75
+N75["Assign: Identifier(line=25, col=487..."]
+N75 --> N76
+N76["Identifier: n_1"]
+N75 --> N77
+N77["Identifier: new"]
+N55 --> N78
+N78["Return: Identifier(line=27, col=503..."]
+N78 --> N79
+N79["Identifier: n_1"]
+N0 --> N80
+N80["FunctionDef: iter_example"]
+N80 --> N81
+N81["Block"]
+N81 --> N82
+N82["Assign: ListExpr(line=30, col=581, ..."]
+N82 --> N83
+N83["Identifier: l"]
+N82 --> N84
+N84["ListExpr"]
+N84 --> N85
+N85["LiteralExpr: 1"]
+N84 --> N86
+N86["LiteralExpr: 2.5"]
+N84 --> N87
+N87["LiteralExpr: 3"]
+N84 --> N88
+N88["LiteralExpr: 'hola'"]
+N84 --> N89
+N89["LiteralExpr: 5"]
+N84 --> N90
+N90["LiteralExpr: 'mundo'"]
+N81 --> N91
+N91["Assign: CallExpr(line=31, col=626, ..."]
+N91 --> N92
+N92["Identifier: it"]
+N91 --> N93
+N93["CallExpr"]
+N93 --> N94
+N94["Identifier: iter"]
+N93 --> N95
+N95["Identifier: l"]
+N81 --> N96
+N96["For"]
+N96 --> N97
+N97["Identifier: i"]
+N96 --> N98
+N98["Identifier: l"]
+N96 --> N99
+N99["Block"]
+N99 --> N100
+N100["ExprStmt: CallExpr(line=33, col=659, ..."]
+N100 --> N101
+N101["CallExpr"]
+N101 --> N102
+N102["Identifier: print"]
+N101 --> N103
+N103["CallExpr"]
+N103 --> N104
+N104["Identifier: next"]
+N103 --> N105
+N105["Identifier: it"]
+N81 --> N106
+N106["Return: LiteralExpr(line=34, col=68..."]
+N106 --> N107
+N107["LiteralExpr: True"]
+N0 --> N108
+N108["FunctionDef: map_ex"]
+N108 --> N109
+N109["Block"]
+N109 --> N110
+N110["Assign: DictExpr(line=37, col=760, ..."]
+N110 --> N111
+N111["Identifier: d"]
+N110 --> N112
+N112["DictExpr"]
+N112 --> N113
+N113["LiteralExpr: 'hola'"]
+N112 --> N114
+N114["LiteralExpr: 'mundo'"]
+N112 --> N115
+N115["LiteralExpr: 1"]
+N112 --> N116
+N116["ListExpr"]
+N116 --> N117
+N117["LiteralExpr: 1"]
+N116 --> N118
+N118["LiteralExpr: 2"]
+N116 --> N119
+N119["LiteralExpr: 3"]
+N116 --> N120
+N120["LiteralExpr: 4"]
+N116 --> N121
+N121["LiteralExpr: 5"]
+N112 --> N122
+N122["LiteralExpr: 'dict'"]
+N112 --> N123
+N123["DictExpr"]
+N123 --> N124
+N124["LiteralExpr: 'adios'"]
+N123 --> N125
+N125["LiteralExpr: ':D'"]
+N109 --> N126
+N126["For"]
+N126 --> N127
+N127["Identifier: k"]
+N126 --> N128
+N128["CallExpr"]
+N128 --> N129
+N129["Attribute: Identifier(line=42, col=866..."]
+N129 --> N130
+N130["Identifier: d"]
+N126 --> N131
+N131["Block"]
+N131 --> N132
+N132["ExprStmt: CallExpr(line=43, col=889, ..."]
+N132 --> N133
+N133["CallExpr"]
+N133 --> N134
+N134["Identifier: print"]
+N133 --> N135
+N135["Subscript: Identifier(line=43, col=890..."]
+N135 --> N136
+N136["Identifier: d"]
+N135 --> N137
+N137["Identifier: k"]
+N109 --> N138
+N138["Return: BinaryExpr(line=0, col=0, l..."]
+N138 --> N139
+N139["BinaryExpr (+)"]
+N139 --> N140
+N140["LiteralExpr: 'hola'"]
+N139 --> N141
+N141["LiteralExpr: 'mundo'"]
+N0 --> N142
+N142["FunctionDef: default_ex"]
+N142 --> N143
+N143["Identifier: a"]
+N142 --> N144
+N144["Block"]
+N144 --> N145
+N145["Return: Identifier(line=48, col=999..."]
+N145 --> N146
+N146["Identifier: a"]
+N0 --> N147
+N147["FunctionDef: set_ex"]
+N147 --> N148
+N148["Block"]
+N148 --> N149
+N149["Assign: SetExpr(line=51, col=1072, ..."]
+N149 --> N150
+N150["Identifier: a"]
+N149 --> N151
+N151["SetExpr"]
+N148 --> N152
+N152["Return: ComparisonExpr(line=0, col=..."]
+N152 --> N153
+N153["ComparisonExpr (in)"]
+N153 --> N154
+N154["LiteralExpr: 2"]
+N153 --> N155
+N155["Identifier: a"]
+N0 --> N156
+N156["FunctionDef: tuple_ex"]
+N156 --> N157
+N157["Block"]
+N157 --> N158
+N158["Assign: TupleExpr(line=55, col=1177..."]
+N158 --> N159
+N159["Identifier: a"]
+N158 --> N160
+N160["TupleExpr"]
+N160 --> N161
+N161["LiteralExpr: 5"]
+N160 --> N162
+N162["LiteralExpr: 6"]
+N160 --> N163
+N163["LiteralExpr: 'joseph'"]
+N157 --> N164
+N164["Assign: TupleExpr(line=56, col=1202..."]
+N164 --> N165
+N165["Identifier: b"]
+N164 --> N166
+N166["TupleExpr"]
+N166 --> N167
+N167["LiteralExpr: 1"]
+N166 --> N168
+N168["LiteralExpr: 2"]
+N166 --> N169
+N169["LiteralExpr: 'valverde'"]
+N157 --> N170
+N170["Return: BinaryExpr(line=0, col=0, l..."]
+N170 --> N171
+N171["BinaryExpr (+)"]
+N171 --> N172
+N172["Identifier: a"]
+N171 --> N173
+N173["Identifier: b"]
+N0 --> N174
+N174["FunctionDef: slices_ex"]
+N174 --> N175
+N175["Block"]
+N175 --> N176
+N176["Assign: ListExpr(line=60, col=1304,..."]
+N176 --> N177
+N177["Identifier: l"]
+N176 --> N178
+N178["ListExpr"]
+N178 --> N179
+N179["LiteralExpr: 1"]
+N178 --> N180
+N180["LiteralExpr: 2"]
+N178 --> N181
+N181["LiteralExpr: 3"]
+N178 --> N182
+N182["LiteralExpr: 4"]
+N178 --> N183
+N183["LiteralExpr: 5"]
+N178 --> N184
+N184["LiteralExpr: 6"]
+N178 --> N185
+N185["LiteralExpr: 7"]
+N178 --> N186
+N186["LiteralExpr: 7"]
+N178 --> N187
+N187["LiteralExpr: 8"]
+N178 --> N188
+N188["LiteralExpr: 9"]
+N175 --> N189
+N189["ExprStmt: CallExpr(line=61, col=1344,..."]
+N189 --> N190
+N190["CallExpr"]
+N190 --> N191
+N191["Identifier: print"]
+N190 --> N192
+N192["Subscript: Identifier(line=61, col=134..."]
+N192 --> N193
+N193["Identifier: l"]
+N192 --> N194
+N194["UnaryExpr (MINUS)"]
+N194 --> N195
+N195["LiteralExpr: 2"]
+N175 --> N196
+N196["ExprStmt: CallExpr(line=62, col=1361,..."]
+N196 --> N197
+N197["CallExpr"]
+N197 --> N198
+N198["Identifier: print"]
+N197 --> N199
+N199["Subscript: Identifier(line=62, col=136..."]
+N199 --> N200
+N200["Identifier: l"]
+N199 --> N201
+N201["TupleExpr"]
+N201 --> N202
+N202["LiteralExpr: 1"]
+N201 --> N203
+N203["UnaryExpr (MINUS)"]
+N203 --> N204
+N204["LiteralExpr: 2"]
+N175 --> N205
+N205["Assign: BinaryExpr(line=0, col=0, l..."]
+N205 --> N206
+N206["Identifier: k"]
+N205 --> N207
+N207["BinaryExpr (+)"]
+N207 --> N208
+N208["Subscript: Identifier(line=63, col=137..."]
+N208 --> N209
+N209["Identifier: l"]
+N208 --> N210
+N210["TupleExpr"]
+N210 --> N211
+N211["LiteralExpr: 1"]
+N210 --> N212
+N212["LiteralExpr: 2"]
+N207 --> N213
+N213["Subscript: Identifier(line=63, col=138..."]
+N213 --> N214
+N214["Identifier: l"]
+N213 --> N215
+N215["TupleExpr"]
+N215 --> N216
+N216["UnaryExpr (MINUS)"]
+N216 --> N217
+N217["LiteralExpr: 3"]
+N215 --> N218
+N218["UnaryExpr (MINUS)"]
+N218 --> N219
+N219["LiteralExpr: 4"]
+N175 --> N220
+N220["Return: Identifier(line=64, col=140..."]
+N220 --> N221
+N221["Identifier: k"]
+N0 --> N222
+N222["FunctionDef: string_ex"]
+N222 --> N223
+N223["Block"]
+N223 --> N224
+N224["ExprStmt: CallExpr(line=67, col=1480,..."]
+N224 --> N225
+N225["CallExpr"]
+N225 --> N226
+N226["Identifier: print"]
+N225 --> N227
+N227["Subscript: LiteralExpr(line=67, col=14..."]
+N227 --> N228
+N228["LiteralExpr: 'profe'"]
+N227 --> N229
+N229["TupleExpr"]
+N229 --> N230
+N230["LiteralExpr: 2"]
+N229 --> N231
+N231["LiteralExpr: 4"]
+N223 --> N232
+N232["ExprStmt: CallExpr(line=68, col=1504,..."]
+N232 --> N233
+N233["CallExpr"]
+N233 --> N234
+N234["Identifier: print"]
+N233 --> N235
+N235["BinaryExpr (+)"]
+N235 --> N236
+N236["BinaryExpr (+)"]
+N236 --> N237
+N237["Subscript: LiteralExpr(line=68, col=15..."]
+N237 --> N238
+N238["LiteralExpr: 'profe'"]
+N237 --> N239
+N239["TupleExpr"]
+N239 --> N240
+N240["LiteralExpr: 2"]
+N239 --> N241
+N241["LiteralExpr: 4"]
+N236 --> N242
+N242["Subscript: LiteralExpr(line=68, col=15..."]
+N242 --> N243
+N243["LiteralExpr: 'profe'"]
+N242 --> N244
+N244["TupleExpr"]
+N244 --> N245
+N245["LiteralExpr: 0"]
+N244 --> N246
+N246["LiteralExpr: 2"]
+N235 --> N247
+N247["Subscript: LiteralExpr(line=68, col=15..."]
+N247 --> N248
+N248["LiteralExpr: 'profe'"]
+N247 --> N249
+N249["UnaryExpr (MINUS)"]
+N249 --> N250
+N250["LiteralExpr: 1"]
+N0 --> N251
+N251["ExprStmt: CallExpr(line=71, col=1555,..."]
+N251 --> N252
+N252["CallExpr"]
+N252 --> N253
+N253["Identifier: print"]
+N252 --> N254
+N254["CallExpr"]
+N254 --> N255
+N255["Identifier: random_operation"]
+N254 --> N256
+N256["LiteralExpr: 5"]
+N254 --> N257
+N257["LiteralExpr: 6"]
+N0 --> N258
+N258["ExprStmt: CallExpr(line=72, col=1585,..."]
+N258 --> N259
+N259["CallExpr"]
+N259 --> N260
+N260["Identifier: print"]
+N259 --> N261
+N261["CallExpr"]
+N261 --> N262
+N262["Identifier: fibonacci"]
+N261 --> N263
+N263["LiteralExpr: 4"]
+N0 --> N264
+N264["ExprStmt: CallExpr(line=73, col=1605,..."]
+N264 --> N265
+N265["CallExpr"]
+N265 --> N266
+N266["Identifier: print"]
+N265 --> N267
+N267["CallExpr"]
+N267 --> N268
+N268["Identifier: fibonacci_d"]
+N267 --> N269
+N269["LiteralExpr: 4"]
+N0 --> N270
+N270["ExprStmt: CallExpr(line=74, col=1627,..."]
+N270 --> N271
+N271["CallExpr"]
+N271 --> N272
+N272["Identifier: print"]
+N271 --> N273
+N273["CallExpr"]
+N273 --> N274
+N274["Identifier: iter_example"]
+N0 --> N275
+N275["ExprStmt: CallExpr(line=75, col=1649,..."]
+N275 --> N276
+N276["CallExpr"]
+N276 --> N277
+N277["Identifier: print"]
+N276 --> N278
+N278["CallExpr"]
+N278 --> N279
+N279["Identifier: map_ex"]
+N0 --> N280
+N280["ExprStmt: CallExpr(line=76, col=1665,..."]
+N280 --> N281
+N281["CallExpr"]
+N281 --> N282
+N282["Identifier: print"]
+N281 --> N283
+N283["CallExpr"]
+N283 --> N284
+N284["Identifier: default_ex"]
+N0 --> N285
+N285["ExprStmt: CallExpr(line=77, col=1685,..."]
+N285 --> N286
+N286["CallExpr"]
+N286 --> N287
+N287["Identifier: print"]
+N286 --> N288
+N288["CallExpr"]
+N288 --> N289
+N289["Identifier: tuple_ex"]
+N0 --> N290
+N290["ExprStmt: CallExpr(line=78, col=1703,..."]
+N290 --> N291
+N291["CallExpr"]
+N291 --> N292
+N292["Identifier: print"]
+N291 --> N293
+N293["CallExpr"]
+N293 --> N294
+N294["Identifier: set_ex"]
+N0 --> N295
+N295["ExprStmt: CallExpr(line=79, col=1719,..."]
+N295 --> N296
+N296["CallExpr"]
+N296 --> N297
+N297["Identifier: print"]
+N296 --> N298
+N298["CallExpr"]
+N298 --> N299
+N299["Identifier: slices_ex"]
+N0 --> N300
+N300["ExprStmt: CallExpr(line=80, col=1742,..."]
+N300 --> N301
+N301["CallExpr"]
+N301 --> N302
+N302["Identifier: string_ex"]

@@ -14,6 +14,10 @@ from src.core.ast import (
     DictExpr,
     Attribute,
     Subscript,
+    FunctionDef,
+    ClassDef,
+    Assign,
+    Return,
 )
 
 
@@ -76,6 +80,7 @@ def _add_list(
     lst = branch.add(f"[{SECTION_STYLE}]{label}[/] [dim][{len(items)}][/dim]")
     for it in items:
         render_fn(it, lst, verbose)
+
 
 # TODO (Any): This one is never used, should it be removed?
 def _render_elements_node(
@@ -281,9 +286,38 @@ def _expr_label(node: AstNode) -> str:
 
 
 def _expr_children(node: AstNode):
-    # Bloques
+    # Block
     if isinstance(node, ExprStmt):
         return [node.value]
+
+    # FunctionDef y ClassDef
+    if isinstance(node, FunctionDef):
+        children = []
+        children.extend(node.params)
+        if node.body:
+            children.append(node.body)
+        return children
+
+    if isinstance(node, ClassDef):
+        if node.body:
+            return [node.body]
+        return []
+
+    # Return statement
+    if isinstance(node, Return):
+        if node.value:
+            return [node.value]
+        return []
+
+    # Assign statement
+    if isinstance(node, Assign):
+        children = []
+        if node.target:
+            children.append(node.target)
+        if node.value:
+            children.append(node.value)
+        return children
+
     if hasattr(node, "body") and isinstance(node.body, list):
         return node.body
     if hasattr(node, "statements") and isinstance(node.statements, list):
@@ -420,15 +454,29 @@ def ast_to_mermaid_lines(node: AstNode, node_id=None, counter=None):
     label = node.__class__.__name__
     if hasattr(node, "name"):
         label += f": {node.name}"
-    elif hasattr(node, "value"):
-        label += f": {repr(node.value)}"
+    elif hasattr(node, "value") and not hasattr(
+        node, "callee"
+    ):  # No mostrar value para CallExpr
+        val_str = repr(node.value)
+        # Truncate long strings
+        if len(val_str) > 30:
+            val_str = val_str[:27] + "..."
+        label += f": {val_str}"
+    elif hasattr(node, "op"):
+        label += f" ({node.op})"
+
     lines = [f'{node_id}["{_sanitize(label)}"]']
 
-    for child in _expr_children(node):
+    # Process children
+    children = _expr_children(node)
+    for child in children:
+        if child is None:
+            continue
         cid = f"N{counter['n']}"
         counter["n"] += 1
         lines.append(f"{node_id} --> {cid}")
         lines.extend(ast_to_mermaid_lines(child, cid, counter))
+
     return lines
 
 
