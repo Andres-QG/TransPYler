@@ -351,7 +351,7 @@ class Parser(
 
         suggestions = {
             "INDENT": "Make sure there's a line ending with ':' before indenting",
-            "DEDENT": "Ensure your indentation is consistent (always 4 spaces)",
+            "DEDENT": "Ensure your indentation is consistent",
             "COLON": "Check the syntax of your statement (if/while/for/def/class)",
             "RPAREN": "Count your parentheses: every '(' must have a matching ')'",
             "RBRACKET": "Count your brackets: every '[' must have a matching ']'",

@@ -160,10 +160,12 @@ python -m src.tools.ast_cli [--expr EXPRESSION | --file PATH] [--out JSON_PATH] 
 - `--out JSON_PATH`: Output path for AST JSON (default: `ast.json` in repo root)
 - `--view {expr,generic,diagram,mermaid}`: Visualization format (default: `expr`)
   - `expr`: Expression-focused tree view (requires Rich)
+    - **Note**: This view is optimized for pure expressions (e.g., `2 + 3`, `foo(bar)`). When visualizing statements (Module, FunctionDef, Assign, etc.), it falls back to the generic view, so both views will appear identical for full programs.
   - `generic`: Generic AST tree view (requires Rich)
   - `diagram`: ASCII art tree diagram
   - `mermaid`: Mermaid diagram syntax (saved to `.mmd` file)
 - `--unwrap-expr`: Return bare expression when input is a single expression
+  - Only unwraps when the AST is `Module` → `ExprStmt` → expression. Has no effect on statements like function definitions.
 
 #### Examples
 
@@ -176,19 +178,46 @@ python -m src.tools.ast_cli --expr "2 + 3 * 4" --view diagram
 **Parse a file and view as Rich tree:**
 
 ```bash
-python -m src.tools.ast_cli --file examples/fibonacci.flpy --view expr
+python -m src.tools.ast_cli --file tests/parser/test_parser_ast.flpy --view expr
 ```
 
 **Generate Mermaid diagram:**
 
 ```bash
-python -m src.tools.ast_cli --file examples/fibonacci.flpy --view mermaid
+python -m src.tools.ast_cli --file tests/parser/test_parser_ast.flpy --view mermaid
 ```
 
 **Parse and save to specific location:**
 
 ```bash
 python -m src.tools.ast_cli --expr "x = [1, 2, 3]" --out output/my_ast.json
+```
+
+#### Views showcase
+
+**Inputted code**
+
+```py
+# comment
+def fun(a,b):
+    """
+    Docstring
+    """
+    if a < b:
+        print("Hello World! \n")
+```
+
+**Rich AST**
+
+![rich_ast](doc/imgs/rich_ast1.png)
+
+**Mermaid AST**
+
+```mermaid
+graph TD
+N0["Module"]
+N0 --> N1
+N1["FunctionDef: fun"]
 ```
 
 ---

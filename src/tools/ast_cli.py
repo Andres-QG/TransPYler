@@ -4,7 +4,10 @@ import sys
 from pathlib import Path
 
 from src.parser.parser import Parser
-from src.core.ast import Module, ExprStmt
+from src.core.ast import (
+    Module,
+    ExprStmt,
+)
 from src.tools.ast_viewer import (
     ast_to_json,
     build_rich_tree_generic,

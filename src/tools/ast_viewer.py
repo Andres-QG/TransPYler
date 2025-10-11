@@ -51,8 +51,8 @@ _HIDE_FIELDS = {"line", "col"}
 def _fields_for_print(node: AstNode, verbose: bool) -> dict:
     data = dict(getattr(node, "__dict__", {}))
     if not verbose:
-        for k in _HIDE_FIELDS:
-            data.pop(k, None)
+        for field_key in _HIDE_FIELDS:
+            data.pop(field_key, None)
     return data
 
 
@@ -77,7 +77,7 @@ def _add_list(
     for it in items:
         render_fn(it, lst, verbose)
 
-
+# TODO (Any): This one is never used, should it be removed?
 def _render_elements_node(
     node: AstNode,
     parent: RichTree,
