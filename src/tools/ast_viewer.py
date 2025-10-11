@@ -454,9 +454,7 @@ def ast_to_mermaid_lines(node: AstNode, node_id=None, counter=None):
     label = node.__class__.__name__
     if hasattr(node, "name"):
         label += f": {node.name}"
-    elif hasattr(node, "value") and not hasattr(
-        node, "callee"
-    ):  # No mostrar value para CallExpr
+    elif hasattr(node, "value") and not hasattr(node, "callee"):
         val_str = repr(node.value)
         # Truncate long strings
         if len(val_str) > 30:

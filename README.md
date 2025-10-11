@@ -456,8 +456,11 @@ This project uses [pytest](https://docs.pytest.org/) for testing.
 
 ## 12. Authors
 
-| Name                    | Email                          | Role/Contribution                                                                                 |
-| ----------------------- | ------------------------------ | ------------------------------------------------------------------------------------------------- |
-| Andrés Quesada-González | <andresquesadagon4@gmail.com>  | Operator and literal token definition, documentation, project structure, test scripts, test cases |
-| David Obando-Cortés     | <david.obandocortes@ucr.ac.cr> | Indentation Handling, Keywords definition                                                         |
-| Randy Agüero-Bermúdez   | <randy.aguero@ucr.ac.cr>       | Testing, comment handling, Identifier token definition recognition                                |
+| Name                    | Email                          | Role/Contribution                                                                                                            |
+| ----------------------- | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------- |
+| Andrés Quesada-González | <andresquesadagon4@gmail.com>  | **Lexer:** Operator and literal token definition, documentation, project structure, test scripts, test cases, python modules |
+|                         |                                | **Parser:** Function and Class definitions, Syntax error handling, Mermaid AST viewer, python modules,documentation          |
+| David Obando-Cortés     | <david.obandocortes@ucr.ac.cr> | **Lexer:** Indentation Handling, Keywords definition                                                                         |
+|                         |                                | **Parser:**                                                                                                                  |
+| Randy Agüero-Bermúdez   | <randy.aguero@ucr.ac.cr>       | **Lexer:** Testing, comment handling, Identifier token definition recognition                                                |
+|                         |                                | **Parser:**                                                                                                                  |
